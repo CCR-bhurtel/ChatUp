@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+    api:
+        build:
+            context: './api'
+            dockerfile: Dockerfile.dev
+        volumes:
+            - /app/node_modules
+            - ./api:/app
+
+        environment:
+            - CHOKIDAR_USEPOLLING=true
+            - DATABASE=mongodb://mongo:2701/chatup-database
+
+    client:
+        build:
+            context: './client'
+            dockerfile: Dockerfile.dev
+        volumes:
+            - /app/node_modules
+            - ./client:/app
+            - /app/.next
+
+        environment:
+            - WATCHPACK_POLLING=true
+
+    mongo:
+        image: mongo
+        restart: unless-stopped
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=root
+            - MONGO_INITDB_ROOT_PASSWORD=password
+
+        ports:
+            - '27017:27017'
+
+    mongo-express:
+        image: mongo-express
+        container_name: mexpress
+        environment:
+            - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+            - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+            - ME_CONFIG_MONGODB_URL=mongodb://root:password@mongo:27017/?authSource=admin
+            - ME_CONFIG_BASICAUTH_USERNAME=mexpress
+            - ME_CONFIG_BASICAUTH_PASSWORD=mexpress
+        links:
+            - mongo
+        restart: unless-stopped
+        ports:
+            - '8081:8081'
+
+    nginx:
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile.dev
+
+        restart: always
+
+        ports:
+            - '8000:80'
