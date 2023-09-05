@@ -57,5 +57,8 @@ services:
 
         restart: always
 
+        volumes:
+            - ./nginx:/app
+
         ports:
             - '8000:80'
