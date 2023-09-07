@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-
+import mongoose from 'mongoose';
 const roomSchema = new mongoose.Schema({
     roomName: String,
     isGroupChat: Boolean,
@@ -39,6 +38,4 @@ const roomSchema = new mongoose.Schema({
     ],
 });
 
-const Room = mongoose.model('Room', roomSchema);
-
-return Room;
+export default mongoose.model('Room', roomSchema);

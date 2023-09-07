@@ -1,7 +1,10 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
-const userSchema = new mongoose.Schema({
-    userName: {
+import { IUser, IUserMethods, UserModel } from '../../../Types/User';
+
+const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
+    name: {
         type: String,
         required: [true, 'Username is required'],
     },
@@ -16,7 +19,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         unique: true,
         validate: {
-            validator: (val) => {
+            validator: function (val) {
                 if (this.registerType === 'EmailPassword') {
                     return val.length > 0;
                 }
@@ -27,7 +30,7 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         validate: {
-            validator: (val) => {
+            validator: function (val) {
                 if (this.registerType === 'EmailPassword') {
                     return val.length > 6;
                 }
@@ -40,15 +43,9 @@ const userSchema = new mongoose.Schema({
     profilePic: String,
     resetToken: String,
 
-    chatRooms: [
-        {
-            type: mongoose.Types.ObjectId,
-            ref: 'Room',
-        },
-    ],
     blockedUsers: [
         {
-            type: mongoose.Type.ObjectId,
+            type: mongoose.Types.ObjectId,
             ref: 'User',
         },
     ],
@@ -63,15 +60,15 @@ const userSchema = new mongoose.Schema({
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
 
-    this.password = await bcrypt.hash(this.password, 12);
+    this.password = await bcrypt.hash(this.password as string, 12);
     this.passwordChangedAt = new Date();
     next();
 });
 
-userSchema.methods.checkPassword = async (actualPassword, providedPassword) => {
-    return await bcrypt.compare(actualPassword, providedPassword);
+userSchema.methods.checkPassword = async function (providedPassword: string): Promise<boolean> {
+    return bcrypt.compare(this.password, providedPassword);
 };
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = User;
+export default User;
