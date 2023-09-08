@@ -16,12 +16,14 @@ export interface IUser {
     profilePic?: String;
     resetToken?: String;
     blockedUsers: [Types.ObjectId];
-    settingId?: ReferenceType;
+    settingId?: Types.ObjectId;
     passwordChangedAt: Date;
 }
 
 export interface IUserMethods {
     checkPassword: (providedPassword: string) => Promise<boolean>;
 }
+
+export type PopulatedUser = Pick<IUser, 'name' | 'email' | 'location' | 'registerType' | 'profilePic' | 'blockedUsers'>
 
 export type UserModel = Model<IUser, {}, IUserMethods>;

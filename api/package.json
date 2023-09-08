@@ -5,6 +5,7 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
+        "watch":"tsc --w",
         "dev": "npx nodemon index.js",
         "start": "node index.js"
     },
@@ -24,6 +25,7 @@
         "@types/express": "^4.17.17",
         "@types/mongoose": "^5.11.97",
         "@types/node": "^20.5.9",
-        "@types/validator": "^13.11.1"
+        "@types/validator": "^13.11.1",
+        "typescript": "^5.2.2"
     }
 }

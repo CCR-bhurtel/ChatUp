@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 
-import { IChat, ChatModel } from '../../../Types/Chat';
-
+import { IChat, ChatModel } from '../../Types/Chat';
 import Media from './Media';
 
 const chatSchema = new mongoose.Schema<IChat, ChatModel>({
@@ -12,15 +11,19 @@ const chatSchema = new mongoose.Schema<IChat, ChatModel>({
     },
     messageType: {
         type: String,
-        enum: ['Text', 'File'],
+        enum: ['Text', 'File', 'Media'],
         default: 'Text',
+    },
+    roomId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Room',
     },
 
     mediaId: {
         type: mongoose.Types.ObjectId,
         ref: 'Media',
         validate: {
-            validator: function (val) {
+            validator: function (this: IChat, val: string) {
                 if (this.messageType === 'File') {
                     return val.length > 0;
                 }
@@ -37,19 +40,16 @@ const chatSchema = new mongoose.Schema<IChat, ChatModel>({
 
 const preSchemaMethods: string[] = ['deleteOne', 'deleteMany', 'findByIdAndDelete', 'findOneAndDelete'];
 const regexPattern = new RegExp(preSchemaMethods.join('|'), 'g');
-chatSchema.pre(
-    regexPattern,
-    async function (next) {
-        if (this.type === 'Media') {
-            try {
-                // file should be deleted in media's middleware
-                await Media.findByIdAndDelete(this._id);
-                next();
-            } catch (err) {
-                next(err);
-            }
+chatSchema.pre(regexPattern, async function (this: IChat, next) {
+    if (this.messageType === 'Media') {
+        try {
+            // file should be deleted in media's middleware
+            await Media.findByIdAndDelete(this.mediaId);
+            next();
+        } catch (err: any) {
+            next(err);
         }
-    }.bind(chatSchema)
-);
+    }
+});
 
 module.exports = mongoose.model('Chat', chatSchema);

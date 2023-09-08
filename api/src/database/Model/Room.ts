@@ -1,13 +1,8 @@
 import mongoose from 'mongoose';
-const roomSchema = new mongoose.Schema({
+import { IRoom, RoomModel, IRoomMethods } from '../../Types/Room';
+const roomSchema = new mongoose.Schema<IRoom, RoomModel, IRoomMethods>({
     roomName: String,
     isGroupChat: Boolean,
-    chatMessages: [
-        {
-            type: mongoose.Types.ObjectId,
-            ref: 'Chat',
-        },
-    ],
 
     users: [
         {
@@ -22,13 +17,6 @@ const roomSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: 'User',
     },
-
-    sharedFiles: [
-        {
-            type: mongoose.Types.ObjectId,
-            ref: 'Media',
-        },
-    ],
 
     blockedUsers: [
         {

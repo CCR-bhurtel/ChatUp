@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-import { IUser, IUserMethods, UserModel } from '../../../Types/User';
+import { IUser, IUserMethods, UserModel } from '../../Types/User';
 
 const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
     name: {
@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
         type: String,
         unique: true,
         validate: {
-            validator: function (val) {
+            validator: function (this: IUser, val: string) {
                 if (this.registerType === 'EmailPassword') {
                     return val.length > 0;
                 }
@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
     password: {
         type: String,
         validate: {
-            validator: function (val) {
+            validator: function (this: IUser, val: string) {
                 if (this.registerType === 'EmailPassword') {
                     return val.length > 6;
                 }
