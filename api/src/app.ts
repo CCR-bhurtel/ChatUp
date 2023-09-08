@@ -1,5 +1,7 @@
+/* eslint-disable import/first */
 import express from 'express';
 import path from 'path';
+
 
 import userRouter from './routes/user';
 import authRouter from './routes/auth';

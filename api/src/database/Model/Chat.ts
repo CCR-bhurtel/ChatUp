@@ -52,4 +52,4 @@ chatSchema.pre(regexPattern, async function (this: IChat, next) {
     }
 });
 
-module.exports = mongoose.model('Chat', chatSchema);
+export default mongoose.model('Chat', chatSchema);

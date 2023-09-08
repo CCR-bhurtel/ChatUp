@@ -1,14 +1,19 @@
-// const dotenv = require('dotenv');
+/* eslint-disable import/first */
 
-// dotenv.config({ path: '../.env' });
+import dotenv from 'dotenv';
 
-const app = require('./app');
-const { connectDb } = require('./database/connect');
+dotenv.config();
 
-const PORT = process.env.PORT || 5000;
+import app from './app';
+import connectDb from './database/connect';
+import { PORT } from './config/keys';
 
-connectDb().then(() => {
-    app.listen(PORT, () => {
-        console.log(`app listening to port ${PORT}`);
+connectDb()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`app listening to port ${PORT}`);
+        });
+    })
+    .catch((err: any) => {
+        console.log(err);
     });
-});
