@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
+import validator from 'validator';
 
 import { IUser, IUserMethods, UserModel } from '../../Types/User';
 
@@ -18,13 +19,14 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
     email: {
         type: String,
         unique: true,
+
         validate: {
             validator: function (this: IUser, val: string) {
                 if (this.registerType === 'EmailPassword') {
-                    return val.length > 0;
+                    return val.length > 0 && validator.isEmail(val);
                 }
             },
-            message: 'Email is required',
+            message: 'Please enter valid email',
         },
     },
     password: {

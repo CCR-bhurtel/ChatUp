@@ -8,6 +8,4 @@ router.get('/google', passport.authenticate('google', { scope: ['public_profile'
 router.post('/login');
 router.post('/signup');
 
-const authRoute = router;
-
-export default authRoute;
+export default router;
