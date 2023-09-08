@@ -3,7 +3,7 @@ import path from 'path';
 
 import userRouter from './routes/user';
 
-import ErrorControllerDev from './controllers/error/devErrorController';
+import ErrorControllerDev from './controllers/error/DevErrorController';
 import ErrorControllerProd from './controllers/error/ProdErrorController';
 
 const app = express();

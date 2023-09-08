@@ -24,6 +24,11 @@ export interface IUserMethods {
     checkPassword: (providedPassword: string) => Promise<boolean>;
 }
 
-export type PopulatedUser = Pick<IUser, 'name' | 'email' | 'location' | 'registerType' | 'profilePic' | 'blockedUsers'>
+export type PopulatedUser = Pick<
+    IUser,
+    'name' | 'email' | 'location' | 'registerType' | 'profilePic' | 'blockedUsers'
+> & {
+    _id: Types.ObjectId;
+};
 
 export type UserModel = Model<IUser, {}, IUserMethods>;
