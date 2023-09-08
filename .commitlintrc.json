@@ -1,46 +1,10 @@
 {
-    "extends": [
-        "@commitlint/config-conventional"
-    ],
+    "extends": ["@commitlint/config-conventional"],
     "rules": {
-        "type-enum": [
-            2,
-            "always",
-            [
-                "feat",
-                "fix",
-                "update",
-                "docs",
-                "style",
-                "chore",
-                "test"
-            ]
-        ],
-        "scope-enum": [
-            2,
-            "always",
-            [
-                "frontend",
-                "api",
-                "client",
-                "backend",
-                "config"
-            ]
-        ],
-        "subject-max-length": [
-            2,
-            "always",
-            100
-        ],
-        "header-max-length": [
-            2,
-            "always",
-            100
-        ],
-        "footer-max-line-length": [
-            2,
-            "always",
-            100
-        ]
+        "type-enum": [2, "always", ["feat", "fix", "update", "docs", "style", "chore", "test"]],
+        "scope-enum": [2, "always", ["api", ".", "client", "public", "nginx", "shared"]],
+        "subject-max-length": [2, "always", 100],
+        "header-max-length": [2, "always", 100],
+        "footer-max-line-length": [2, "always", 100]
     }
 }
