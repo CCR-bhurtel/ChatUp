@@ -1,4 +1,8 @@
 export const DATABASE = process.env.MONGO_URI as string;
-export const JWT_SECRET = process.env.JWT_SECRET;
+export const JWT_SECRET = process.env.JWT_SECRET as string;
 export const PORT = process.env.PORT;
+export const GOOGLE_OAUTH_CLIENT_ID = process.env.GOOGLE_OAUTH_CLIENT_ID as string;
+export const GOOGLE_OAUTH_CLIENT_SECRET = process.env.GOOGLE_OAUTH_CLIENT_SECRET as string;
+export const FACEBOOK_OAUTH_CLIENT_ID = process.env.FACEBOOK_OAUTH_CLIENT_ID as string;
+export const FACEBOOK_OAUTH_CLIENT_SECRET = process.env.FACEBOOK_OAUTH_CLIENT_SECRET as string;
 // more to come

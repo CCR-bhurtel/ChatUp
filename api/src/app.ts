@@ -2,7 +2,6 @@
 import express from 'express';
 import path from 'path';
 
-
 import userRouter from './routes/user';
 import authRouter from './routes/auth';
 import cookieSession from 'cookie-session';
@@ -10,6 +9,7 @@ import bodyParser from 'body-parser';
 
 import ErrorControllerDev from './controllers/error/DevErrorController';
 import ErrorControllerProd from './controllers/error/ProdErrorController';
+import './config/passportConfig';
 
 const app = express();
 
@@ -27,9 +27,9 @@ app.use(
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/user', userRouter);
+app.use('/api/user', userRouter);
 
-app.use('/auth', authRouter);
+app.use('/api/auth', authRouter);
 
 app.get('/', (req, res) => {
     res.send('<h1> Hello world</h1>');

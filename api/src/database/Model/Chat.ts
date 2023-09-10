@@ -18,6 +18,7 @@ const chatSchema = new mongoose.Schema<IChat, ChatModel>({
         type: mongoose.Types.ObjectId,
         ref: 'Room',
     },
+    verified: { type: Boolean, default: false },
 
     mediaId: {
         type: mongoose.Types.ObjectId,

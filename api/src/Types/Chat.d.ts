@@ -7,8 +7,7 @@ export interface IChat {
     mediaId?: Types.ObjectId;
     isDeleted: false;
     roomId?: Types.ObjectId;
+    verified: Booolean;
 }
-
-
 
 export type ChatModel = Model<IChat, {}, {}>;
