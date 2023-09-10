@@ -1,4 +1,4 @@
-import { Model, Types } from 'mongoose';
+import { Mixed, Model, Types } from 'mongoose';
 
 export interface ReferenceType {
     type: Types.ObjectId;
@@ -29,6 +29,7 @@ export type PopulatedUser = Pick<
     'name' | 'email' | 'location' | 'registerType' | 'profilePic' | 'blockedUsers'
 > & {
     _id: Types.ObjectId;
+    _doc?: Mixed;
 };
 
 export type UserModel = Model<IUser, {}, IUserMethods>;

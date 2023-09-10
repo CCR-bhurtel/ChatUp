@@ -10,6 +10,7 @@ import bodyParser from 'body-parser';
 import ErrorControllerDev from './controllers/error/DevErrorController';
 import ErrorControllerProd from './controllers/error/ProdErrorController';
 import './config/passportConfig';
+import { COOKIE_EXPIRES_IN, COOKIE_KEY } from './config/keys';
 
 const app = express();
 
@@ -20,8 +21,8 @@ app.use(express.static(publicPath));
 
 app.use(
     cookieSession({
-        maxAge: 5 * 24 * 60 * 60,
-        keys: [process.env.COOKIE_KEY as string],
+        maxAge: parseInt(COOKIE_EXPIRES_IN) * 24 * 60 * 60,
+        keys: [COOKIE_KEY],
     })
 );
 
