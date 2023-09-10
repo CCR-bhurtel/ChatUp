@@ -12,8 +12,8 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
     location: String,
     registerType: {
         type: String,
-        enum: ['EmailPassword', 'Google', 'Facebook'],
-        default: 'EmailPassword',
+        enum: ['emailPassword', 'google', 'facebook'],
+        default: 'emailPassword',
     },
 
     email: {
@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
 
         validate: {
             validator: function (this: IUser, val: string) {
-                if (this.registerType === 'EmailPassword') {
+                if (this.registerType === 'emailPassword') {
                     return val.length > 0 && validator.isEmail(val);
                 }
             },
@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
         type: String,
         validate: {
             validator: function (this: IUser, val: string) {
-                if (this.registerType === 'EmailPassword') {
+                if (this.registerType === 'emailPassword') {
                     return val.length > 6;
                 }
             },

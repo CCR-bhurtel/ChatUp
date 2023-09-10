@@ -1,8 +1,14 @@
 import passport from 'passport';
 import googleOauth from 'passport-google-oauth20';
 import User from '../database/Model/User';
-import { GOOGLE_OAUTH_CLIENT_ID, GOOGLE_OAUTH_CLIENT_SECRET } from './keys';
+import {
+    FACEBOOK_OAUTH_CLIENT_ID,
+    FACEBOOK_OAUTH_CLIENT_SECRET,
+    GOOGLE_OAUTH_CLIENT_ID,
+    GOOGLE_OAUTH_CLIENT_SECRET,
+} from './keys';
 import { PopulatedUser } from '../Types/User';
+import { Strategy } from 'passport-facebook';
 
 passport.serializeUser((user, done) => {
     done(null, (user as PopulatedUser)._id);
@@ -33,7 +39,7 @@ passport.use(
                         name: profile.displayName,
                         email: profile.emails?.length ? profile.emails[0].value : '',
                         profilePic: profile.photos?.length ? profile.photos[0].value : '',
-                        registerType: 'Google',
+                        registerType: 'google',
                         location: '',
                         blockedUsers: [],
                         verified: true,
@@ -41,6 +47,39 @@ passport.use(
                     done(null, user);
                 } else {
                     //pass for serializing
+                    done(null, currentUser);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    )
+);
+
+passport.use(
+    new Strategy(
+        {
+            clientID: FACEBOOK_OAUTH_CLIENT_ID,
+            clientSecret: FACEBOOK_OAUTH_CLIENT_SECRET,
+            callbackURL: '/api/auth/facebookredirect',
+        },
+        async (accessToken, refreshToken, profile, done) => {
+            try {
+                const currentUser = await User.findOne({ facebookId: profile.id });
+                if (!currentUser) {
+                    const user = await User.create({
+                        facebookId: profile.id,
+
+                        name: profile.displayName,
+                        email: profile.emails?.length ? profile.emails[0].value : '',
+                        profilePic: profile.photos?.length ? profile.photos[0].value : '',
+                        registerType: 'facebook',
+                        location: '',
+                        blockedUsers: [],
+                        verified: true,
+                    });
+                    done(null, user);
+                } else {
                     done(null, currentUser);
                 }
             } catch (err) {
