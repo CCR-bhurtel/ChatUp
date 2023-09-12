@@ -14,7 +14,7 @@ import { COOKIE_EXPIRES_IN, COOKIE_KEY } from './config/keys';
 
 const app = express();
 
-const publicPath: string = path.resolve(__dirname, '../../public');
+const publicPath: string = path.resolve(__dirname, '../public');
 
 app.use(express.json());
 app.use(express.static(publicPath));

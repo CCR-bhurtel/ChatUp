@@ -1,6 +1,6 @@
 import express from 'express';
 import authCheck from '../middlewares/authCheck';
-import upload from '../utils/imageUpload';
+import upload from '../middlewares/imageUpload';
 import { profileImageUpload } from '../controllers/user/userProfile';
 
 const router = express.Router();
