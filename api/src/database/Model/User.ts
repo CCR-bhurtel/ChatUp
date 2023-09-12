@@ -44,6 +44,7 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
     facebookId: String,
     profilePic: String,
     resetToken: String,
+    resetTokenExpires: { type: Date, default: new Date() },
 
     blockedUsers: [
         {

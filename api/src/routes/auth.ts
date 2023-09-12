@@ -5,6 +5,10 @@ import createSendToken from '../utils/createSendToken';
 import { PopulatedUser } from '../Types/User';
 import login from '../controllers/auth/login';
 import signup from '../controllers/auth/signup';
+import forgotPasswordHandler from '../controllers/auth/forgotPassword';
+import changePasswordHandler from '../controllers/auth/changePassword';
+import resetPasswordHandler from '../controllers/auth/resetPassword';
+import authCheck from '../middlewares/authCheck';
 
 const router = express.Router();
 
@@ -22,5 +26,10 @@ router.get('/facebookredirect', passport.authenticate('facebook'), (req, res) =>
 
 router.post('/login', login);
 router.post('/signup', signup);
+
+router.post('/forgot-password', forgotPasswordHandler);
+
+router.post('/change-password', authCheck, changePasswordHandler);
+router.post('/reset-password/:token', resetPasswordHandler);
 
 export default router;

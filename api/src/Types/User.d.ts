@@ -1,4 +1,5 @@
 import { Mixed, Model, Types } from 'mongoose';
+import { Request } from 'express';
 
 export interface ReferenceType {
     type: Types.ObjectId;
@@ -15,6 +16,7 @@ export interface IUser {
     facebookId?: String;
     profilePic?: String;
     resetToken?: String;
+    resetTokenExpires?: Date;
     blockedUsers: [Types.ObjectId];
     settingId?: Types.ObjectId;
     passwordChangedAt: Date;
@@ -22,6 +24,10 @@ export interface IUser {
 
 export interface IUserMethods {
     checkPassword: (providedPassword: string) => Promise<boolean>;
+}
+
+export interface ExpressRequest extends Request {
+    user: PopulatedUser;
 }
 
 export type PopulatedUser = Pick<
