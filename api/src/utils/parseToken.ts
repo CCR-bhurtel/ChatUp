@@ -4,7 +4,7 @@ const parseToken = (req: Request): string | null => {
     let authToken = null;
 
     const cookies: string[] | undefined = req.headers.cookie?.split(';');
-    console.log(cookies);
+
     if (cookies) {
         cookies.forEach((cookie) => {
             if (cookie.trim().startsWith('Authorization')) {

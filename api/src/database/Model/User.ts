@@ -56,7 +56,7 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
         type: mongoose.Types.ObjectId,
         ref: 'Setting',
     },
-    passwordChangedAt: Date,
+    passwordChangedAt: { type: Date, default: new Date() },
 });
 
 userSchema.pre('save', async function (next) {
@@ -68,7 +68,7 @@ userSchema.pre('save', async function (next) {
 });
 
 userSchema.methods.checkPassword = async function (providedPassword: string): Promise<boolean> {
-    return bcrypt.compare(this.password, providedPassword);
+    return bcrypt.compare(providedPassword, this.password);
 };
 
 const User = mongoose.model('User', userSchema);

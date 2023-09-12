@@ -2,6 +2,7 @@ import { NextFunction, Response } from 'express';
 import parseToken from '../utils/parseToken';
 import jwt from 'jsonwebtoken';
 import User from '../database/Model/User';
+import { JWT_SECRET } from '../config/keys';
 
 const authCheck = async (req: any, res: Response, next: NextFunction) => {
     const authToken: string | null = parseToken(req);
@@ -10,10 +11,15 @@ const authCheck = async (req: any, res: Response, next: NextFunction) => {
         return res.status(403).json({ message: 'Error authenticating' });
     }
     if (authToken) {
-        const decodedPayload: any = jwt.verify(authToken, process.env.JWT_SECRET as string);
-        const user = await User.findById(decodedPayload.id);
-        req.user = user;
-        next();
+        try {
+            const decodedPayload: any = jwt.verify(authToken, JWT_SECRET);
+            const user = await User.findById(decodedPayload.id).select(['-password']);
+
+            req.user = user;
+            next();
+        } catch (err) {
+            next(err);
+        }
     }
 };
 

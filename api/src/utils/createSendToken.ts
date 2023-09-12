@@ -16,7 +16,7 @@ const createSendToken = (user: PopulatedUser, res: Response) => {
         if (process.env.NODE_ENV === 'production') cookieOptions.httpOnly = true;
 
         res.cookie('Authorization', token, cookieOptions);
-        return res.status(200).json({ ...user._doc, token });
+        return res.status(200).json({ ...user._doc, password: '', token });
     } catch (err) {
         console.log(err);
         return res.status(400).json(err);
