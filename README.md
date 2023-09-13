@@ -29,13 +29,16 @@ Follow these instructions to set up and run ChatUp on your local machine for dev
   Check .env.sample in api and frontend folder  and create .env file inside BOTH folder with necessary keys.
 
   Running the Development Servers
-
+```bash
   cd api
   npm run dev
+```
 
   Start the frontend development server in another terminal tab:
 
+```bash
   cd client
   npm run dev
+```
 
   The application shoud run on:- http://localhost:3000
