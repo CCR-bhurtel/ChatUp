@@ -37,7 +37,7 @@ Follow these instructions to set up and run ChatUp on your local machine for dev
   Start the frontend development server in another terminal tab:
 
 ```bash
-  cd client
+  cd ../client
   npm run dev
 ```
 
