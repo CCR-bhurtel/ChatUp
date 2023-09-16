@@ -9,7 +9,13 @@ router.get('/', authCheck, (req, res) => {
     return res.status(200).json(req.user);
 });
 
-router.post('/profileimage', authCheck, upload.single('image'), profileImageUpload);
+router.post(
+    '/profileimage',
+    authCheck,
+   
+    upload.single('image'),
+    profileImageUpload
+);
 
 const userRouter = router;
 

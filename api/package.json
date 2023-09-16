@@ -5,7 +5,8 @@
     "main": "index.js",
     "scripts": {
         "watch": "tsc --w",
-        "dev": "npx nodemon ./build/index.js",
+        "devserver": "npx nodemon ./build/index.js",
+        "dev":"npx concurrently \"npm run watch\" \"npm run devserver\"",
         "start": "node ./build/index.js"
     },
     "keywords": [],
