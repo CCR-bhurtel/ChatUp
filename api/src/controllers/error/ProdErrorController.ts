@@ -16,10 +16,11 @@ class ErrorController {
         const message = `Invalid input data, ${errors[0]}`; // returning first validation error only
         return new AppError(message, 400);
     };
-    private handleJWTError = (err: ExtendedErrorJWT) => new AppError('Invalid Token, please login again', 401);
+    private handleJWTError = (err: ExtendedErrorJWT) =>
+        new AppError('Invalid Token, please login again', 401, '/login');
 
     private handleTokenExpireError = (err: ExtendedErrorToken) =>
-        new AppError('Session Expired, please login again', 401);
+        new AppError('Session Expired, please login again', 401, '/login');
 
     private sendProdError = (err: ErrorType, req: Request, res: Response) => {
         if (req.originalUrl.startsWith('/api')) {

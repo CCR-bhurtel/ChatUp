@@ -8,4 +8,9 @@ export const GOOGLE_OAUTH_CLIENT_ID = process.env.GOOGLE_OAUTH_CLIENT_ID as stri
 export const GOOGLE_OAUTH_CLIENT_SECRET = process.env.GOOGLE_OAUTH_CLIENT_SECRET as string;
 export const FACEBOOK_OAUTH_CLIENT_ID = process.env.FACEBOOK_OAUTH_CLIENT_ID as string;
 export const FACEBOOK_OAUTH_CLIENT_SECRET = process.env.FACEBOOK_OAUTH_CLIENT_SECRET as string;
+export const EMAIL_HOST = process.env.EMAIL_HOST as string;
+export const EMAIL_HOST_PORT = parseInt(process.env.EMAIL_HOST_PORT as string);
+export const EMAIL_AUTH_USER = process.env.EMAIL_AUTH_USER as string;
+export const EMAIL_AUTH_PASSWORD = process.env.EMAIL_AUTH_PASSWORD as string;
+export const EMAIL_HOST_TLS = process.env.EMAIL_HOST_TLS === 'true' ? true : false;
 // more to come
