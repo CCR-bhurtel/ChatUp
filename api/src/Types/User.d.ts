@@ -20,6 +20,12 @@ export interface IUser {
     blockedUsers: [Types.ObjectId];
     settingId?: Types.ObjectId;
     passwordChangedAt: Date;
+    contactNumber: string;
+    preferences: {
+        email: boolean;
+        message: boolean;
+        notification: boolean;
+    };
 }
 
 export interface IUserMethods {
@@ -32,7 +38,7 @@ export interface ExpressRequest extends Request {
 
 export type PopulatedUser = Pick<
     IUser,
-    'name' | 'email' | 'location' | 'registerType' | 'profilePic' | 'blockedUsers'
+    'name' | 'email' | 'location' | 'registerType' | 'profilePic' | 'blockedUsers' | 'preference'
 > & {
     _id: Types.ObjectId;
     _doc?: Mixed;

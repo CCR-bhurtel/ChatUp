@@ -11,6 +11,7 @@ import ErrorControllerDev from './controllers/error/DevErrorController';
 import ErrorControllerProd from './controllers/error/ProdErrorController';
 import './config/passportConfig';
 import { COOKIE_EXPIRES_IN, COOKIE_KEY } from './config/keys';
+import authCheck from './middlewares/authCheck';
 
 const app = express();
 
@@ -28,7 +29,7 @@ app.use(
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/api/user', userRouter);
+app.use('/api/user', authCheck, userRouter);
 
 app.use('/api/auth', authRouter);
 

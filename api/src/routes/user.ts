@@ -1,21 +1,28 @@
 import express from 'express';
-import authCheck from '../middlewares/authCheck';
 import upload from '../middlewares/imageUpload';
-import { profileImageUpload } from '../controllers/user/userProfile';
+import {
+    blockUser,
+    changePreferences,
+    profileImageUpload,
+    unblockUser,
+    userProfileUpdate,
+} from '../controllers/user/userProfile';
 
 const router = express.Router();
 
-router.get('/', authCheck, (req, res) => {
+router.get('/', (req, res) => {
     return res.status(200).json(req.user);
 });
 
-router.post(
-    '/profileimage',
-    authCheck,
-   
-    upload.single('image'),
-    profileImageUpload
-);
+router.post('/profileimage', upload.single('image'), profileImageUpload);
+
+router.put('/profile', userProfileUpdate);
+
+router.put('/block', blockUser);
+
+router.put('/unblock', unblockUser);
+
+router.put('/preferences', changePreferences);
 
 const userRouter = router;
 

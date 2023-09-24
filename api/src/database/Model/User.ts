@@ -44,6 +44,22 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
     facebookId: String,
     profilePic: String,
     resetToken: String,
+
+    contactNumber: {
+        type: String,
+        validate: {
+            validator: function (this: IUser, val: string) {
+                return validator.isMobilePhone(val);
+            },
+            message: 'Please provide valid phone number',
+        },
+    },
+
+    preferences: {
+        notification: { type: Boolean, default: true },
+        emails: { type: Boolean, default: false },
+        messages: { type: Boolean, default: false },
+    },
     resetTokenExpires: { type: Date, default: new Date() },
 
     blockedUsers: [
