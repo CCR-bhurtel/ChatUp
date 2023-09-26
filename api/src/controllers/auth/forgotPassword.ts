@@ -24,7 +24,7 @@ const forgotPasswordHandler = catchAsync(async (req: Request, res, next) => {
     const resetUrl = `${req.headers.origin}/reset-password/${resetToken}`;
 
     if (user.email) {
-        const emailService = new Email(user.name, `<h4>${resetUrl}</h4>`, user.email);
+        const emailService = new Email(user.name, user.email, 'Forgot password', `<h4>${resetUrl}</h4>`, 'html');
         await emailService.sendMail();
     }
 });

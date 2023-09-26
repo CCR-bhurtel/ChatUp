@@ -16,7 +16,7 @@ const authCheck = async (req: any, res: Response, next: NextFunction) => {
             const decodedPayload: any = jwt.verify(authToken, JWT_SECRET);
             const user = await User.findById(decodedPayload.id).select(['-password']);
 
-            req.user = user as PopulatedUser;
+            req.user = user;
             next();
         } catch (err) {
             next(err);

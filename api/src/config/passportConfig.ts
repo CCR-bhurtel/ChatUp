@@ -11,7 +11,7 @@ import { PopulatedUser } from '../Types/User';
 import { Strategy } from 'passport-facebook';
 
 passport.serializeUser((user, done) => {
-    done(null, (user as PopulatedUser)._id);
+    done(null, user._id);
 });
 
 passport.deserializeUser(async (id, done) => {
@@ -22,7 +22,6 @@ passport.deserializeUser(async (id, done) => {
         done(null);
     }
 });
-
 
 passport.use(
     new googleOauth.Strategy(

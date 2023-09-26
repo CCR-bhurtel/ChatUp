@@ -1,12 +1,7 @@
 import express from 'express';
 import upload from '../middlewares/imageUpload';
-import {
-    blockUser,
-    changePreferences,
-    profileImageUpload,
-    unblockUser,
-    userProfileUpdate,
-} from '../controllers/user/userProfile';
+import { blockUser, profileImageUpload, unblockUser, userProfileUpdate } from '../controllers/user/userProfile';
+import { changePreferences } from '../controllers/user/userSettings';
 
 const router = express.Router();
 

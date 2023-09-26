@@ -31,6 +31,7 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
     },
     password: {
         type: String,
+        required: [true, 'please provide password'],
         validate: {
             validator: function (this: IUser, val: string) {
                 if (this.registerType === 'emailPassword') {
@@ -79,7 +80,7 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
 
-    this.password = await bcrypt.hash(this.password as string, 12);
+    if (this.password) this.password = await bcrypt.hash(this.password, 12);
     this.passwordChangedAt = new Date();
     next();
 });

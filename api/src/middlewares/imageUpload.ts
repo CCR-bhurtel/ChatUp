@@ -8,8 +8,8 @@ const storage = multer.diskStorage({
     },
 
     filename(req, file, cb) {
-        const user = req.user as PopulatedUser;
-        const fileName = 'userimage_' + user._id.toString() + path.extname(file.originalname);
+        const user = req.user;
+        const fileName = 'userimage_' + user?._id.toString() + path.extname(file.originalname);
         cb(null, fileName);
     },
 });

@@ -38,7 +38,7 @@ export interface ExpressRequest extends Request {
 
 export type PopulatedUser = Pick<
     IUser,
-    'name' | 'email' | 'location' | 'registerType' | 'profilePic' | 'blockedUsers' | 'preference'
+    'name' | 'email' | 'location' | 'registerType' | 'profilePic' | 'blockedUsers' | 'preferences'
 > & {
     _id: Types.ObjectId;
     _doc?: Mixed;
