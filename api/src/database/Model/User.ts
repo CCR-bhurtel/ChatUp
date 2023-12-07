@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
     },
     googleId: String,
     facebookId: String,
-    profilePic: String,
+    profilePic: { type: String, default: 'defaultProfilePic404.png' },
     resetToken: String,
 
     contactNumber: {

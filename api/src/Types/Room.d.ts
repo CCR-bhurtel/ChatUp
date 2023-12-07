@@ -11,6 +11,9 @@ export interface IRoom {
         ref: 'User';
     };
     blockedUsers: [Types.ObjectId];
+    lastMessage: {
+        type: Date;
+    };
 }
 
 export interface IRoomMethods {}

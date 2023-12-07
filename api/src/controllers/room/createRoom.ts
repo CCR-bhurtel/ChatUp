@@ -4,6 +4,7 @@ import catchAsync from '../../utils/catchAsync';
 import User from '../../database/Model/User';
 import Room from '../../database/Model/Room';
 import Chat from '../../database/Model/Chat';
+import AppError from '../../utils/AppError';
 
 const createRoom = catchAsync(async (req: ExpressRequest, res: Response, next: NextFunction) => {
     const { users, isGroupChat } = req.body;
@@ -22,8 +23,10 @@ const createRoom = catchAsync(async (req: ExpressRequest, res: Response, next: N
 
         return res.status(201).json({ message: 'Group created successfully', group: populatedGroupChat });
     } else {
+        if (req.user.blockedUsers.includes(req.body.users[0])) return next(new AppError('This user is blocked', 400));
+
         const existingRoom = await Room.findOne({
-            users,
+            users: [req.user._id, ...req.body.users],
         }).populate({ path: 'users', select: 'name profilePic' });
 
         if (existingRoom) {

@@ -3,6 +3,8 @@ import { ExpressRequest } from '../Types/User';
 import catchAsync from '../utils/catchAsync';
 import createRoom from '../controllers/room/createRoom';
 import searchRoom from '../controllers/room/searchRoom';
+import { searchUsersForGroupChat } from '../controllers/user/searchUsers';
+import { getRoom, getUserRooms } from '../controllers/room/getRooms';
 
 const router = express.Router();
 
@@ -11,27 +13,23 @@ const router = express.Router();
 router.get('/search', searchRoom);
 // room creation
 router.post('/', createRoom);
-//657174f8d74dc6993a417571 65719b5d3c3afe9e83dfe8bb
-// get all rooms
-router.get(
-    '/',
-    catchAsync(async (req: ExpressRequest, res: Response, next: NextFunction) => {})
-);
+
+// user search for groupchat
+router.get('/usersearch', searchUsersForGroupChat);
+
+// get all rooms for user
+router.get('/', getUserRooms);
 // get specific room
-router.get(
-    '/:roomid',
-    catchAsync(async (req: ExpressRequest, res: Response, next: NextFunction) => {
-        // const chats = await Chat.find({ roomId: groupChat._id }).populate({
-        //     path: 'sender',
-        //     select: 'name profilePic _id',
-        // });
-    })
-);
+router.get('/:roomid', getRoom);
+
+
 // room deletion
 router.delete(
     '/:roomid',
     catchAsync(async (req: ExpressRequest, res: Response, next: NextFunction) => {})
 );
+
+
 // shared medias
 router.get(
     '/:roomid/medias',
@@ -47,6 +45,7 @@ router.get(
     '/:roomid/message',
     catchAsync(async (req: ExpressRequest, res: Response, next: NextFunction) => {})
 );
+
 // block user
 router.put(
     '/:roomid/block',

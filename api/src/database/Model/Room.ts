@@ -18,6 +18,11 @@ const roomSchema = new mongoose.Schema<IRoom, RoomModel, IRoomMethods>({
         ref: 'User',
     },
 
+    lastMessage: {
+        type: Date,
+        default: Date.now(),
+    },
+
     blockedUsers: [
         {
             type: mongoose.Types.ObjectId,
