@@ -1,40 +1,17 @@
 import express, { NextFunction, Response } from 'express';
-import { ExpressRequest, IUser, PopulatedUser, UserModel } from '../Types/User';
+import { ExpressRequest } from '../Types/User';
 import catchAsync from '../utils/catchAsync';
-import Room from '../database/Model/Room';
-import User from '../database/Model/User';
-import { IRoom, RoomModel } from '../Types/Room';
-import mongoose from 'mongoose';
+import createRoom from '../controllers/room/createRoom';
+import searchRoom from '../controllers/room/searchRoom';
 
 const router = express.Router();
 
 // ----------normal room (one to one chat)--------
 // search room (user)
-router.get(
-    '/search',
-    catchAsync(async (req: ExpressRequest, res: Response, next: NextFunction) => {
-        const { key } = req.query;
-        const regexPattern = new RegExp(key as string, 'i');
-        // search from rooms that he is involved, other users
-        const users = await User.find({
-            name: regexPattern,
-            _id: {
-                $nin: req.user.blockedUsers,
-                $not: { $eq: req.user._id },
-            },
-        });
-        const involvedGroupChats = await Room.find({ name: regexPattern, isGroupChat: true, users: req.user._id });
-        let searchResults = [];
-        searchResults.push(...users);
-        searchResults.push(...involvedGroupChats);
-        return res.status(200).json({ searchResult: searchResults });
-    })
-);
+router.get('/search', searchRoom);
 // room creation
-router.get(
-    '/create',
-    catchAsync(async (req: ExpressRequest, res: Response, next: NextFunction) => {})
-);
+router.post('/', createRoom);
+//657174f8d74dc6993a417571 65719b5d3c3afe9e83dfe8bb
 // get all rooms
 router.get(
     '/',
@@ -43,7 +20,12 @@ router.get(
 // get specific room
 router.get(
     '/:roomid',
-    catchAsync(async (req: ExpressRequest, res: Response, next: NextFunction) => {})
+    catchAsync(async (req: ExpressRequest, res: Response, next: NextFunction) => {
+        // const chats = await Chat.find({ roomId: groupChat._id }).populate({
+        //     path: 'sender',
+        //     select: 'name profilePic _id',
+        // });
+    })
 );
 // room deletion
 router.delete(
