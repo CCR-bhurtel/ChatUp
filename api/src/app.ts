@@ -12,6 +12,8 @@ import ErrorControllerProd from './controllers/error/ProdErrorController';
 import './config/passportConfig';
 import { COOKIE_EXPIRES_IN, COOKIE_KEY } from './config/keys';
 import authCheck from './middlewares/authCheck';
+import roomRouter from './routes/room';
+import chatRouter from './routes/chat';
 
 const app = express();
 
@@ -29,11 +31,13 @@ app.use(
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-
 app.use('/api/v1/user', authCheck, userRouter);
 
 app.use('/api/v1/auth', authRouter);
+
+app.use('/api/v1/room', authCheck, roomRouter);
+
+app.use('/api/v1/chat', authCheck, chatRouter);
 
 app.get('/', (req, res) => {
     res.send('<h1> Hello world</h1>');
