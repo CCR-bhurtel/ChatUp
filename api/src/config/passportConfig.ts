@@ -7,7 +7,6 @@ import {
     GOOGLE_OAUTH_CLIENT_ID,
     GOOGLE_OAUTH_CLIENT_SECRET,
 } from './keys';
-import { PopulatedUser } from '../Types/User';
 import { Strategy } from 'passport-facebook';
 
 passport.serializeUser((user, done) => {
@@ -28,7 +27,7 @@ passport.use(
         {
             clientID: GOOGLE_OAUTH_CLIENT_ID,
             clientSecret: GOOGLE_OAUTH_CLIENT_SECRET,
-            callbackURL: '/api/auth/googleredirect',
+            callbackURL: '/api/v1/auth/googleredirect',
         },
         async (accessToken, refreshToken, profile, done) => {
             const currentUser = await User.findOne({ googleId: profile.id });
@@ -62,7 +61,7 @@ passport.use(
         {
             clientID: FACEBOOK_OAUTH_CLIENT_ID,
             clientSecret: FACEBOOK_OAUTH_CLIENT_SECRET,
-            callbackURL: '/api/auth/facebookredirect',
+            callbackURL: '/api/v1/auth/facebookredirect',
         },
         async (accessToken, refreshToken, profile, done) => {
             try {

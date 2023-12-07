@@ -7,11 +7,14 @@ import crypto from 'crypto';
 
 const forgotPasswordHandler = catchAsync(async (req: Request, res, next) => {
     const { email } = req.body;
+    console.log(email);
+
+    if (!email) return next(new AppError('Please provide email', 400));
 
     const user = await User.findOne({ email });
 
     if (!user) {
-        return new AppError('No user with given email', 400);
+        return next(new AppError('No user with given email', 400));
     }
 
     const resetToken = crypto.randomBytes(12).toString('hex');
@@ -23,10 +26,18 @@ const forgotPasswordHandler = catchAsync(async (req: Request, res, next) => {
 
     const resetUrl = `${req.headers.origin}/reset-password/${resetToken}`;
 
-    if (user.email) {
-        const emailService = new Email(user.name, user.email, 'Forgot password', `<h4>${resetUrl}</h4>`, 'html');
-        await emailService.sendMail();
+    if (!user.email && !req.body.email) {
+        return next(new AppError('Email id not found', 400));
     }
+    const emailService = new Email(
+        user.name,
+        user.email || req.body.email,
+        'Forgot password',
+        `<h4>${resetUrl}</h4>`,
+        'html'
+    );
+    const emailResponse = await emailService.sendMail();
+    return res.status(200).json({ message: 'Email sent successfully', detailedResponse: emailResponse });
 });
 
 export default forgotPasswordHandler;

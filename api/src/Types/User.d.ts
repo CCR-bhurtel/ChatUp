@@ -14,7 +14,7 @@ export interface IUser {
     password?: string;
     googleId?: String;
     facebookId?: String;
-    profilePic?: String;
+    profilePic?: string;
     resetToken?: String;
     resetTokenExpires?: Date;
     blockedUsers: [Types.ObjectId];
@@ -34,6 +34,7 @@ export interface IUserMethods {
 
 export interface ExpressRequest extends Request {
     user: PopulatedUser;
+    folderName: String;
 }
 
 export type PopulatedUser = Pick<

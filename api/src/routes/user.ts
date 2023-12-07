@@ -9,7 +9,12 @@ router.get('/', (req, res) => {
     return res.status(200).json(req.user);
 });
 
-router.post('/profileimage', upload.single('image'), profileImageUpload);
+router.post(
+    '/profileimage',
+
+    upload('userImages').single('image'),
+    profileImageUpload
+);
 
 router.put('/profile', userProfileUpdate);
 

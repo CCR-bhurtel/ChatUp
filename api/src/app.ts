@@ -29,9 +29,11 @@ app.use(
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/api/user', authCheck, userRouter);
 
-app.use('/api/auth', authRouter);
+
+app.use('/api/v1/user', authCheck, userRouter);
+
+app.use('/api/v1/auth', authRouter);
 
 app.get('/', (req, res) => {
     res.send('<h1> Hello world</h1>');

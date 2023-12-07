@@ -3,11 +3,16 @@ import { ExpressRequest } from '../../Types/User';
 import User from '../../database/Model/User';
 import AppError from '../../utils/AppError';
 import catchAsync from '../../utils/catchAsync';
+import fs from 'fs';
+import path from 'path';
 
 export const profileImageUpload = catchAsync(async (req: ExpressRequest, res, next) => {
     const fileName = req.file?.filename;
 
     if (fileName) {
+        if (req.user.profilePic)
+            await fs.unlinkSync(path.join(__dirname, '../../../public/images/userImages', req.user.profilePic));
+
         const user = await User.findByIdAndUpdate(
             req.user._id,
             {
@@ -15,6 +20,7 @@ export const profileImageUpload = catchAsync(async (req: ExpressRequest, res, ne
             },
             { new: true }
         );
+
         return res.status(200).json(user);
     } else {
         return next(new AppError("Couldn't save image", 400));
@@ -60,6 +66,3 @@ export const unblockUser = catchAsync(async (req: ExpressRequest, res: Response,
 
     return res.status(200).json(user);
 });
-
-
-
