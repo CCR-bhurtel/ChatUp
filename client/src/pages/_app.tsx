@@ -4,7 +4,8 @@ import type { AppProps } from 'next/app';
 
 export default function App({ Component, pageProps }: AppProps) {
     return (
-        <div>
+        <div className="overflow-auto h-screen">
+            <div className="backgroundlayer hidden bg-lightnavy z-[-1] absolute inset-0"></div>
             <Navbar />
             <Component {...pageProps} />
         </div>
