@@ -7,11 +7,16 @@ import AppError from '../../utils/AppError';
 
 export const getUserRooms = catchAsync(async (req: ExpressRequest, res: Response, next: NextFunction) => {
     const userId = req.user._id;
-    const { limit = 10 } = req.query;
 
+    let { page = 0, limit = 10 } = req.query;
+
+    let totalSkipItems: number = (page as number) * (limit as number);
     const rooms = await Room.find({
         users: userId,
-    }).limit(limit as number);
+    })
+        .sort({ lastMessage: -1 })
+        .skip(totalSkipItems)
+        .limit(limit as number);
 
     return res.status(200).json({ rooms });
 });

@@ -20,6 +20,8 @@ const chatSchema = new mongoose.Schema<IChat, ChatModel>({
     },
     verified: { type: Boolean, default: false },
 
+    textContent: { type: String },
+
     mediaId: {
         type: mongoose.Types.ObjectId,
         ref: 'Media',
