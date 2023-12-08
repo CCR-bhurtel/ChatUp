@@ -21,6 +21,7 @@ const chatSchema = new mongoose.Schema<IChat, ChatModel>({
     verified: { type: Boolean, default: false },
 
     textContent: { type: String },
+    read: { type: Boolean, default: false },
 
     mediaId: {
         type: mongoose.Types.ObjectId,

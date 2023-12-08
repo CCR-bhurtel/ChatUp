@@ -9,6 +9,7 @@ export interface IChat {
     isDeleted: false;
     roomId?: Types.ObjectId;
     verified: Booolean;
+    read: Boolean;
 }
 
 export type ChatModel = Model<IChat, {}, {}>;

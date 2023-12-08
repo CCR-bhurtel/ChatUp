@@ -46,9 +46,9 @@ function ChatList() {
         },
         {
             sender: {
+                name: 'Nick',
                 profilePic:
-                    'https://images.unsplash.com/photo-1610276198568-eb6d0ff53e48?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                name: 'Elizabeth II',
+                    'https://images.unsplash.com/photo-1552234994-66ba234fd567?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cG90cmFpdHxlbnwwfHwwfHx8MA%3D%3D',
                 online: true,
             },
             lastmessage: 'Hello there, I need to talk to you.....',
@@ -67,11 +67,11 @@ function ChatList() {
     ]);
     return (
         <div className="mt-8 w-full">
-            <div className="rooms flex gap-4 flex-col w-full">
+            <div className="rooms flex gap-4 flex-col w-full pb-12 md:pb-0">
                 {rooms.map((room, i) => (
                     <div
                         key={i}
-                        className="roomItem flex items-center justify-between flex-row relative w-full p-4 bg-Gravel rounded-md"
+                        className="cursor-pointer roomItem flex items-center justify-between flex-row relative w-full p-4 bg-Gravel rounded-md"
                     >
                         <div className="messageDetails flex flex-row gap-2 items-center ">
                             <Avatar source={room.sender.profilePic} className="h-[50px] w-[50px]" />
