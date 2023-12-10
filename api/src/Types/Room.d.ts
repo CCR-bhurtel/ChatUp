@@ -1,4 +1,5 @@
 import { Model, Types } from 'mongoose';
+import { PopulatedUser } from './User';
 
 export interface IRoom {
     roomName: string;
@@ -6,7 +7,7 @@ export interface IRoom {
 
     users: [Types.ObjectId];
     roomImage?: string;
-    roomAdmin: {
+    roomAdmin?: {
         type: Types.ObjectId;
         ref: 'User';
     };
@@ -20,4 +21,19 @@ export interface IRoomMethods {}
 
 export type RoomModel = Model<IRoom, {}, IRoomMethods>;
 
-export interface PopulatedRoom {}
+export interface PopulatedRoom {
+    roomName: string;
+    isGroupChat: boolean;
+    _id: string;
+
+    users: [PopulatedUser];
+    roomImage?: string;
+    roomAdmin?: {
+        type: Types.ObjectId;
+        ref: 'User';
+    };
+    blockedUsers: [Types.ObjectId];
+    lastMessage: {
+        type: Date;
+    };
+}

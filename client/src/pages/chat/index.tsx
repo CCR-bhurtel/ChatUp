@@ -1,8 +1,21 @@
 import ChatFooter from '@/components/chat/ChatFooter';
 import ChatSidebar from '@/components/chat/ChatSidebar';
-import React, { useEffect } from 'react';
+import CreateGroupChat from '@/components/chat/CreateGroupChat';
+import Popup from '@/components/layouts/Popup';
+import React, { useEffect, useState } from 'react';
 
 function Chat() {
+    const [createGroupOpen, setCreateGroupOpen] = useState(false);
+
+    const handleCreateGroupOpen = () => {
+        setCreateGroupOpen(true);
+    };
+
+    const handleCreateGroupClose = () => {
+        setCreateGroupOpen(false);
+    };
+
+    const handleFormSubmit = () => {};
     useEffect(() => {
         const background = document.querySelector('.backgroundlayer');
         if (background) {
@@ -16,14 +29,19 @@ function Chat() {
         };
     }, []);
     return (
-        <div className="chatContainer p-4 relative  flex justify-center">
-            <div className="min-w-[100%] md:min-w-[20%] min-h-100">
+        <div className="chatContainer  p-4  flex justify-center">
+            {createGroupOpen && (
+                <Popup onClose={handleCreateGroupClose}>
+                    <CreateGroupChat onSubmit={handleFormSubmit} />
+                </Popup>
+            )}
+            <div className="min-w-[100%] lg:min-w-[25%] min-h-100">
                 <ChatSidebar />
             </div>
-            <div className="emptyChatArea hidden md:flex md:min-w-[80%] items-center justify-center ">
+            <div className="emptyChatArea hidden lg:flex lg:min-w-[75%] items-center justify-center ">
                 Empty chat area
             </div>
-            <ChatFooter />
+            <ChatFooter handleGroupChatOpen={handleCreateGroupOpen} />
         </div>
     );
 }

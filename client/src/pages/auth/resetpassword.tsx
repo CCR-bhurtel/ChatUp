@@ -14,7 +14,7 @@ function resetpassword() {
                     <Input type="password" placeholder="confirm password" name="confirmPassword" onChange={(e) => {}} />
                 </div>
                 <div className="buttonGroup mt-8 w-full flex flex-col items-center justify-center">
-                    <Button onClick={() => {}} dClass={'text-white bg-primary'}>
+                    <Button onClick={() => {}} dClass={'text-white bg-secondary transition-all hover:bg-primary'}>
                         Submit
                     </Button>
                 </div>

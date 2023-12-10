@@ -45,4 +45,8 @@ export type PopulatedUser = Pick<
     _doc?: Mixed;
 };
 
+export type ISimpleUser = Pick<IUser, 'name' | 'email' | 'location' | 'profilePic'> & {
+    _id: Types.ObjectId;
+};
+
 export type UserModel = Model<IUser, {}, IUserMethods>;

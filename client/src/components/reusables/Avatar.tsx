@@ -1,15 +1,11 @@
 import React from 'react';
 
 interface IAvatar {
-    source: string;
+    source: string | undefined;
     className: string;
 }
 function Avatar({ className, source }: IAvatar) {
-    return (
-        <div className={`${className} rounded-[50%] overflow-hidden  object-none`}>
-            <img src={source} alt="avatar img" />
-        </div>
-    );
+    return <img src={source} className={`${className} rounded-full object-cover object-top`} alt="avatar img" />;
 }
 
 export default Avatar;

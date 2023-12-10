@@ -4,12 +4,19 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+    margin: 0;
+    padding: 0;
+}
+
 :root {
     --foreground-rgb: 0, 0, 0;
     --background-start-rgb: 214, 219, 220;
     --background-end-rgb: 255, 255, 255;
-    --primary: #4044ED;
+    --primary: #4044ed;
+    --hoverblue: #01b7f9;
     --red: #f81919;
+    --secondaryred: #b52020;
     --navy: #161056;
     --tuna: #313250;
     --Iron: #d9d9d9;
@@ -21,13 +28,27 @@
     src: url('../assets/fonts/JKAbode-Demo.ttf');
 }
 
+button {
+    transition: all 0.3s ease-in !important;
+}
 body {
     min-width: 100vw;
     font-family: 'Poppins';
     min-height: 100svh;
     background: url('../assets/images/background_desktop.png') no-repeat;
-    background-size: 100vw 110vh;
+    background-size: 100vw 100vh;
     background-position: center;
+}
+.chatsection {
+    border-radius: 8px;
+    background: linear-gradient(
+        180deg,
+        rgba(73, 72, 72, 0.04) 0%,
+        rgba(73, 72, 72, 0.36) 18.45%,
+        rgba(73, 72, 72, 0.66) 46.43%,
+        rgba(73, 72, 72, 0.74) 73.75%,
+        #494848 100%
+    );
 }
 @media screen and (max-width: 768px) {
     body {
