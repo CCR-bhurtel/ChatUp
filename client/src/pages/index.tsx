@@ -1,15 +1,8 @@
-import Image from 'next/image';
-import { Inter } from 'next/font/google';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-
-const inter = Inter({ subsets: ['latin'] });
+import Loading from '@/components/reusables/Loading';
+import { useAuth } from '@/context/auth/AuthContextProvider';
 
 export default function Home() {
-    const router = useRouter();
+    const { state } = useAuth();
 
-    useEffect(() => {
-        router.push('/chat');
-    }, [router]);
-    return <div className="font-jk text-3xl"></div>;
+    return <>{state.loading ? <Loading /> : ''}</>;
 }

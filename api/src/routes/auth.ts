@@ -1,5 +1,5 @@
 import passport from 'passport';
-import express from 'express';
+import express, { NextFunction, Response } from 'express';
 import catchAsync from '../utils/catchAsync';
 import createSendToken from '../utils/createSendToken';
 import login from '../controllers/auth/login';

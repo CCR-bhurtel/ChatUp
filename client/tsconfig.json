@@ -18,6 +18,6 @@
             "@backend/*": ["../api/src"]
         }
     },
-    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/context/auth/AuthContextProvider.tsx"],
     "exclude": ["node_modules"]
 }

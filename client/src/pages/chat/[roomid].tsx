@@ -1,13 +1,12 @@
-import { ISimpleRoom, PopulatedRoom } from '@/Types/Room';
+import { ISimpleRoom } from '@/Types/Room';
 import ChatArea from '@/components/chat/ChatArea';
 import RoomInfo from '@/components/chat/RoomInfo';
 import Popup from '@/components/layouts/Popup';
-import { privateRoom, groupChatRoom } from '@/data/testRoom';
+import {  groupChatRoom } from '@/data/testRoom';
 
-import React, { createRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function ChatRoom() {
-    const divref = createRef<HTMLDivElement>();
     const [isInfoOpen, setIsInfoOpen] = useState<boolean>(false);
     const handleOpenInfo = () => {
         setIsInfoOpen(true);

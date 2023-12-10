@@ -1,5 +1,4 @@
-import { Mixed, Model, Types } from 'mongoose';
-import { Request } from 'express';
+import { Mixed, Types } from 'mongoose';
 
 export interface ReferenceType {
     type: Types.ObjectId;
@@ -17,7 +16,7 @@ export interface IUser {
     profilePic?: string;
     resetToken?: String;
     resetTokenExpires?: Date;
-    blockedUsers: [Types.ObjectId];
+    blockedUsers: Types.ObjectId[];
     settingId?: Types.ObjectId;
     passwordChangedAt: Date;
     contactNumber: string;
@@ -28,13 +27,12 @@ export interface IUser {
     };
 }
 
-export interface IUserMethods {
-    checkPassword: (providedPassword: string) => Promise<boolean>;
+export interface IUserType extends IUser {
+    blockedUsers: IUser[];
 }
 
-export interface ExpressRequest extends Request {
-    user: PopulatedUser;
-    folderName: String;
+export interface IUserMethods {
+    checkPassword: (providedPassword: string) => Promise<boolean>;
 }
 
 export type PopulatedUser = Pick<
@@ -48,5 +46,3 @@ export type PopulatedUser = Pick<
 export type ISimpleUser = Pick<IUser, 'name' | 'email' | 'location' | 'profilePic'> & {
     _id: Types.ObjectId;
 };
-
-export type UserModel = Model<IUser, {}, IUserMethods>;

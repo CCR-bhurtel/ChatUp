@@ -9,13 +9,12 @@ const createSendToken = (user: PopulatedUser, res: Response) => {
             expiresIn: JWT_COOKIE_EXPIRES_IN,
         });
         const time: number = parseInt(JWT_COOKIE_EXPIRES_IN);
-        const cookieOptions = {
-            expires: new Date(Date.now() + time * 24 * 60 * 60 * 1000),
-            httpOnly: true,
-        };
-        if (process.env.NODE_ENV === 'production') cookieOptions.httpOnly = true;
 
-        res.cookie('Authorization', token, cookieOptions);
+        res.cookie('Authorization', token, {
+            expires: new Date(Date.now() + time * 24 * 60 * 60 * 1000),
+
+            httpOnly: process.env.NODE_ENV === 'production',
+        });
         return res.status(200).json({ ...user._doc, password: '', token });
     } catch (err) {
         console.log(err);

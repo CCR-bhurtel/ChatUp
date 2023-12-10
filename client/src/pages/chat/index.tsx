@@ -2,6 +2,8 @@ import ChatFooter from '@/components/chat/ChatFooter';
 import ChatSidebar from '@/components/chat/ChatSidebar';
 import CreateGroupChat from '@/components/chat/CreateGroupChat';
 import Popup from '@/components/layouts/Popup';
+import { useAuth } from '@/context/auth/AuthContextProvider';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 function Chat() {
@@ -16,6 +18,7 @@ function Chat() {
     };
 
     const handleFormSubmit = () => {};
+
     useEffect(() => {
         const background = document.querySelector('.backgroundlayer');
         if (background) {

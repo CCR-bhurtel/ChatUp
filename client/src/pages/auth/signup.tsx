@@ -1,20 +1,66 @@
 import Button from '@/components/reusables/Button';
 import Input from '@/components/reusables/Input';
-import React from 'react';
+import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import google from '../../assets/icons/google.png';
 import facebook from '../../assets/icons/facebook.png';
 import Link from 'next/link';
+import axios, { AxiosResponse } from 'axios';
+import { IUserType } from '@/Types/User';
+import { AuthActionTypes } from '@/context/auth/authActions';
+import toast from 'react-hot-toast';
+import { useAuth } from '@/context/auth/AuthContextProvider';
 
-function signup() {
+function Signup() {
+    const [userData, setUserdata] = useState<{ name: string; email: string; password: string }>({
+        name: '',
+        email: '',
+        password: '',
+    });
+
+    const { state, dispatch } = useAuth();
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setUserdata({ ...userData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e: SyntheticEvent) => {
+        e.preventDefault();
+
+        try {
+            const res: AxiosResponse<IUserType> = await axios.post('/auth/signup', userData, { withCredentials: true });
+
+            dispatch({ type: AuthActionTypes.LoadUser, payload: res.data });
+        } catch (err: any) {
+            dispatch({ type: AuthActionTypes.UserLoginFail, payload: undefined });
+            toast.error(err?.response?.data.message || 'Error loggin in user');
+        }
+    };
     return (
         <div className="w-screen h-[80vh] flex items-center justify-center">
-            <form className="min-w-[300px] flex flex-col items-center justify-center">
+            <form onSubmit={handleSubmit} className="min-w-[300px] flex flex-col items-center justify-center">
                 <h2 className="text-white text-3xl font-jk tracking-wide">signup</h2>
 
                 <div className="inputGroups mt-4 w-full">
-                    <Input type="text" placeholder="Username" name="name" onChange={(e) => {}} />
-                    <Input type="email" placeholder="Email" name="email" onChange={(e) => {}} />
-                    <Input type="password" placeholder="Password" name="password" onChange={(e) => {}} />
+                    <Input
+                        value={userData.name}
+                        type="text"
+                        placeholder="Username"
+                        name="name"
+                        onChange={handleInputChange}
+                    />
+                    <Input
+                        value={userData.email}
+                        type="email"
+                        placeholder="Email"
+                        name="email"
+                        onChange={handleInputChange}
+                    />
+                    <Input
+                        value={userData.password}
+                        type="password"
+                        placeholder="Password"
+                        name="password"
+                        onChange={handleInputChange}
+                    />
                 </div>
                 <div className="buttonGroup mt-8 w-full flex flex-col items-center justify-center">
                     <Button onClick={() => {}} dClass={'text-white bg-secondary transition-all hover:bg-primary'}>
@@ -36,4 +82,4 @@ function signup() {
     );
 }
 
-export default signup;
+export default Signup;

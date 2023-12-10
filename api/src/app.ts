@@ -6,6 +6,7 @@ import userRouter from './routes/user';
 import authRouter from './routes/auth';
 import cookieSession from 'cookie-session';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 
 import ErrorControllerDev from './controllers/error/DevErrorController';
 import ErrorControllerProd from './controllers/error/ProdErrorController';
@@ -14,13 +15,21 @@ import { COOKIE_EXPIRES_IN, COOKIE_KEY } from './config/keys';
 import authCheck from './middlewares/authCheck';
 import roomRouter from './routes/room';
 import chatRouter from './routes/chat';
-
+import cors from 'cors';
 const app = express();
 
 const publicPath: string = path.resolve(__dirname, '../public');
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.static(publicPath));
+
+app.use(
+    cors({
+        credentials: true,
+        origin: 'http://localhost:3000',
+    })
+);
 
 app.use(
     cookieSession({
