@@ -18,12 +18,11 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
 
     email: {
         type: String,
-        unique: true,
 
         validate: {
             validator: function (this: IUser, val: string) {
                 if (this.registerType === 'emailPassword') {
-                    return val.length > 0 && validator.isEmail(val);
+                    return val && val.length > 0 && validator.isEmail(val);
                 }
             },
             message: 'Please enter valid email',
@@ -31,11 +30,10 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
     },
     password: {
         type: String,
-        required: [true, 'please provide password'],
         validate: {
             validator: function (this: IUser, val: string) {
                 if (this.registerType === 'emailPassword') {
-                    return val.length > 6;
+                    return val && val.length > 6;
                 }
             },
             message: 'Password is required and its length should be greater than 6',

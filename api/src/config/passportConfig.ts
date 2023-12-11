@@ -31,26 +31,22 @@ passport.use(
         },
         async (accessToken, refreshToken, profile, done) => {
             const currentUser = await User.findOne({ googleId: profile.id });
-            try {
-                if (!currentUser) {
-                    const user = await User.create({
-                        googleId: profile.id,
+            if (!currentUser) {
+                const user = await User.create({
+                    googleId: profile.id,
 
-                        name: profile.displayName,
-                        email: profile.emails?.length ? profile.emails[0].value : '',
-                        profilePic: profile.photos?.length ? profile.photos[0].value : '',
-                        registerType: 'google',
-                        location: '',
-                        blockedUsers: [],
-                        verified: true,
-                    });
-                    done(null, user);
-                } else {
-                    //pass for serializing
-                    done(null, currentUser);
-                }
-            } catch (err) {
-                console.log(err);
+                    name: profile.displayName,
+                    email: profile.emails?.length ? profile.emails[0].value : '',
+                    profilePic: profile.photos?.length ? profile.photos[0].value : '',
+                    registerType: 'google',
+                    location: '',
+                    blockedUsers: [],
+                    verified: true,
+                });
+                done(null, user);
+            } else {
+                //pass for serializing
+                done(null, currentUser);
             }
         }
     )

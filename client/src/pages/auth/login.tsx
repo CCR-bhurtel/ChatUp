@@ -9,12 +9,16 @@ import { AuthActionTypes } from '@/context/auth/authActions';
 import toast from 'react-hot-toast';
 import axios, { AxiosResponse } from 'axios';
 import { IUserType } from '@/Types/User';
+import { useRouter } from 'next/router';
+import { BASE_API_PATH } from '@/config/keys';
 
 function Login() {
     const [userData, setUserData] = useState<{ email?: string; password?: string }>({ email: '', password: '' });
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUserData({ ...userData, [e.target.name]: e.target.value });
     };
+
+    const router = useRouter();
 
     const { state, dispatch } = useAuth();
 
@@ -72,10 +76,23 @@ function Login() {
                         login
                     </Button>
                     <h1 className="text-white mt-2 ">OR</h1>
-                    <Button onClick={() => {}} dClass="text-white bg-red hover:bg-crimson">
+                    <Button
+                        onClick={async (e) => {
+                            e.preventDefault();
+                            router.push(`${BASE_API_PATH}/auth/google`);
+                        }}
+                        dClass="text-white bg-red hover:bg-crimson"
+                    >
                         <img src={google.src} alt="googleicon" className="w-8 mr-2" /> Login with google
                     </Button>
-                    <Button onClick={() => {}} dClass="text-black bg-white hover:bg-black hover:text-white">
+
+                    <Button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            router.push(`${BASE_API_PATH}/auth/facebook`);
+                        }}
+                        dClass="text-black bg-white hover:bg-black hover:text-white"
+                    >
                         <img src={facebook.src} alt="facebookicon" className="w-8 mr-2" /> Login with facebook
                     </Button>
                 </div>

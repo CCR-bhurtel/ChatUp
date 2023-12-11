@@ -2,7 +2,7 @@ import { ISimpleRoom } from '@/Types/Room';
 import ChatArea from '@/components/chat/ChatArea';
 import RoomInfo from '@/components/chat/RoomInfo';
 import Popup from '@/components/layouts/Popup';
-import {  groupChatRoom } from '@/data/testRoom';
+import { groupChatRoom } from '@/data/testRoom';
 
 import React, { useEffect, useState } from 'react';
 
@@ -28,7 +28,7 @@ function ChatRoom() {
         };
     }, []);
     return (
-        <div className={`pt-4 flex flex-col self-end h-[93vh] overflow-scroll  ${!isInfoOpen && 'relative'}`}>
+        <div className={`pt-4 flex flex-col self-end h-[93vh] overflow-scroll   ${!isInfoOpen && 'relative'}`}>
             <div className="popup md:hidden">
                 {isInfoOpen ? (
                     <Popup onClose={handleCloseInfo}>

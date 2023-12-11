@@ -17,7 +17,7 @@ function Signup() {
         password: '',
     });
 
-    const { state, dispatch } = useAuth();
+    const { dispatch } = useAuth();
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUserdata({ ...userData, [e.target.name]: e.target.value });
     };

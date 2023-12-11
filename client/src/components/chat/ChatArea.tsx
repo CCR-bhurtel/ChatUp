@@ -45,9 +45,9 @@ function ChatArea(props: IChatArea) {
                     <FontAwesomeIcon icon={faTrashCan} style={{ color: 'white' }} />
                 </div>
             </div>
-            <div className="chatsection relative flex  px-4 min-h-[87%] overflow-scroll  min-w-full ">
-                <div ref={divref} className="message-container mb-20 py-2 overflow-scroll flex flex-col ">
-                    <div className="messages mymessages mt-2 self-end text-white font-light leading-tight  flex items-end flex-col gap-2 w-[70%]">
+            <div className="chatsection relative flex  px-4 min-h-[87%] overflow-y-scroll overflow-x-hidden  min-w-full ">
+                <div ref={divref} className="message-container mb-20 py-2 overflow-y-scroll overflow-x-hidden flex flex-col ">
+                    <div className="messages overflow-x-hidden mymessages mt-2 self-end text-white font-light leading-tight  flex items-end flex-col gap-2 w-[70%]">
                         <div className="message bg-purple p-4 pt-6 color-white rounded-md relative">
                             <div className="time text-[10px] absolute left-1 top-1 p-1 font-thin tracking-wide">
                                 08:30
