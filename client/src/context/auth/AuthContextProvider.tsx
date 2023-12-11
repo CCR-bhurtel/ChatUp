@@ -48,7 +48,7 @@ function AuthContextProvider(props: { children: ReactElement }) {
                 router.push('/auth/login');
             }
         }
-    }, [state]);
+    }, [state, router]);
 
     useEffect(() => {
         loadUser(dispatch);

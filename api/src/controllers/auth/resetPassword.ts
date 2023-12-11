@@ -3,6 +3,7 @@ import User from '../../database/Model/User';
 import catchAsync from '../../utils/catchAsync';
 import AppError from '../../utils/AppError';
 import createSendToken from '../../utils/createSendToken';
+import { use } from 'passport';
 
 const resetPasswordHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const resetToken = req.query.token;
@@ -22,7 +23,8 @@ const resetPasswordHandler = catchAsync(async (req: Request, res: Response, next
 
     user.password = password;
     user.resetTokenExpires = new Date();
-    user.save();
+
+    await user.save();
     createSendToken(user, res);
 });
 

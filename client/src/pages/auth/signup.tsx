@@ -28,6 +28,7 @@ function Signup() {
         try {
             const res: AxiosResponse<IUserType> = await axios.post('/auth/signup', userData, { withCredentials: true });
 
+            toast.success('Signup complete');
             dispatch({ type: AuthActionTypes.LoadUser, payload: res.data });
         } catch (err: any) {
             dispatch({ type: AuthActionTypes.UserLoginFail, payload: undefined });

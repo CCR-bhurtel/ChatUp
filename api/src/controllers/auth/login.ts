@@ -13,7 +13,7 @@ interface loginType {
 const login = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const { email, password }: loginType = req.body;
     if (!email || !password) return res.status(400).json({ message: 'Please fill in all the fields' });
-    const user = await User.findOne({ email }).select(['+password']);
+    const user = await User.findOne({ email }).select(["+password"])
     if (!user) {
         return next(new AppError('No user found with given email, please signup', 400));
     }
