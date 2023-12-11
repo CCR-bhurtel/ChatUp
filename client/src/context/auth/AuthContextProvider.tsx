@@ -42,13 +42,13 @@ function AuthContextProvider(props: { children: ReactElement }) {
     const router = useRouter();
     useEffect(() => {
         if (!state.loading) {
-            if (state.isLoggedIn) {
+            if (state.isLoggedIn ) {
                 router.push('/chat');
             } else if (!state.isLoggedIn && !router.pathname.includes('auth')) {
                 router.push('/auth/login');
             }
         }
-    }, [state, router]);
+    }, [state]);
 
     useEffect(() => {
         loadUser(dispatch);

@@ -12,13 +12,12 @@ import { Toaster } from 'react-hot-toast';
 export default function App({ Component, pageProps }: AppProps) {
     axios.defaults.baseURL = BASE_API_PATH;
 
-
     const { state } = useContext(AuthContext);
 
     return (
-        <div className="overflow-scroll min-h-screen flex flex-col">
+        <div className="h-screen overflow-hidden flex flex-col">
             <Toaster />
-            <div className="backgroundlayer hidden bg-lightnavy z-[-1] absolute inset-0"></div>
+            <div className="backgroundlayer  hidden bg-lightnavy z-[-1] absolute inset-0"></div>
 
             <AuthContextProvider>
                 <>
