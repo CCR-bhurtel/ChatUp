@@ -24,6 +24,8 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.static(publicPath));
 
+// app.set('view engine', 'pug');
+// app.set('views', path.join(__dirname, 'templates'));
 app.use(
     cors({
         credentials: true,

@@ -26,9 +26,9 @@ router.get('/facebookredirect', passport.authenticate('facebook'), (req, res) =>
 router.post('/login', login);
 router.post('/signup', signup);
 
-router.post('/forgot-password', forgotPasswordHandler);
+router.post('/forgotpassword', forgotPasswordHandler);
 
-router.post('/change-password', authCheck, changePasswordHandler);
-router.post('/reset-password/:token', resetPasswordHandler);
+router.post('/changepassword', authCheck, changePasswordHandler);
+router.post('/resetpassword', resetPasswordHandler);
 
 export default router;

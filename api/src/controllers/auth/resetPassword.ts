@@ -5,8 +5,10 @@ import AppError from '../../utils/AppError';
 import createSendToken from '../../utils/createSendToken';
 
 const resetPasswordHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const resetToken = req.params.token;
-    const { newPassword } = req.body;
+    const resetToken = req.query.token;
+
+    const { password, confirmPassword } = req.body;
+    if (password !== confirmPassword) return new AppError('passwords donot match', 400);
     const user = await User.findOne({
         resetToken,
         resetTokenExpires: {
@@ -18,7 +20,8 @@ const resetPasswordHandler = catchAsync(async (req: Request, res: Response, next
         return next(new AppError('Token invalid or already expired', 400));
     }
 
-    user.password = newPassword;
+    user.password = password;
+    user.resetTokenExpires = new Date();
     user.save();
     createSendToken(user, res);
 });

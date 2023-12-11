@@ -4,6 +4,8 @@ import Email from '../../services/Email';
 import AppError from '../../utils/AppError';
 import catchAsync from '../../utils/catchAsync';
 import crypto from 'crypto';
+import pug from 'pug';
+import path from 'path';
 
 const forgotPasswordHandler = catchAsync(async (req: Request, res, next) => {
     const { email } = req.body;
@@ -24,16 +26,23 @@ const forgotPasswordHandler = catchAsync(async (req: Request, res, next) => {
 
     await user.save();
 
-    const resetUrl = `${req.headers.origin}/reset-password/${resetToken}`;
+    const resetUrl = `${req.headers.origin}/auth/resetpassword/?token=${resetToken}`;
 
     if (!user.email && !req.body.email) {
         return next(new AppError('Email id not found', 400));
     }
+
+    const forgotPasswordHTML = pug.renderFile(`${path.join(__dirname, '../../../templates/forgotpassword.pug')}`, {
+        username: user.name,
+        resetURL: resetUrl,
+        logoURL: `${req.headers.origin}/images/logo.svg`,
+    });
+
     const emailService = new Email(
         user.name,
         user.email || req.body.email,
         'Forgot password',
-        `<h4>${resetUrl}</h4>`,
+        forgotPasswordHTML,
         'html'
     );
     const emailResponse = await emailService.sendMail();

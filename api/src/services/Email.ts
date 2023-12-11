@@ -22,7 +22,7 @@ export default class Email {
         this.userName = userName;
         this.type = type;
         this.receiver = receiverEmail;
-        this.sender = '<no-reply>@chatup.com';
+        this.sender = 'c1d203053d-bcb734+1@inbox.mailtrap.io';
         this.message = message;
         this.subject = subject;
     }
