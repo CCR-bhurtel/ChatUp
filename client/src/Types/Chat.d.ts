@@ -1,14 +1,12 @@
-import { Model, Types } from 'mongoose';
-import { ReferenceType } from './User';
+import { ISimpleUser } from './User';
 
-export interface IChat {
-    sender: ReferenceType;
+export interface IChatType {
+    _id: string;
+    sender: ISimpleUser;
     messageType: 'Text' | 'File' | 'Media';
     textContent?: String;
-    mediaId?: Types.ObjectId;
-    isDeleted: false;
-    roomId?: Types.ObjectId;
+    mediaId?: String;
+    isDeleted: Boolean;
+    roomId?: String;
     verified: Booolean;
 }
-
-export type ChatModel = Model<IChat, {}, {}>;

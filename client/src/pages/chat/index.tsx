@@ -31,6 +31,7 @@ function Chat() {
             }
         };
     }, []);
+
     return (
         <div className="chatContainer  p-4  flex justify-center">
             {createGroupOpen && (

@@ -28,7 +28,11 @@ function ChatRoom() {
         };
     }, []);
     return (
-        <div className={`pt-4 flex flex-col self-end h-[93vh] overflow-hidden   ${!isInfoOpen && 'relative'}`}>
+        <div
+            className={`pt-4 w-full md:w-auto flex flex-col self-end h-[93vh] overflow-hidden   ${
+                !isInfoOpen && 'relative'
+            }`}
+        >
             <div className="popup md:hidden">
                 {isInfoOpen ? (
                     <Popup onClose={handleCloseInfo}>

@@ -90,9 +90,24 @@ function CreateGroupChat({ onSubmit }: ICreateGroupChat) {
         setSearchResult(newSearchResults);
     };
 
-    useEffect(() => {}, [searchKey]);
+    useEffect(() => {
+        try {
+            const groupContainer = document.getElementById('chatGroupCreate');
+            const searchResult = document.getElementById('groupMemberContainer');
+
+            groupContainer?.addEventListener('click', (e: any) => {
+                setTimeout(() => {
+                    if (openSearchResult && !searchResult?.contains(e.target)) {
+                        setOpenSearchResult(false);
+                    }
+                }, 100);
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    }, []);
     return (
-        <div className="bg-Iron py-12 px-4 flex flex-col min-w-[20rem] rounded-md">
+        <div id="chatGroupCreate" className="bg-Iron py-12 px-4 flex flex-col min-w-[20rem] rounded-md">
             <div className="sectiontitle font-jk font-normal text-center tracking-wide text-2xl text-navy">
                 create chat group
             </div>
@@ -105,7 +120,7 @@ function CreateGroupChat({ onSubmit }: ICreateGroupChat) {
                     placeholder="Name"
                 />
 
-                <div className="membercontiner relative">
+                <div id="groupMemberContainer" className="groupMemberContainer relative">
                     <GroupMemberInput
                         searchKey={searchKey}
                         removeMember={removeGroupMember}
@@ -114,7 +129,7 @@ function CreateGroupChat({ onSubmit }: ICreateGroupChat) {
                     />
 
                     {searchResult.length && openSearchResult ? (
-                        <div className="seachResult bg-white p-2 flex flex-col rounded-md gap-1 absolute w-full">
+                        <div className="groupSearchResult bg-white p-2 flex flex-col rounded-md gap-1 absolute w-full">
                             {searchResult.slice(0, 5).map((member) => (
                                 <div
                                     onClick={() => {

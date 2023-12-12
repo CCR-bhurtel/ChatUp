@@ -1,5 +1,5 @@
 import { Model, Types } from 'mongoose';
-import { ISimpleUser } from './User';
+import { ISimpleUser, IUserType } from './User';
 
 export interface IRoom {
     roomName: string;
@@ -36,6 +36,18 @@ export interface PopulatedRoom {
     lastMessage: {
         type: Date;
     };
+}
+
+export interface IRoomType {
+    roomName: string;
+    isGroupChat: boolean;
+    _id: string;
+
+    users: IUserType[];
+    roomImage?: string;
+    roomAdmin?: IUserType;
+    blockedUsers: IUserType[];
+    lastMessage: Date;
 }
 
 export interface ISimpleRoom {

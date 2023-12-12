@@ -26,7 +26,7 @@ function ChatArea(props: IChatArea) {
     }, []);
     return (
         <>
-            <div className="flex justify-between  p-4 items-center">
+            <div className="flex  justify-between  p-4 items-center">
                 <div
                     onClick={() => {
                         props.handleInfoOpen && props.handleInfoOpen();
