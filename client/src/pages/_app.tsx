@@ -2,6 +2,7 @@ import Navbar from '@/components/layouts/Navbar';
 import Loading from '@/components/reusables/Loading';
 import { BASE_API_PATH } from '@/config/keys';
 import AuthContextProvider, { AuthContext, useAuth } from '@/context/auth/AuthContextProvider';
+import RoomContextProvider from '@/context/chat/RoomContextProvider';
 import '@/styles/globals.css';
 import axios from 'axios';
 import type { AppProps } from 'next/app';
@@ -20,16 +21,18 @@ export default function App({ Component, pageProps }: AppProps) {
             <div className="backgroundlayer  hidden bg-lightnavy z-[-1] absolute inset-0"></div>
 
             <AuthContextProvider>
-                <>
-                    {state.loading ? (
-                        <Loading />
-                    ) : (
-                        <>
-                            <Navbar />
-                            <Component {...pageProps} />
-                        </>
-                    )}
-                </>
+                <RoomContextProvider>
+                    <>
+                        {state.loading ? (
+                            <Loading />
+                        ) : (
+                            <>
+                                <Navbar />
+                                <Component {...pageProps} />
+                            </>
+                        )}
+                    </>
+                </RoomContextProvider>
             </AuthContextProvider>
         </div>
     );

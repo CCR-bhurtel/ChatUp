@@ -1,9 +1,11 @@
 import { IChatType } from '@/Types/Chat';
 import { IActiveRoom, IRoomType } from '@/Types/Room';
-import React, { Dispatch, ReactElement, createContext, useContext } from 'react';
+import React, { Dispatch, ReactElement, createContext, useContext, useEffect, useReducer } from 'react';
 import { RoomActionTypes, RoomActions } from './roomActions';
 import axios, { AxiosResponse } from 'axios';
 import toast from 'react-hot-toast';
+import roomReducer from './roomReducer';
+import { useAuth } from '../auth/AuthContextProvider';
 
 export interface RoomStateInterface {
     activeRoom?: IActiveRoom;
@@ -44,7 +46,17 @@ const loadRooms = async (dispatch: Dispatch<RoomActions>) => {
 };
 
 function RoomContextProvider(props: { children: ReactElement }) {
-    return <div>RoomContextProvider</div>;
+    const [state, dispatch] = useReducer(roomReducer, INITIAL_STATE);
+
+    const {
+        state: { isLoggedIn },
+    } = useAuth();
+    useEffect(() => {
+        if (isLoggedIn) {
+            loadRooms(dispatch);
+        }
+    }, [isLoggedIn]);
+    return <RoomContext.Provider value={{ state, dispatch }}>{props.children}</RoomContext.Provider>;
 }
 
 export default RoomContextProvider;
