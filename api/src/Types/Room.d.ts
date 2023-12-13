@@ -1,18 +1,19 @@
 import { Model, Types } from 'mongoose';
 import { PopulatedUser } from './User';
+import { IChat } from './Chat';
 
 export interface IRoom {
     roomName: string;
     isGroupChat: boolean;
 
-    users: [Types.ObjectId];
+    users: Types.ObjectId[];
     roomImage?: string;
     roomAdmin?: {
         type: Types.ObjectId;
         ref: 'User';
     };
-    blockedUsers: [Types.ObjectId];
-    lastMessage: {
+    blockedUsers: Types.ObjectId[];
+    lastMessageDate: {
         type: Date;
     };
 }
@@ -33,7 +34,7 @@ export interface PopulatedRoom {
         ref: 'User';
     };
     blockedUsers: [Types.ObjectId];
-    lastMessage: {
+    lastMessageDate: {
         type: Date;
     };
 }

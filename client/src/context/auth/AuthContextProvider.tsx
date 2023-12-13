@@ -52,7 +52,7 @@ function AuthContextProvider(props: { children: ReactElement }) {
 
     useEffect(() => {
         loadUser(dispatch);
-    }, []);
+    }, [state.isLoggedIn]);
     return <AuthContext.Provider value={{ state, dispatch }}>{props.children}</AuthContext.Provider>;
 }
 

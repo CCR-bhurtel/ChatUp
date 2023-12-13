@@ -1,5 +1,6 @@
 import { Model, Types } from 'mongoose';
 import { ISimpleUser, IUserType } from './User';
+import { IChatType } from './Chat';
 
 export interface IRoom {
     roomName: string;
@@ -48,6 +49,10 @@ export interface IRoomType {
     roomAdmin?: IUserType;
     blockedUsers: IUserType[];
     lastMessage: Date;
+}
+
+export interface IActiveRoom extends IRoomType {
+    messages: IChatType[];
 }
 
 export interface ISimpleRoom {

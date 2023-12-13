@@ -12,13 +12,14 @@ const roomSchema = new mongoose.Schema<IRoom, RoomModel, IRoomMethods>({
     ],
     roomImage: {
         type: String,
+        default: 'defaultGroupImage.png',
     },
     roomAdmin: {
         type: mongoose.Types.ObjectId,
         ref: 'User',
     },
 
-    lastMessage: {
+    lastMessageDate: {
         type: Date,
         default: Date.now(),
     },

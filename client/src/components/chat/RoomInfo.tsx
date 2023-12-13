@@ -2,7 +2,14 @@ import { ISimpleRoom } from '@/Types/Room';
 import React from 'react';
 import Avatar from '../reusables/Avatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBan, faImage, faSearch, faUserFriends, faUsers } from '@fortawesome/free-solid-svg-icons';
+import {
+    faArrowRightFromBracket,
+    faBan,
+    faImage,
+    faSearch,
+    faUserFriends,
+    faUsers,
+} from '@fortawesome/free-solid-svg-icons';
 import { Switch } from '@material-tailwind/react';
 export interface IRoomInfo {
     room: ISimpleRoom | undefined;
@@ -115,6 +122,14 @@ function RoomInfoGroup({ room }: IRoomInfo) {
                             <FontAwesomeIcon icon={faUserFriends} className="text-xs" />
                         </div>
                     ))}
+                </div>
+            </span>
+
+            <span className="leavegroup text-navy mt-4 flex w-full justify-between cursor-pointer">
+                <span> Leave group</span>
+
+                <div className="label">
+                    <FontAwesomeIcon icon={faArrowRightFromBracket} />
                 </div>
             </span>
         </div>
