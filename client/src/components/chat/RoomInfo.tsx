@@ -1,4 +1,4 @@
-import { ISimpleRoom } from '@/Types/Room';
+import { IActiveRoom, ISimpleRoom } from '@/Types/Room';
 import React from 'react';
 import Avatar from '../reusables/Avatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,7 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Switch } from '@material-tailwind/react';
 export interface IRoomInfo {
-    room: ISimpleRoom | undefined;
+    room: IActiveRoom | undefined;
     light?: boolean;
 }
 function RoomInfo({ room, light }: IRoomInfo) {

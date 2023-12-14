@@ -4,9 +4,8 @@ export interface IChatType {
     _id: string;
     sender: ISimpleUser;
     messageType: 'Text' | 'File' | 'Media';
-    textContent?: String;
-    mediaId?: String;
-    isDeleted: Boolean;
-    roomId?: String;
-    verified: Booolean;
+    textContent?: string;
+    mediaId?: string;
+    isDeleted: boolean;
+    roomId?: string;
 }

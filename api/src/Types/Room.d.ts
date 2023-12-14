@@ -1,8 +1,7 @@
-import { Model, Types } from 'mongoose';
+import { Document, Model, Types } from 'mongoose';
 import { PopulatedUser } from './User';
-import { IChat } from './Chat';
 
-export interface IRoom {
+export interface IRoom extends Document {
     roomName: string;
     isGroupChat: boolean;
 

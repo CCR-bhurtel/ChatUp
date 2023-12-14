@@ -1,4 +1,4 @@
-import { ISimpleRoom } from '@/Types/Room';
+import { IActiveRoom } from '@/Types/Room';
 import ChatArea from '@/components/chat/ChatArea';
 import RoomInfo from '@/components/chat/RoomInfo';
 import Popup from '@/components/layouts/Popup';
@@ -14,7 +14,7 @@ function ChatRoom() {
     const handleCloseInfo = () => {
         setIsInfoOpen(false);
     };
-    const [room, setRoom] = useState<ISimpleRoom | undefined>(groupChatRoom);
+    const [room, setRoom] = useState<IActiveRoom | undefined>(groupChatRoom);
     useEffect(() => {
         const background = document.querySelector('.backgroundlayer');
         if (background) {

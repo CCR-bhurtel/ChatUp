@@ -1,54 +1,16 @@
-import { Model, Types } from 'mongoose';
-import { ISimpleUser, IUserType } from './User';
+import { ISimpleUser } from './User';
 import { IChatType } from './Chat';
-
-export interface IRoom {
-    roomName: string;
-    isGroupChat: boolean;
-
-    users: [Types.ObjectId];
-    roomImage?: string;
-    roomAdmin: {
-        type: Types.ObjectId;
-        ref: 'User';
-    };
-    blockedUsers: [Types.ObjectId];
-    lastMessage: {
-        type: Date;
-    };
-}
-
-export interface IRoomMethods {}
-
-export type RoomModel = Model<IRoom, {}, IRoomMethods>;
-
-export interface PopulatedRoom {
-    roomName: string;
-    isGroupChat: boolean;
-    _id: string;
-
-    users: [PopulatedUser];
-    roomImage?: string;
-    roomAdmin?: {
-        type: Types.ObjectId;
-        ref: 'User';
-    };
-    blockedUsers: [Types.ObjectId];
-    lastMessage: {
-        type: Date;
-    };
-}
 
 export interface IRoomType {
     roomName: string;
     isGroupChat: boolean;
     _id: string;
 
-    users: IUserType[];
+    users: ISimpleUser[];
     roomImage?: string;
-    roomAdmin?: IUserType;
-    blockedUsers: IUserType[];
-    lastMessage: Date;
+    roomAdmin?: string;
+    blockedUsers: string[];
+    lastMessage?: string;
 }
 
 export interface IActiveRoom extends IRoomType {
@@ -59,7 +21,8 @@ export interface ISimpleRoom {
     roomName: string;
     isGroupChat: boolean;
     _id: string;
-    users: ISimpleUser[];
+    users: string[];
     roomImage?: string;
     roomAdmin?: ISimpleUser;
+    lastMessage?: string;
 }
