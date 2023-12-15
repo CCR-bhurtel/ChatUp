@@ -23,6 +23,7 @@ const roomSchema = new mongoose.Schema<IRoom, RoomModel, IRoomMethods>({
         type: Date,
         default: Date.now(),
     },
+    lastMessage: String,
 
     blockedUsers: [
         {

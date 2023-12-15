@@ -15,6 +15,7 @@ export interface IRoom extends Document {
     lastMessageDate: {
         type: Date;
     };
+    lastMessage?: String;
 }
 
 export interface IRoomMethods {}
@@ -36,4 +37,5 @@ export interface PopulatedRoom {
     lastMessageDate: {
         type: Date;
     };
+    lastMessage?: String;
 }

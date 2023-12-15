@@ -14,6 +14,8 @@ function ChatRoom() {
     const handleCloseInfo = () => {
         setIsInfoOpen(false);
     };
+
+    
     const [room, setRoom] = useState<IActiveRoom | undefined>(groupChatRoom);
     useEffect(() => {
         const background = document.querySelector('.backgroundlayer');

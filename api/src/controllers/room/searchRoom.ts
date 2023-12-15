@@ -7,7 +7,8 @@ import Room from '../../database/Model/Room';
 const searchRoom = catchAsync(async (req: ExpressRequest, res: Response, next: NextFunction) => {
     const { key } = req.query;
     const regexPattern = new RegExp(key as string, 'i');
-    // search from rooms that he is involved, other users
+
+    // TODO:- search after populate
     const users = await User.find({
         name: regexPattern,
         _id: {
@@ -16,6 +17,7 @@ const searchRoom = catchAsync(async (req: ExpressRequest, res: Response, next: N
         },
     });
     const involvedGroupChats = await Room.find({ name: regexPattern, isGroupChat: true, users: req.user._id });
+
     let searchResults = [];
     searchResults.push(...users);
     searchResults.push(...involvedGroupChats);
