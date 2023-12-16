@@ -7,12 +7,18 @@ import {
     faVideoCamera,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { createRef, useEffect, useMemo } from 'react';
+import React, { ChangeEvent, SyntheticEvent, createRef, useEffect, useMemo, useState } from 'react';
 import Avatar from '../reusables/Avatar';
 import { userData } from '@/data/testUser';
 import { IActiveRoom } from '@/Types/Room';
 import getAvatarImage from '@/utils/getAvatarImage';
 import MessageContainer from './MessageContainer';
+import { IChatType } from '@/Types/Chat';
+import axios, { AxiosResponse } from 'axios';
+import { useAuth } from '@/context/auth/AuthContextProvider';
+import { useRoom } from '@/context/chat/RoomContextProvider';
+import { RoomActionTypes } from '@/context/chat/roomActions';
+import toast from 'react-hot-toast';
 
 interface IChatArea {
     handleInfoOpen?: () => void;
@@ -20,6 +26,9 @@ interface IChatArea {
 }
 function ChatArea(props: IChatArea) {
     const { room } = props;
+    const auth = useAuth();
+    const { state, dispatch } = useRoom();
+    const [message, setMessage] = useState<string>('');
     const divref = createRef<HTMLDivElement>();
     useEffect(() => {
         if (divref.current) {
@@ -28,8 +37,36 @@ function ChatArea(props: IChatArea) {
                 behavior: 'smooth',
             });
         }
-    }, []);
+    }, [state.activeRoom?.messages, divref]);
     const roomImage = useMemo(() => getAvatarImage(room.roomImage, room.isGroupChat), [room]);
+
+    const handleMessageChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setMessage(e.target.value);
+    };
+    const handleSendMessage = async (e: SyntheticEvent) => {
+        e.preventDefault();
+        if (!auth.state.user) {
+            toast.error('User not authorized');
+            return;
+        }
+        if (message.length < 1) return;
+        try {
+            const res: AxiosResponse<IChatType> = await axios.post('/chat', {
+                message,
+                roomId: room._id,
+            });
+
+            const chat = {
+                ...res.data,
+                sender: auth.state.user,
+            };
+
+            dispatch({ type: RoomActionTypes.AppendChatToRoom, payload: chat });
+            setMessage('');
+        } catch (err: any) {
+            toast.error(err.response?.data.message);
+        }
+    };
     return (
         <>
             <div className="flex  justify-between  p-4 items-center">
@@ -51,22 +88,28 @@ function ChatArea(props: IChatArea) {
                     <FontAwesomeIcon icon={faTrashCan} style={{ color: 'white' }} />
                 </div>
             </div>
-            <div className="chatsection relative flex  px-4 min-h-[87%] overflow-hidden min-w-full ">
+            <div className="chatsection relative flex  px-4 min-h-[87%]  min-w-full ">
                 <div
                     ref={divref}
-                    className="message-container min-h-[80vh] w-full mb-20 py-2 overflow-y-scroll overflow-x-hidden flex flex-col "
+                    className="message-container   min-h-[70vh] md:min-h-[50vh] w-full mb-[20vh] py-2 overflow-y-scroll overflow-x-hidden flex flex-col "
                 >
-                    <MessageContainer />
+                    <MessageContainer messages={room.messages} />
                 </div>
             </div>
-            <div className="messageBox absolute w-full justify-center  bottom-5  flex">
+
+            <div className="messageBox absolute w-full justify-center  bottom-2  flex">
                 <div className="bg-cgray p-4 rounded-tl-xl text-sm rounded-bl-xl flex  ">
-                    <input
-                        type="text"
-                        className="w-[250px] outline-none placeholder:font-thin text-white font-light text-sm placeholder:text-white bg-transparent focus:bg-transparent border-none outline-0 focus:outline-0"
-                        placeholder="Your message here "
-                    />
-                    <div className="flex justify-around min-w-[15%]">
+                    <form onSubmit={handleSendMessage} className="w-[150px]">
+                        <input
+                            value={message}
+                            onChange={handleMessageChange}
+                            type="text"
+                            className="w-full outline-none placeholder:font-thin text-white font-light text-sm placeholder:text-white bg-transparent focus:bg-transparent border-none outline-0 focus:outline-0"
+                            placeholder="Your message here "
+                        />
+                    </form>
+
+                    <div className="flex justify-around min-w-[15%] gap-2">
                         <FontAwesomeIcon icon={faPaperclip} style={{ color: 'white' }} />
                         <FontAwesomeIcon icon={faFaceSmile} style={{ color: 'white' }} />
                     </div>

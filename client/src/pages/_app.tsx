@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
     
 
     return (
-        <div className="h-screen overflow-hidden flex flex-col">
+        <div className="h-screen relative overflow-hidden flex flex-col">
             <Toaster />
             <div className="backgroundlayer  hidden bg-lightnavy z-[-1] absolute inset-0"></div>
 

@@ -24,7 +24,7 @@ function Navbar() {
     };
     return (
         <div className="w-100 flex items-center justify-between py-8 px-4 relative h-10">
-            <Link href="/" replace={true}>
+            <Link href={`${isLoggedIn ? '/chat' : '/auth/login'}`} replace={true}>
                 <img src={Logo.src} alt="Chatup logo" className="w-20" />
             </Link>
             {isLoggedIn ? (

@@ -55,14 +55,14 @@ function ChatRoom() {
     }, []);
     return (
         <div
-            className={`pt-4 w-full md:w-auto flex flex-col self-end h-[93vh] overflow-hidden   ${
+            className={`pt-4 w-full md:w-auto flex flex-col self-end h-[93vh]  overflow-hidden   ${
                 !isInfoOpen && 'relative'
             }`}
         >
             {state.isActiveRoomLoading ? (
                 <Loading />
             ) : !state.activeRoom ? (
-                <p>Error loading chat room</p>
+                <p></p>
             ) : (
                 <>
                     <div className="popup md:hidden">
