@@ -9,6 +9,7 @@ import { IUserType } from '@/Types/User';
 import { AuthActionTypes } from '@/context/auth/authActions';
 import toast from 'react-hot-toast';
 import { useAuth } from '@/context/auth/AuthContextProvider';
+import { useRouter } from 'next/router';
 
 function Signup() {
     const [userData, setUserdata] = useState<{ name: string; email: string; password: string }>({
@@ -21,6 +22,7 @@ function Signup() {
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUserdata({ ...userData, [e.target.name]: e.target.value });
     };
+    const router = useRouter();
 
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
@@ -29,6 +31,7 @@ function Signup() {
             const res: AxiosResponse<IUserType> = await axios.post('/auth/signup', userData, { withCredentials: true });
             toast.success('Signup complete');
             dispatch({ type: AuthActionTypes.LoadUser, payload: res.data });
+            router.push('/chat');
         } catch (err: any) {
             dispatch({ type: AuthActionTypes.UserLoginFail, payload: undefined });
             toast.error(err?.response?.data.message || 'Error loggin in user');
@@ -45,7 +48,7 @@ function Signup() {
                         type="text"
                         placeholder="Username"
                         name="name"
-                        autoComplete='name'
+                        autoComplete="name"
                         onChange={handleInputChange}
                     />
                     <Input
@@ -53,7 +56,7 @@ function Signup() {
                         type="email"
                         placeholder="Email"
                         name="email"
-                        autoComplete='email'
+                        autoComplete="email"
                         onChange={handleInputChange}
                     />
                     <Input
@@ -61,7 +64,7 @@ function Signup() {
                         type="password"
                         placeholder="Password"
                         name="password"
-                        autoComplete='new-password'
+                        autoComplete="new-password"
                         onChange={handleInputChange}
                     />
                 </div>

@@ -1,4 +1,5 @@
 export interface IUser {
+    _id: string;
     name: string;
     location: string;
     registerType: 'emailPassword' | 'google' | 'facebook';
@@ -24,6 +25,4 @@ export interface IUserType extends IUser {
     blockedUsers: IUser[];
 }
 
-export type ISimpleUser = Pick<IUser, 'name' | 'email' | 'location' | 'profilePic'> & {
-    _id: string;
-};
+export type ISimpleUser = Pick<IUser, '_id' | 'name' | 'email' | 'location' | 'profilePic'>;

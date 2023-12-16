@@ -7,17 +7,25 @@ import fs from 'fs';
 import path from 'path';
 
 const changeRoomImage = catchAsync(async (req: ExpressRequest, res: Response, next: NextFunction) => {
-    if (!req.file) return next(new AppError('Image wass not provided', 400));
-    const roomId = req.params;
+    if (!req.file) return next(new AppError('Image was not provided', 400));
+    const { roomId } = req.params;
     if (!roomId) return next(new AppError('No room Id', 400));
 
-    const existingRoom = await Room.findById(roomId);
+    const existingRoom = await Room.findById(roomId).populate({ path: 'roomAdmin', select: 'name' });
+
     if (!existingRoom) return next(new AppError('No room found with given id', 400));
 
-    const updatedRoom = await Room.findByIdAndUpdate(roomId, { roomImage: req.file.filename });
+    if (existingRoom.isGroupChat && existingRoom.roomAdmin?._id.toString() !== req.user._id.toString())
+        return next(new AppError('You are not authorized to change image', 403));
 
-    if (existingRoom.roomImage && !existingRoom.roomImage?.startsWith('default'))
-        await fs.unlinkSync(path.join(__dirname, '../../../public/images/groupImages', existingRoom.roomImage));
+    const updatedRoom = await Room.findByIdAndUpdate(roomId, { roomImage: req.file.filename }, { new: true });
+
+    try {
+        if (existingRoom.roomImage && !existingRoom.roomImage?.startsWith('default'))
+            await fs.unlinkSync(path.join(__dirname, '../../../public/images/groupImages', existingRoom.roomImage));
+    } catch (err) {
+        console.log(err);
+    }
 
     return res.status(200).json(updatedRoom);
 });

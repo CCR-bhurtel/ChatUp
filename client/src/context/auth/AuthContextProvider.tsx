@@ -4,7 +4,7 @@ import { AuthActionTypes, AuthActions } from './authActions';
 import authReducer from './authReducer';
 import axios, { AxiosResponse } from 'axios';
 import { BASE_API_PATH } from '@/config/keys';
-import { useRouter } from 'next/router';
+import { NextRouter, useRouter } from 'next/router';
 
 export interface AuthStateInterface {
     user?: IUserType;
@@ -25,14 +25,16 @@ export const AuthContext = createContext<{
 
 export const useAuth = () => useContext(AuthContext);
 
-export const loadUser = async (dispatch: React.Dispatch<AuthActions>) => {
+export const loadUser = async (dispatch: React.Dispatch<AuthActions>, router: NextRouter) => {
     try {
         dispatch({ type: AuthActionTypes.LoggingUser });
         const response: AxiosResponse<IUserType> = await axios.get(`/user/`, { withCredentials: true });
 
         const data = response.data;
         dispatch({ type: AuthActionTypes.LoadUser, payload: data });
+        router.push('/chat');
     } catch (err) {
+        router.push('/auth/login');
         dispatch({ type: AuthActionTypes.UserLoginFail, payload: undefined });
     }
 };
@@ -44,15 +46,15 @@ function AuthContextProvider(props: { children: ReactElement }) {
     useEffect(() => {
         if (!state.loading) {
             if (!state.isLoggedIn && !router.pathname.includes('auth')) {
-                router.push('/auth/login');
+                // router.push('/auth/login');
             } else if (state.isLoggedIn && router.pathname.includes('auth')) {
-                router.push('/chat');
+                // router.push('/chat');
             }
         }
     }, [state, router]);
 
     useEffect(() => {
-        loadUser(dispatch);
+        loadUser(dispatch, router);
     }, []);
     return <AuthContext.Provider value={{ state, dispatch }}>{props.children}</AuthContext.Provider>;
 }

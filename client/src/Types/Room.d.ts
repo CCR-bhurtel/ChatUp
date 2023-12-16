@@ -7,7 +7,7 @@ export interface IRoomType {
     _id: string;
 
     users: ISimpleUser[];
-    roomImage?: string;
+    roomImage: string;
     roomAdmin?: string;
     blockedUsers: string[];
     lastMessage?: IChatType;
@@ -22,7 +22,7 @@ export interface ISimpleRoom {
     isGroupChat: boolean;
     _id: string;
     users: string[];
-    roomImage?: string;
+    roomImage: string;
     roomAdmin?: ISimpleUser;
     lastMessage?: IChatType;
 }

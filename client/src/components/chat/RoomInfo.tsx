@@ -1,17 +1,23 @@
-import { IActiveRoom } from '@/Types/Room';
-import React from 'react';
+import { IActiveRoom, IRoomType } from '@/Types/Room';
+import React, { ChangeEvent } from 'react';
 import Avatar from '../reusables/Avatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faArrowRightFromBracket,
     faBan,
     faImage,
+    faPencil,
     faSearch,
     faUserFriends,
     faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { Switch } from '@material-tailwind/react';
 import getAvatarImage from '@/utils/getAvatarImage';
+import { useAuth } from '@/context/auth/AuthContextProvider';
+import toast from 'react-hot-toast';
+import axios, { AxiosResponse } from 'axios';
+import { useRoom } from '@/context/chat/RoomContextProvider';
+import { RoomActionTypes } from '@/context/chat/roomActions';
 export interface IRoomInfo {
     room: IActiveRoom | undefined;
     light?: boolean;
@@ -80,12 +86,44 @@ function RoomInfoPrivate({ room }: IRoomInfo) {
 }
 function RoomInfoGroup({ room }: IRoomInfo) {
     const roomImage = room ? getAvatarImage(room.roomImage, true) : '';
+    const { state } = useAuth();
+    const { dispatch } = useRoom();
 
+    const handleRoomImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length) {
+            const formData = new FormData();
+            formData.append('image', e.target.files[0]);
+            try {
+                const res: AxiosResponse<IRoomType> = await axios.put(`/room/image/${room?._id}`, formData);
+                const image = res.data.roomImage;
+                dispatch({ type: RoomActionTypes.EditRoomImage, payload: image });
+            } catch (err: any) {
+                toast.error(err.response?.data.message || 'Eror updating image');
+            }
+        } else {
+            toast.error('No Image file selected');
+        }
+    };
     return (
         <div className="flex flex-col min-h-[300px]  items-center ">
             <div className="row1">
                 <div className="userInfo flex items-center  flex-col">
-                    <Avatar source={roomImage} className="h-[80px] w-[80px]" />
+                    <div className="relative">
+                        <Avatar source={roomImage} className="h-[80px] w-[80px] cursor-default" />
+                        {state.user?._id === room?.roomAdmin ? (
+                            <div className="input cursor-pointer w-5 h-5 absolute top-0 right-0 text-navy">
+                                <FontAwesomeIcon icon={faPencil} className="absolute inset-0 text-navy" />
+                                <input
+                                    onChange={handleRoomImageChange}
+                                    type="file"
+                                    className="opacity-0"
+                                    accept="image/png, image/gif, image/jpeg, image/jpg, image/webp"
+                                />
+                            </div>
+                        ) : (
+                            ''
+                        )}
+                    </div>
                     <div className="userinfo_data text-navy dark:text-white text-center mt-2">
                         <h1 className=" font-semibold text-xl">{room?.roomName}</h1>
                         <div className="address font-light text-sm">{room?.users.length} members</div>
@@ -109,7 +147,7 @@ function RoomInfoGroup({ room }: IRoomInfo) {
                     <span className="ml-2">Members</span>
                 </div>
                 <div className="memberlist mt-2 items-start w-full flex flex-col gap-2">
-                    {room?.users.map((user) => (
+                    {room?.users.slice(0,5).map((user) => (
                         <div
                             key={user._id}
                             className="groupmember rounded-md text-lightnavy cursor-pointer bg-gray-200  dark:bg-transparent p-2 w-full flex flex-row gap-2 items-center justify-between"

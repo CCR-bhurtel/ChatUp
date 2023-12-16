@@ -27,7 +27,6 @@ function Login() {
         try {
             dispatch({
                 type: AuthActionTypes.LoggingUser,
-                payload: undefined,
             });
             const response: AxiosResponse<IUserType> = await axios.post('/auth/login', userData, {
                 withCredentials: true,
@@ -36,6 +35,7 @@ function Login() {
 
             dispatch({ type: AuthActionTypes.LoadUser, payload: user });
             toast.success('User logged in successfully');
+            router.push('/chat');
         } catch (err: any) {
             dispatch({ type: AuthActionTypes.UserLoginFail, payload: undefined });
             toast.error(err?.response?.data.message || 'Error loggin in user');
@@ -58,7 +58,7 @@ function Login() {
                         type="email"
                         placeholder="Email"
                         name="email"
-                        autoComplete='email'
+                        autoComplete="email"
                         onChange={handleInputChange}
                     />
                     <Input

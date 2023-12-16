@@ -7,10 +7,7 @@ export interface IRoom extends Document {
 
     users: Types.ObjectId[];
     roomImage?: string;
-    roomAdmin?: {
-        type: Types.ObjectId;
-        ref: 'User';
-    };
+    roomAdmin?: IUser;
     blockedUsers: Types.ObjectId[];
     lastMessageDate: {
         type: Date;
@@ -22,18 +19,15 @@ export interface IRoomMethods {}
 
 export type RoomModel = Model<IRoom, {}, IRoomMethods>;
 
-export interface PopulatedRoom {
+export interface PopulatedRoom extends IRoom {
     roomName: string;
     isGroupChat: boolean;
     _id: string;
 
-    users: [PopulatedUser];
+    users: PopulatedUser[];
     roomImage?: string;
-    roomAdmin?: {
-        type: Types.ObjectId;
-        ref: 'User';
-    };
-    blockedUsers: [Types.ObjectId];
+    roomAdmin?: IUser;
+    blockedUsers: Types.ObjectId[];
     lastMessageDate: {
         type: Date;
     };
