@@ -21,11 +21,11 @@ const AccountClickables = () => {
     };
 
     return (
-        <div className="w-100 flex items-center justify-between py-8 px-4 relative h-10 lg:px-[10px]">
+        <div className="w-100 flex items-center justify-between py-8 px-4 relative h-10 lg:px-[10px] lg:h-min-10">
             {isLoggedIn ? (
                 <div className="clickables flex flex-row items-center gap-2 lg:flex-col">
                     <Avatar
-                        className="h-[40px] w-[40px] "
+                        className="h-[30px] w-[30px] "
                         source={user && `${BASE_PATH}/images/userImages/${user.profilePic}`}
                     />
                     <img onClick={handleLogOut} src={logout.src} className="w-[25px]" alt="" />

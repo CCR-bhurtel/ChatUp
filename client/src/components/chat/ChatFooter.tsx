@@ -10,7 +10,7 @@ interface IChatFooter {
 }
 function ChatFooter(props: IChatFooter) {
     return (
-        <div className="fixed bottom-0 left-0 w-full flex items-end p-5 bg-lightnavy lg:h-[90%] lg:flex-col lg:max-w-[90px] lg:justify-between lg:items-start">
+        <div className="fixed bottom-0 left-0 w-full flex items-end p-5 bg-lightnavy lg:h-[60%] lg:flex-col lg:max-w-[90px] lg:justify-between lg:items-center">
             <div className="flex w-full justify-between lg:flex-col lg:w-auto lg:items-center lg:h-auto lg:gap-6">
                 <div className="cursor-pointer">
                     <FontAwesomeIcon onClick={props.handleGroupChatOpen} icon={faPencil} style={{ color: 'white', height: '20px', width: '20px' }} />
