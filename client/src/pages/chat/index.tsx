@@ -62,13 +62,13 @@ function Chat() {
     }, [dispatch]);
 
     return (
-        <div className="chatContainer  p-4  flex justify-center">
+        <div className="chatContainer p-4 flex flex-col justify-center">
             {createGroupOpen && (
                 <Popup onClose={handleCreateGroupClose}>
                     <CreateGroupChat onSubmit={handleFormSubmit} />
                 </Popup>
             )}
-            <div className="min-w-[100%] lg:min-w-[25%] min-h-100">
+            <div className="min-w-[100%] lg:max-w-[25%] min-h-100">
                 <ChatSidebar />
             </div>
             <div className="emptyChatArea hidden lg:flex lg:min-w-[75%] items-center justify-center ">
