@@ -79,7 +79,7 @@ function ChatArea(props: IChatArea) {
         socket.on('typing', (userImage: string) => setTypingUser(userImage));
 
         socket.on('stopTyping', () => setTypingUser(null));
-        socket.on('newMessage', (message: IChatType) => {
+        socket.on('messageReceived', (message: IChatType) => {
             dispatch({ type: RoomActionTypes.AppendChatToRoom, payload: message });
         });
     }, []);

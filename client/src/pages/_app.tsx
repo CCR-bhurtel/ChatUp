@@ -3,7 +3,7 @@ import { BASE_API_PATH } from '@/config/keys';
 import AuthContextProvider from '@/context/auth/AuthContextProvider';
 import RoomContextProvider from '@/context/chat/RoomContextProvider';
 import '@/styles/globals.css';
-import { initSocket } from '@/utils/socketService';
+import { getSocket, initSocket } from '@/utils/socketService';
 import axios from 'axios';
 import type { AppProps } from 'next/app';
 import { useEffect } from 'react';
@@ -15,6 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
     axios.defaults.withCredentials = true;
     useEffect(() => {
         initSocket();
+        
     }, []);
 
     return (
