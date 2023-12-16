@@ -58,6 +58,7 @@ function Login() {
                         type="email"
                         placeholder="Email"
                         name="email"
+                        autoComplete='email'
                         onChange={handleInputChange}
                     />
                     <Input
