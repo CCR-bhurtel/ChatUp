@@ -3,44 +3,46 @@ import mongoose from 'mongoose';
 import { IChat, ChatModel } from '../../Types/Chat';
 import Media from './Media';
 
-const chatSchema = new mongoose.Schema<IChat, ChatModel>({
-    sender: {
-        type: mongoose.Types.ObjectId,
-        ref: 'User',
-        required: [true, 'User is required field'],
-    },
-    messageType: {
-        type: String,
-        enum: ['Text', 'File', 'Media'],
-        default: 'Text',
-    },
-    room: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Room',
-    },
-    verified: { type: Boolean, default: false },
+const chatSchema = new mongoose.Schema<IChat, ChatModel>(
+    {
+        sender: {
+            type: mongoose.Types.ObjectId,
+            ref: 'User',
+            required: [true, 'User is required field'],
+        },
+        messageType: {
+            type: String,
+            enum: ['Text', 'File', 'Media'],
+            default: 'Text',
+        },
+        room: {
+            type: mongoose.Types.ObjectId,
+            ref: 'Room',
+        },
 
-    textContent: { type: String },
-    read: { type: Boolean, default: false },
+        textContent: { type: String },
+        read: { type: Boolean, default: false },
 
-    mediaId: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Media',
-        validate: {
-            validator: function (this: IChat, val: string) {
-                if (this.messageType === 'File') {
-                    return val.length > 0;
-                }
+        mediaId: {
+            type: mongoose.Types.ObjectId,
+            ref: 'Media',
+            validate: {
+                validator: function (this: IChat, val: string) {
+                    if (this.messageType === 'File') {
+                        return val.length > 0;
+                    }
+                },
+                message: 'Media id is required',
             },
-            message: 'Media id is required',
+        },
+
+        isDeleted: {
+            type: Boolean,
+            default: false,
         },
     },
-
-    isDeleted: {
-        type: Boolean,
-        default: false,
-    },
-});
+    { timestamps: true }
+);
 
 const preSchemaMethods: string[] = ['deleteOne', 'deleteMany', 'findByIdAndDelete', 'findOneAndDelete'];
 const regexPattern = new RegExp(preSchemaMethods.join('|'), 'g');

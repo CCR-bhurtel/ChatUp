@@ -11,7 +11,6 @@ import { Server } from 'http';
 import socketio from 'socket.io';
 import { IUser } from './Types/User';
 import { IPopulatedChat } from './Types/Chat';
-import Chat from './database/Model/Chat';
 let server: Server;
 
 connectDb()

@@ -34,7 +34,9 @@ export const getRoom = catchAsync(async (req: ExpressRequest, res: Response, nex
     if (!room) return next(new AppError("Room can't be found, please check roomId", 400));
     const formatttedRoom = await formatRoomDetail(room, req.user._id);
     if (room) {
-        const chats = await Chat.find({ roomId: room._id }).populate({ path: 'sender', select: 'name profilePic' });
+        const chats = await Chat.find({ room: room._id })
+            .sort({ createdAt: 1 })
+            .populate({ path: 'sender', select: 'name profilePic' });
 
         return res.status(200).json({ roomDetails: formatttedRoom, messages: chats });
     } else {
