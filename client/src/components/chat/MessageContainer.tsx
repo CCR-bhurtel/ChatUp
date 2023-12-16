@@ -4,6 +4,8 @@ import { IChatType } from '@/Types/Chat';
 import { useAuth } from '@/context/auth/AuthContextProvider';
 import getAvatarImage from '@/utils/getAvatarImage';
 
+
+
 export interface IMessageContainer {
     messages: IChatType[];
 }
@@ -12,13 +14,15 @@ function MessageContainer(props: IMessageContainer) {
     return (
         <>
             {props.messages.map((message, i) => {
+                const date = new Date(message.createdAt);
+                const formattedTime = `${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
                 if (message.sender._id === state.user?._id) {
                     return (
                         <div className="mymessages mt-2 self-end text-white font-light leading-tight  flex items-end flex-col gap-2 w-[70%]">
                             <div className="messages flex gap-2 flex-col">
                                 <div className="message bg-purple p-4 pt-6 color-white rounded-md relative text-sm">
                                     <div className="time text-[10px] absolute left-1 top-1 p-1 font-thin tracking-wide">
-                                        08:30
+                                        {formattedTime}
                                     </div>
                                     {message.textContent}
                                 </div>
@@ -43,7 +47,7 @@ function MessageContainer(props: IMessageContainer) {
                             </div>
                             <div className="message self-justify-self-start bg-storm p-4 pt-6  color-white rounded-md relative text-sm">
                                 <div className="time text-[10px] absolute left-1 top-1 p-1 font-thin tracking-wide">
-                                    08:30
+                                    {formattedTime}
                                 </div>
                                 {message.textContent}
                             </div>

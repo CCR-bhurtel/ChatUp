@@ -4,24 +4,33 @@ import ChatArea from '@/components/chat/ChatArea';
 import RoomInfo from '@/components/chat/RoomInfo';
 import Popup from '@/components/layouts/Popup';
 import Loading from '@/components/reusables/Loading';
+import { useAuth } from '@/context/auth/AuthContextProvider';
 import { useRoom } from '@/context/chat/RoomContextProvider';
 import { RoomActionTypes } from '@/context/chat/roomActions';
+import { getSocket, initSocket } from '@/utils/socketService';
 import axios, { AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
 function ChatRoom() {
     const [isInfoOpen, setIsInfoOpen] = useState<boolean>(false);
     const router = useRouter();
     const { state, dispatch } = useRoom();
+
+    const auth = useAuth();
+
+    const [socketConnected, setSocketConnected] = useState(false);
+
     const handleOpenInfo = () => {
         setIsInfoOpen(true);
     };
     const handleCloseInfo = () => {
         setIsInfoOpen(false);
     };
+
+    const socket = useMemo(() => getSocket(), []);
 
     const handleRoomLoad = async () => {
         const { roomid } = router.query;
@@ -34,11 +43,25 @@ function ChatRoom() {
             const room: IActiveRoom = { ...res.data.roomDetails, messages: res.data.messages };
             console.log(room);
             dispatch({ type: RoomActionTypes.SetActiveRoom, payload: room });
+            socket.emit('joinRoom', room._id);
         } catch (err) {
             toast.error('Error loding room');
             router.push('/chat');
         }
     };
+
+    useEffect(() => {
+        try {
+            if (!socket) initSocket();
+
+            if (auth.state.user) {
+                socket.emit('initialSetup', auth.state.user);
+            }
+            socket.on('connected', () => setSocketConnected(true));
+        } catch (err) {
+            console.log(err);
+        }
+    }, [auth.state.user]);
 
     useEffect(() => {
         handleRoomLoad();

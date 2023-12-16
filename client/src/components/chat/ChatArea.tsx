@@ -19,6 +19,7 @@ import { useAuth } from '@/context/auth/AuthContextProvider';
 import { useRoom } from '@/context/chat/RoomContextProvider';
 import { RoomActionTypes } from '@/context/chat/roomActions';
 import toast from 'react-hot-toast';
+import { getSocket } from '@/utils/socketService';
 
 interface IChatArea {
     handleInfoOpen?: () => void;
@@ -30,6 +31,10 @@ function ChatArea(props: IChatArea) {
     const { state, dispatch } = useRoom();
     const [message, setMessage] = useState<string>('');
     const divref = createRef<HTMLDivElement>();
+
+    const [typingUser, setTypingUser] = useState<string | null>(null);
+
+    const socket = useMemo(() => getSocket(), []);
     useEffect(() => {
         if (divref.current) {
             divref.current.scrollTo({
@@ -63,10 +68,21 @@ function ChatArea(props: IChatArea) {
 
             dispatch({ type: RoomActionTypes.AppendChatToRoom, payload: chat });
             setMessage('');
+
+            socket.emit('newMessage', { ...chat, room: state.activeRoom });
         } catch (err: any) {
             toast.error(err.response?.data.message);
         }
     };
+
+    useEffect(() => {
+        socket.on('typing', (userImage: string) => setTypingUser(userImage));
+
+        socket.on('stopTyping', () => setTypingUser(null));
+        socket.on('newMessage', (message: IChatType) => {
+            dispatch({ type: RoomActionTypes.AppendChatToRoom, payload: message });
+        });
+    }, []);
     return (
         <>
             <div className="flex  justify-between  p-4 items-center">
