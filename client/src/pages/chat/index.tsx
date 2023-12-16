@@ -62,7 +62,7 @@ function Chat() {
     }, [dispatch]);
 
     return (
-        <div className="chatContainer  p-4  flex justify-center">
+        <div className="chatContainer p-4 flex flex-col justify-center">
             {createGroupOpen && (
                 <Popup onClose={handleCreateGroupClose}>
                     <CreateGroupChat onSubmit={handleFormSubmit} />
