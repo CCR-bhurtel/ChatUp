@@ -27,7 +27,6 @@ function Signup() {
 
         try {
             const res: AxiosResponse<IUserType> = await axios.post('/auth/signup', userData, { withCredentials: true });
-
             toast.success('Signup complete');
             dispatch({ type: AuthActionTypes.LoadUser, payload: res.data });
         } catch (err: any) {
@@ -46,6 +45,7 @@ function Signup() {
                         type="text"
                         placeholder="Username"
                         name="name"
+                        autoComplete='name'
                         onChange={handleInputChange}
                     />
                     <Input
@@ -53,6 +53,7 @@ function Signup() {
                         type="email"
                         placeholder="Email"
                         name="email"
+                        autoComplete='email'
                         onChange={handleInputChange}
                     />
                     <Input
@@ -60,6 +61,7 @@ function Signup() {
                         type="password"
                         placeholder="Password"
                         name="password"
+                        autoComplete='new-password'
                         onChange={handleInputChange}
                     />
                 </div>

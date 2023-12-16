@@ -1,6 +1,6 @@
-import React, { ChangeEventHandler } from 'react';
+import React, { ChangeEventHandler, InputHTMLAttributes } from 'react';
 
-interface InputProps {
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     placeholder?: string;
     onChange: ChangeEventHandler<HTMLInputElement>;
     name: string;
