@@ -10,8 +10,12 @@ export const profileImageUpload = catchAsync(async (req: ExpressRequest, res, ne
     const fileName = req.file?.filename;
 
     if (fileName) {
-        if (req.user.profilePic)
-            await fs.unlinkSync(path.join(__dirname, '../../../public/images/userImages', req.user.profilePic));
+        try {
+            if (req.user.profilePic && !req.user.profilePic?.startsWith('defaultProfilePic'))
+                await fs.unlinkSync(path.join(__dirname, '../../../public/images/userImages', req.user.profilePic));
+        } catch (err) {
+            console.log('Error deleting previous profile');
+        }
 
         const user = await User.findByIdAndUpdate(
             req.user._id,

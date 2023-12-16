@@ -10,10 +10,11 @@ const createRoom = catchAsync(async (req: ExpressRequest, res: Response, next: N
     const { users, isGroupChat } = req.body;
     if (isGroupChat) {
         const { groupName } = req.body;
+        if (!groupName) return next(new AppError('Please enter group name', 400));
         const groupChat = await Room.create({
             isGroupChat: true,
             roomName: groupName,
-            users,
+            users: [...users, req.user._id],
             roomAdmin: req.user._id,
         });
         const populatedGroupChat = await Room.findById(groupChat._id).populate({

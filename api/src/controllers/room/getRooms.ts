@@ -23,20 +23,20 @@ export const getUserRooms = catchAsync(async (req: ExpressRequest, res: Response
         const formattedRoom = await formatRoomDetail(room, req.user._id);
         return formattedRoom;
     });
-    let resolvedFormattedRooms = Promise.all(formattedRooms);
+    let resolvedFormattedRooms = await Promise.all(formattedRooms);
     return res.status(200).json({ rooms: resolvedFormattedRooms });
 });
 
 export const getRoom = catchAsync(async (req: ExpressRequest, res: Response, next: NextFunction) => {
     const roomId = req.params.roomid;
 
-    const room = await Room.findById(roomId);
+    const room = await Room.findById(roomId).populate({ path: 'users', select: 'profilePic name' });
     if (!room) return next(new AppError("Room can't be found, please check roomId", 400));
     const formatttedRoom = await formatRoomDetail(room, req.user._id);
     if (room) {
         const chats = await Chat.find({ roomId: room._id }).populate({ path: 'sender', select: 'name profilePic' });
 
-        return res.status(200).json({ room: formatttedRoom, chats });
+        return res.status(200).json({ roomDetails: formatttedRoom, messages: chats });
     } else {
         return next(new AppError('Room not found', 404));
     }

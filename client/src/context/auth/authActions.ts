@@ -15,7 +15,6 @@ export enum AuthActionTypes {
 
 export interface LoggingUser {
     type: AuthActionTypes.LoggingUser;
-    payload: undefined;
 }
 export interface Loaduser {
     type: AuthActionTypes.LoadUser;

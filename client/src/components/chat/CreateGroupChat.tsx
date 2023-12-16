@@ -3,6 +3,10 @@ import Input from '../reusables/Input';
 import Button from '../reusables/Button';
 import Avatar from '../reusables/Avatar';
 import GroupMemberInput from '../reusables/GroupMemberInput';
+import { IUserType } from '@/Types/User';
+import axios, { AxiosResponse } from 'axios';
+import { useRoom } from '@/context/chat/RoomContextProvider';
+import { BASE_PATH } from '@/config/keys';
 
 export interface IUser {
     _id: string;
@@ -10,54 +14,12 @@ export interface IUser {
     profilePic: string;
 }
 interface ICreateGroupChat {
-    onSubmit: () => void;
+    onSubmit: (userIds: string[], grouName: string) => void;
 }
 function CreateGroupChat({ onSubmit }: ICreateGroupChat) {
-    const [availableUsers, setAvailableusers] = useState<IUser[]>([
-        {
-            _id: 'fdasdfl12342',
-            profilePic:
-                'https://images.unsplash.com/photo-1610276198568-eb6d0ff53e48?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            name: 'Elizabeth II',
-        },
-        {
-            _id: 'fdasdfl12343',
-
-            profilePic:
-                'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cG90cmFpdHxlbnwwfHwwfHx8MA%3D%3D',
-            name: 'Neil patrick',
-        },
-
-        {
-            _id: 'fdasdfl12344',
-
-            profilePic:
-                'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cG90cmFpdHxlbnwwfHwwfHx8MA%3D%3D',
-            name: 'John Doe',
-        },
-        {
-            _id: 'fdasdfl12345',
-
-            profilePic:
-                'https://images.unsplash.com/photo-1610276198568-eb6d0ff53e48?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            name: 'Lily',
-        },
-        {
-            _id: 'fdasdfl12346',
-
-            name: 'Nick',
-            profilePic:
-                'https://images.unsplash.com/photo-1552234994-66ba234fd567?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cG90cmFpdHxlbnwwfHwwfHx8MA%3D%3D',
-        },
-        {
-            _id: 'fdasdfl12347',
-
-            profilePic:
-                'https://images.unsplash.com/photo-1610276198568-eb6d0ff53e48?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            name: 'Robin',
-        },
-    ]);
     const [searchResult, setSearchResult] = useState<IUser[]>([]);
+
+    const [groupName, setGroupName] = useState('');
 
     const [groupMembers, setGroupMembers] = useState<IUser[]>([]);
 
@@ -79,15 +41,23 @@ function CreateGroupChat({ onSubmit }: ICreateGroupChat) {
         setGroupMembers(newMembers);
     };
 
-    const handleMemberInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleMemberInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
         setSearchKey(e.target.value);
-        const newSearchResults = availableUsers.filter(
-            (result) => e.target.value.length && result.name.toLowerCase().startsWith(e.target.value.toLowerCase())
-        );
-        if (newSearchResults.length) {
-            setOpenSearchResult(true);
-        }
-        setSearchResult(newSearchResults);
+
+        try {
+            const res: AxiosResponse<{ users: IUser[] }> = await axios.post(
+                `/room/usersearch?key=${searchKey}`,
+                {
+                    selectedUsers: groupMembers.map((member) => member._id),
+                },
+                { withCredentials: true }
+            );
+            const newSearchResults = res.data.users;
+            if (newSearchResults.length) {
+                setOpenSearchResult(true);
+            }
+            setSearchResult(newSearchResults);
+        } catch (err) {}
     };
 
     useEffect(() => {
@@ -111,9 +81,20 @@ function CreateGroupChat({ onSubmit }: ICreateGroupChat) {
             <div className="sectiontitle font-jk font-normal text-center tracking-wide text-2xl text-navy">
                 create chat group
             </div>
-            <form>
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    onSubmit(
+                        groupMembers.map((member) => member._id),
+                        groupName
+                    );
+                }}
+            >
                 <Input
-                    onChange={() => {}}
+                    onChange={(e) => {
+                        setGroupName(e.target.value);
+                    }}
+                    value={groupName}
                     name="roomName"
                     type="text"
                     borderclass="border-navy focus:border-blue-400 text-navy"
@@ -130,14 +111,18 @@ function CreateGroupChat({ onSubmit }: ICreateGroupChat) {
 
                     {searchResult.length && openSearchResult ? (
                         <div className="groupSearchResult bg-white p-2 flex flex-col rounded-md gap-1 absolute w-full">
-                            {searchResult.slice(0, 5).map((member) => (
+                            {searchResult.map((member) => (
                                 <div
+                                    key={member._id}
                                     onClick={() => {
                                         appendMember(member);
                                     }}
-                                    className="member flex  items-center justify-center bg-Gravel p-2 rounded-md w-full"
+                                    className="member flex  items-center justify-center bg-Gravel p-2 rounded-md w-full cursor-pointer"
                                 >
-                                    <Avatar source={member.profilePic} className="w-[30px] h-[30px]" />
+                                    <Avatar
+                                        source={`${BASE_PATH}/images/userImages/${member.profilePic}`}
+                                        className="w-[30px] h-[30px]"
+                                    />
                                     <p className="ml-2 text-md text-white">{member.name}</p>
                                 </div>
                             ))}
@@ -147,12 +132,7 @@ function CreateGroupChat({ onSubmit }: ICreateGroupChat) {
                     )}
                 </div>
 
-                <Button
-                    dClass="bg-navy hover:bg-secondary text-white rounded-md mt-8"
-                    onClick={() => {
-                        onSubmit();
-                    }}
-                >
+                <Button dClass="bg-navy hover:bg-secondary text-white rounded-md mt-8" onClick={() => {}}>
                     <p>Submit</p>
                 </Button>
             </form>

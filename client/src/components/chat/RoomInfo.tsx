@@ -1,4 +1,4 @@
-import { IActiveRoom, ISimpleRoom } from '@/Types/Room';
+import { IActiveRoom } from '@/Types/Room';
 import React from 'react';
 import Avatar from '../reusables/Avatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,6 +11,7 @@ import {
     faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { Switch } from '@material-tailwind/react';
+import getAvatarImage from '@/utils/getAvatarImage';
 export interface IRoomInfo {
     room: IActiveRoom | undefined;
     light?: boolean;
@@ -31,11 +32,12 @@ function RoomInfo({ room, light }: IRoomInfo) {
 export default RoomInfo;
 
 function RoomInfoPrivate({ room }: IRoomInfo) {
+    const roomImage = room ? getAvatarImage(room.roomImage) : '';
     return (
         <div className="flex flex-col min-h-[300px]  items-center justify-between">
             <div className="row1">
                 <div className="userInfo flex items-center  flex-col">
-                    <Avatar source={room?.roomImage} className="h-[80px] w-[80px]" />
+                    <Avatar source={roomImage} className="h-[80px] w-[80px]" />
                     <div className="userinfo_data text-navy dark:text-white text-center mt-2">
                         <h1 className=" font-semibold text-xl">{room?.roomName}</h1>
                         <div className="address font-light text-sm">{room?.users[0].location}</div>
@@ -77,21 +79,19 @@ function RoomInfoPrivate({ room }: IRoomInfo) {
     );
 }
 function RoomInfoGroup({ room }: IRoomInfo) {
+    const roomImage = room ? getAvatarImage(room.roomImage, true) : '';
+
     return (
         <div className="flex flex-col min-h-[300px]  items-center ">
             <div className="row1">
                 <div className="userInfo flex items-center  flex-col">
-                    <Avatar source={room?.roomImage} className="h-[80px] w-[80px]" />
+                    <Avatar source={roomImage} className="h-[80px] w-[80px]" />
                     <div className="userinfo_data text-navy dark:text-white text-center mt-2">
                         <h1 className=" font-semibold text-xl">{room?.roomName}</h1>
                         <div className="address font-light text-sm">{room?.users.length} members</div>
                     </div>
                 </div>
                 <div className="useroptions mt-8 gap-2 flex flex-col items-start justify-center">
-                    {/* to be added later,
-        Search Messages,
-        Shared Media,
-     */}
                     <div className="seachMessage items-center gap-2 cursor-pointer text-navy dark:text-white flex flex-row">
                         <FontAwesomeIcon icon={faSearch} />
                         <span>Search messages</span>
@@ -110,10 +110,13 @@ function RoomInfoGroup({ room }: IRoomInfo) {
                 </div>
                 <div className="memberlist mt-2 items-start w-full flex flex-col gap-2">
                     {room?.users.map((user) => (
-                        <div className="groupmember rounded-md text-lightnavy cursor-pointer bg-gray-200  dark:bg-transparent p-2 w-full flex flex-row gap-2 items-center justify-between">
+                        <div
+                            key={user._id}
+                            className="groupmember rounded-md text-lightnavy cursor-pointer bg-gray-200  dark:bg-transparent p-2 w-full flex flex-row gap-2 items-center justify-between"
+                        >
                             <div className="info flex flex-row gap-2 items-center text-sm">
                                 <div className="avatar relative">
-                                    <Avatar source={user.profilePic} className="h-[30px] w-[30px] " />
+                                    <Avatar source={getAvatarImage(user.profilePic)} className="h-[30px] w-[30px] " />
 
                                     <div className="status absolute top-0 right-0 bg-primary w-2 h-2 rounded-full"></div>
                                 </div>

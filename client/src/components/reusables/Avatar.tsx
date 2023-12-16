@@ -5,7 +5,9 @@ interface IAvatar {
     className: string;
 }
 function Avatar({ className, source }: IAvatar) {
-    return <img src={source} className={`${className} rounded-full object-cover object-top`} alt="avatar img" />;
+    return (
+        <img src={source} className={`${className} cursor-pointer rounded-full object-cover object-top`} alt="avt" />
+    );
 }
 
 export default Avatar;

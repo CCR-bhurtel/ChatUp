@@ -1,4 +1,3 @@
-import { IRoomType } from '@/Types/Room';
 import { RoomActionTypes, RoomActions } from './roomActions';
 import { RoomStateInterface } from './RoomContextProvider';
 
@@ -40,9 +39,12 @@ const roomReducer = (state: RoomStateInterface, action: RoomActions): RoomStateI
             return { ...state, rooms: newRoomList };
 
         case RoomActionTypes.AppendRoom:
-            const rooms = state.rooms;
-            rooms.unshift(action.payload);
-            return { ...state, rooms };
+            const newRooms = state.rooms;
+            console.log('Reducer called');
+            console.log(action.payload);
+
+            newRooms.unshift(action.payload);
+            return state;
 
         case RoomActionTypes.AppendChatToRoom:
             if (!state.activeRoom) return state;

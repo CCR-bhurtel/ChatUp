@@ -10,6 +10,7 @@ import { updateGroupChat } from '../controllers/chat/groupChat';
 import { addUserToGroupChat, giveAdminAccess } from '../controllers/room/groupChat';
 import { blockUser } from '../controllers/user/userProfile';
 import searchMessageOfRoom from '../controllers/room/searchMessageOfRoom';
+import upload from '../middlewares/imageUpload';
 
 const router = express.Router();
 
@@ -20,7 +21,7 @@ router.get('/search', searchRoom);
 router.post('/', createRoom);
 
 // user search for groupchat
-router.get('/usersearch', searchUsersForGroupChat);
+router.post('/usersearch', searchUsersForGroupChat);
 
 // get all rooms for user
 router.get('/', getUserRooms);
@@ -47,8 +48,11 @@ router.get('/:roomid/message', searchMessageOfRoom);
 router.put('/:roomid/block', blockUser);
 
 // -----------groupChat room ----------------
-// room update (name, image)
+// room update
 router.put('/:roomid/', updateGroupChat);
+
+// room update (image)
+router.put('/image', upload('groupImages').single('image'));
 
 // add user by admin
 router.post('/:roomid/user', addUserToGroupChat);

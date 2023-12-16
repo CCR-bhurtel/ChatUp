@@ -14,7 +14,7 @@ function GroupMemberInput(props: IGroupMemberInput) {
             {props.members.length ? (
                 <div className="memberlist flex flex-wrap flex-row max-w-full justify-start gap-2 mt-4">
                     {props.members.map((member) => (
-                        <div className="bg-Gravel rounded-md text-white p-2 pt-4 pr-4 text-xs font-light relative">
+                        <div key={member._id} className="bg-Gravel rounded-md text-white p-2 pt-4 pr-4 text-xs font-light relative">
                             <div
                                 onClick={() => {
                                     props.removeMember(member);

@@ -23,7 +23,10 @@ const roomSchema = new mongoose.Schema<IRoom, RoomModel, IRoomMethods>({
         type: Date,
         default: Date.now(),
     },
-    lastMessage: String,
+    lastMessage: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Chat',
+    },
 
     blockedUsers: [
         {

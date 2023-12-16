@@ -10,7 +10,7 @@ export interface IRoomType {
     roomImage?: string;
     roomAdmin?: string;
     blockedUsers: string[];
-    lastMessage?: string;
+    lastMessage?: IChatType;
 }
 
 export interface IActiveRoom extends IRoomType {
@@ -24,5 +24,5 @@ export interface ISimpleRoom {
     users: string[];
     roomImage?: string;
     roomAdmin?: ISimpleUser;
-    lastMessage?: string;
+    lastMessage?: IChatType;
 }

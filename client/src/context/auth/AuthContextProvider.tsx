@@ -25,8 +25,9 @@ export const AuthContext = createContext<{
 
 export const useAuth = () => useContext(AuthContext);
 
-const loadUser = async (dispatch: React.Dispatch<AuthActions>) => {
+export const loadUser = async (dispatch: React.Dispatch<AuthActions>) => {
     try {
+        dispatch({ type: AuthActionTypes.LoggingUser });
         const response: AxiosResponse<IUserType> = await axios.get(`/user/`, { withCredentials: true });
 
         const data = response.data;
@@ -44,7 +45,7 @@ function AuthContextProvider(props: { children: ReactElement }) {
         if (!state.loading) {
             if (!state.isLoggedIn && !router.pathname.includes('auth')) {
                 router.push('/auth/login');
-            } else if (state.isLoggedIn && (router.pathname.includes('auth') || router.pathname === '/')) {
+            } else if (state.isLoggedIn && router.pathname.includes('auth')) {
                 router.push('/chat');
             }
         }
@@ -52,7 +53,7 @@ function AuthContextProvider(props: { children: ReactElement }) {
 
     useEffect(() => {
         loadUser(dispatch);
-    }, [state.isLoggedIn]);
+    }, []);
     return <AuthContext.Provider value={{ state, dispatch }}>{props.children}</AuthContext.Provider>;
 }
 
