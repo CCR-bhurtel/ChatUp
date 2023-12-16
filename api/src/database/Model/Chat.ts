@@ -14,7 +14,7 @@ const chatSchema = new mongoose.Schema<IChat, ChatModel>({
         enum: ['Text', 'File', 'Media'],
         default: 'Text',
     },
-    roomId: {
+    room: {
         type: mongoose.Types.ObjectId,
         ref: 'Room',
     },

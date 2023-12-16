@@ -1,5 +1,6 @@
 import { Model, Types } from 'mongoose';
-import { ReferenceType } from './User';
+import { IUser, ReferenceType } from './User';
+import { IRoom, PopulatedRoom } from './Room';
 
 export interface IChat {
     sender: ReferenceType;
@@ -7,9 +8,14 @@ export interface IChat {
     textContent?: String;
     mediaId?: Types.ObjectId;
     isDeleted: false;
-    roomId?: Types.ObjectId;
+    room?: Types.ObjectId;
     verified: Booolean;
     read: Boolean;
+}
+
+export interface IPopulatedChat extends IChat {
+    sender: IUser;
+    room: PopulatedRoom;
 }
 
 export type ChatModel = Model<IChat, {}, {}>;

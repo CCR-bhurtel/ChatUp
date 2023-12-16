@@ -7,6 +7,7 @@ export interface ReferenceType {
 }
 
 export interface IUser {
+    _id: string;
     name: string;
     location: string;
     registerType: 'emailPassword' | 'google' | 'facebook';
