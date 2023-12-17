@@ -13,9 +13,9 @@ import { Toaster } from 'react-hot-toast';
 export default function App({ Component, pageProps }: AppProps) {
     axios.defaults.baseURL = BASE_API_PATH;
     axios.defaults.withCredentials = true;
+
     useEffect(() => {
-        initSocket();
-        
+        initSocket();    
     }, []);
 
     return (
@@ -26,10 +26,8 @@ export default function App({ Component, pageProps }: AppProps) {
             <AuthContextProvider>
                 <RoomContextProvider>
                     <>
-                        <>
-                            <Navbar />
-                            <Component {...pageProps} />
-                        </>
+                        <Navbar />
+                        <Component {...pageProps} />
                     </>
                 </RoomContextProvider>
             </AuthContextProvider>

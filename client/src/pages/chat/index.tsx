@@ -62,17 +62,17 @@ function Chat() {
     }, [dispatch]);
 
     return (
-        <div className="chatContainer p-4 flex flex-col justify-center">
+        <div className="chatContainer h-[90%] w-full flex lg:flex-row justify-start flex-col">
             {createGroupOpen && (
                 <Popup onClose={handleCreateGroupClose}>
                     <CreateGroupChat onSubmit={handleFormSubmit} />
                 </Popup>
             )}
-            <div className="min-w-[100%] lg:max-w-[25%] min-h-100">
-                <ChatSidebar />
+            <div className="w-full lg:w-[30%] flex-1 min-h-100 items-start overflow-y-scroll">
+                <ChatSidebar handleGroupChatOpen={handleCreateGroupOpen} />
             </div>
-            <div className="emptyChatArea hidden lg:flex lg:min-w-[75%] items-center justify-center ">
-                Empty chat area
+            <div className="emptyChatArea hidden lg:flex lg:flex-1 lg:h-full items-center justify-center text-white text-center">
+                Start Chatting now by clicking on the pencil <br /> icon or an existing group chat
             </div>
             <ChatFooter handleGroupChatOpen={handleCreateGroupOpen} />
         </div>
