@@ -1,10 +1,9 @@
-import React, { use } from 'react';
+import React from 'react';
 import { TypingUser } from './ChatArea';
 import getAvatarImage from '@/utils/getAvatarImage';
 import Avatar from '../reusables/Avatar';
 import animationData from '../../assets/animations/typing.json';
 import Lottie from 'react-lottie';
-import { useAuth } from '@/context/auth/AuthContextProvider';
 
 interface TypingContianer {
     users: TypingUser[];
