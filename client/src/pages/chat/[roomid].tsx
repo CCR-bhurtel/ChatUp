@@ -111,7 +111,7 @@ function ChatRoom() {
                 background.classList.toggle('hidden');
             }
         };
-    }, []);
+    }, [router]);
 
     return (
         <div
