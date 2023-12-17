@@ -14,7 +14,7 @@ function ChatSidebar({ handleGroupChatOpen }: IChatSidebar) {
     const router = useRouter();
     return (
         <div className="flex flex-row w-full h-full">
-            <div className="flex-col h-[60%] hidden lg:flex justify-between self-end p-2">
+            <div className="flex-col h-[60%] hidden lg:flex justify-between self-end px-2 py-4">
                 <div className="flex w-full justify-between lg:flex-col lg:w-auto lg:items-center lg:h-auto lg:gap-6">
                     <div className="cursor-pointer">
                         <FontAwesomeIcon onClick={handleGroupChatOpen} icon={faPencil} style={{ color: 'white', height: '20px', width: '20px' }} />
@@ -29,7 +29,7 @@ function ChatSidebar({ handleGroupChatOpen }: IChatSidebar) {
                 <AccountClickables />
             </div>
 
-            <div className="flex flex-col w-full h-full relative flex-1 p-4 lg:p-1">
+            <div className="flex flex-col w-full h-full relative flex-1 p-4 lg:p-1 overflow-y-scroll">
                 <SearchInput onChange={(e) => {}} name="search" type="text" placeholder="Search users, groups" />
                 <RoomList />
             </div>
