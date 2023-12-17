@@ -29,7 +29,7 @@ function ChatSidebar({ handleGroupChatOpen }: IChatSidebar) {
                 <AccountClickables />
             </div>
 
-            <div className="flex flex-col w-full h-full relative flex-1 p-4 lg:p-1 no-sidebar overflow-auto">
+            <div className="flex flex-col w-full h-full relative flex-1 p-4 lg:p-1 no-scrollbar overflow-auto">
                 <SearchInput onChange={(e) => {}} name="search" type="text" placeholder="Search users, groups" />
                 <RoomList />
             </div>

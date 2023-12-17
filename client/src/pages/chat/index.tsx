@@ -68,7 +68,7 @@ function Chat() {
                     <CreateGroupChat onSubmit={handleFormSubmit} />
                 </Popup>
             )}
-            <div className="w-full lg:w-[30%] flex-1 min-h-100 items-start overflow-y-scroll">
+            <div className="w-full lg:w-[30%] flex-1 min-h-100 items-start overflow-y-scroll no-scrollbar">
                 <ChatSidebar handleGroupChatOpen={handleCreateGroupOpen} />
             </div>
             <div className="emptyChatArea hidden lg:flex lg:flex-1 lg:h-full items-center justify-center text-white text-center">
