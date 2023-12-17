@@ -41,11 +41,11 @@ io.on('connection', (socket) => {
 
     socket.on('stopTyping', (room) => socket.in(room).emit('stopTyping'));
 
-    socket.on('newMessage', (message: IPopulatedChat) => {
+    socket.on('newMessage', (message: IPopulatedChat, socktId: any) => {
         const room = message.room;
 
         room.users.forEach((user) => {
-            if (user._id.toString() === message.sender._id) return;
+            if (socktId == socket.id) return;
             else socket.in(user._id.toString()).emit('messageReceived', { ...message, room: message.room._id });
         });
     });
