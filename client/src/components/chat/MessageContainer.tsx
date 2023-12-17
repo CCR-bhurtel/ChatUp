@@ -16,7 +16,7 @@ function MessageContainer(props: IMessageContainer) {
                 const formattedTime = `${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
                 if (message.sender._id === state.user?._id) {
                     return (
-                        <div className="mymessages mt-2 self-end text-white font-light leading-tight  flex items-end flex-col gap-2 w-[70%]">
+                        <div key={i} className="mymessages mt-2 self-end text-white font-light leading-tight  flex items-end flex-col gap-2 w-[70%]">
                             <div className="messages flex gap-2 flex-col">
                                 <div className="message bg-purple p-4 pt-6 color-white rounded-md relative text-sm">
                                     <div className="time text-[10px] absolute left-1 top-1 p-1 font-thin tracking-wide">
@@ -29,7 +29,7 @@ function MessageContainer(props: IMessageContainer) {
                     );
                 } else {
                     return (
-                        <div className="others mt-2 self-start text-white font-light leading-tight justify-start  flex items-end flex-row gap-2 w-[70%]">
+                        <div key={i} className="others mt-2 self-start text-white font-light leading-tight justify-start  flex items-end flex-row gap-2 w-[70%]">
                             <div
                                 className={`avatardiv
                              ${
