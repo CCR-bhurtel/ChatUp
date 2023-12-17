@@ -47,4 +47,4 @@ Start the frontend development server in another terminal tab:
   npm run dev
 ```
 
-The application shoud run on:- http://localhost:3000
+  The application shoud run on:- http://localhost:3000

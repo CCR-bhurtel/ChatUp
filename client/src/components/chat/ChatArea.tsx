@@ -82,7 +82,7 @@ function ChatArea(props: IChatArea) {
         socket.on('messageReceived', (message: IChatType) => {
             dispatch({ type: RoomActionTypes.AppendChatToRoom, payload: message });
         });
-    }, []);
+    }, [socket, dispatch]);
 
     return (
         <div className="flex chatsection relative  flex-col h-full w-full">

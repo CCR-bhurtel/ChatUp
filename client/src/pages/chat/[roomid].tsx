@@ -90,10 +90,10 @@ function ChatRoom() {
         try {
             if (!socket) initSocket();
 
-            if (auth.state.user) {
+            if (auth.state.user && socket) {
                 socket.emit('initialSetup', auth.state.user);
             }
-            socket.on('connected', () => setSocketConnected(true));
+            if (socket) socket.on('connected', () => setSocketConnected(true));
         } catch (err) {
             console.log(err);
         }
@@ -111,7 +111,7 @@ function ChatRoom() {
                 background.classList.toggle('hidden');
             }
         };
-    }, []);
+    }, [router]);
 
     return (
         <div
