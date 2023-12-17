@@ -20,6 +20,8 @@ import { useRoom } from '@/context/chat/RoomContextProvider';
 import { RoomActionTypes } from '@/context/chat/roomActions';
 import toast from 'react-hot-toast';
 import { getSocket } from '@/utils/socketService';
+import Picker from '@emoji-mart/react';
+import data, { Skin } from "@emoji-mart/data"
 
 interface IChatArea {
     handleInfoOpen?: () => void;
@@ -33,6 +35,7 @@ function ChatArea(props: IChatArea) {
     const divref = createRef<HTMLDivElement>();
 
     const [typingUser, setTypingUser] = useState<string | null>(null);
+    const [showPicker, setShowPicker] = useState(false);
 
     const socket = useMemo(() => getSocket(), []);
     useEffect(() => {
@@ -48,6 +51,7 @@ function ChatArea(props: IChatArea) {
     const handleMessageChange = (e: ChangeEvent<HTMLInputElement>) => {
         setMessage(e.target.value);
     };
+
     const handleSendMessage = async (e: SyntheticEvent) => {
         e.preventDefault();
         if (!auth.state.user) {
@@ -73,6 +77,11 @@ function ChatArea(props: IChatArea) {
         } catch (err: any) {
             toast.error(err.response?.data.message);
         }
+    };
+
+    const onEmojiClick = (obj: Skin) => {
+        setMessage(message + obj.native);
+        setShowPicker(false);
     };
 
     useEffect(() => {
@@ -109,10 +118,11 @@ function ChatArea(props: IChatArea) {
                     <div
                         ref={divref}
                         className="message-container w-full py-2 overflow-y-scroll overflow-x-hidden flex flex-col"
-                    >
+                        >
                         <MessageContainer messages={room.messages} />
                     </div>
                 </div>
+                {showPicker && <Picker data={data} onEmojiSelect={onEmojiClick} />}
                 <div className="messageBox w-full justify-center self-end bottom-2 flex p-4">
                     <div className="bg-cgray p-4 rounded-tl-xl text-sm rounded-bl-xl flex flex-1 items-center">
                         <form onSubmit={handleSendMessage} className="flex-1">
@@ -127,7 +137,7 @@ function ChatArea(props: IChatArea) {
 
                         <div className="flex gap-2 self-end justify-end">
                             <FontAwesomeIcon icon={faPaperclip} style={{ color: 'white' }} />
-                            <FontAwesomeIcon icon={faFaceSmile} style={{ color: 'white' }} />
+                            <FontAwesomeIcon icon={faFaceSmile} style={{ color: 'white', cursor: 'pointer' }} onClick={() => setShowPicker(true)} />
                         </div>
                     </div>
                     <div className="sendButton bg-navy hover:bg-secondary px-4 items-center justify-center flex rounded-tr-md rounded-br-md">
