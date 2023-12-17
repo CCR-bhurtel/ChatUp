@@ -77,15 +77,15 @@ function ChatArea(props: IChatArea) {
 
     useEffect(() => {
         socket.on('typing', (userImage: string) => setTypingUser(userImage));
-
         socket.on('stopTyping', () => setTypingUser(null));
         socket.on('messageReceived', (message: IChatType) => {
             dispatch({ type: RoomActionTypes.AppendChatToRoom, payload: message });
         });
     }, []);
+    
     return (
-        <>
-            <div className="flex  justify-between  p-4 items-center">
+        <div className="flex flex-col h-full w-full">
+            <div className="flex justify-between p-4 items-center">
                 <div
                     onClick={() => {
                         props.handleInfoOpen && props.handleInfoOpen();
@@ -104,37 +104,38 @@ function ChatArea(props: IChatArea) {
                     <FontAwesomeIcon icon={faTrashCan} style={{ color: 'white' }} />
                 </div>
             </div>
-            <div className="chatsection relative flex  px-4 min-h-[87%]  min-w-full ">
-                <div
-                    ref={divref}
-                    className="message-container   min-h-[70vh] md:min-h-[50vh] w-full mb-[20vh] py-2 overflow-y-scroll overflow-x-hidden flex flex-col "
-                >
-                    <MessageContainer messages={room.messages} />
-                </div>
-            </div>
-
-            <div className="messageBox absolute w-full justify-center  bottom-2  flex">
-                <div className="bg-cgray p-4 rounded-tl-xl text-sm rounded-bl-xl flex  ">
-                    <form onSubmit={handleSendMessage} className="w-[150px]">
-                        <input
-                            value={message}
-                            onChange={handleMessageChange}
-                            type="text"
-                            className="w-full outline-none placeholder:font-thin text-white font-light text-sm placeholder:text-white bg-transparent focus:bg-transparent border-none outline-0 focus:outline-0"
-                            placeholder="Your message here "
-                        />
-                    </form>
-
-                    <div className="flex justify-around min-w-[15%] gap-2">
-                        <FontAwesomeIcon icon={faPaperclip} style={{ color: 'white' }} />
-                        <FontAwesomeIcon icon={faFaceSmile} style={{ color: 'white' }} />
+            <div className="chatsection flex flex-col flex-1 w-full">
+                <div className="flex flex-1 min-w-full">
+                    <div
+                        ref={divref}
+                        className="message-container w-full py-2 overflow-y-scroll overflow-x-hidden flex flex-col"
+                    >
+                        <MessageContainer messages={room.messages} />
                     </div>
                 </div>
-                <div className="sendButton bg-navy hover:bg-secondary px-4 items-center justify-center flex rounded-tr-md rounded-br-md">
-                    <FontAwesomeIcon icon={faPaperPlane} style={{ color: 'white' }} />
+                <div className="messageBox w-full justify-center self-end bottom-2 flex p-4">
+                    <div className="bg-cgray p-4 rounded-tl-xl text-sm rounded-bl-xl flex flex-1 items-center">
+                        <form onSubmit={handleSendMessage} className="flex-1">
+                            <input
+                                value={message}
+                                onChange={handleMessageChange}
+                                type="text"
+                                className="w-full outline-none placeholder:font-thin text-white font-light text-sm placeholder:text-white bg-transparent focus:bg-transparent border-none outline-0 focus:outline-0"
+                                placeholder="Your message here "
+                            />
+                        </form>
+
+                        <div className="flex gap-2 self-end justify-end">
+                            <FontAwesomeIcon icon={faPaperclip} style={{ color: 'white' }} />
+                            <FontAwesomeIcon icon={faFaceSmile} style={{ color: 'white' }} />
+                        </div>
+                    </div>
+                    <div className="sendButton bg-navy hover:bg-secondary px-4 items-center justify-center flex rounded-tr-md rounded-br-md">
+                        <FontAwesomeIcon icon={faPaperPlane} style={{ color: 'white' }} />
+                    </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 

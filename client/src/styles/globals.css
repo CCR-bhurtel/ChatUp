@@ -27,6 +27,12 @@
     font-family: jkadobe;
     src: url('../assets/fonts/JKAbode-Demo.ttf');
 }
+* {
+    box-sizing: border-box;
+    ::-webkit-scrollbar {
+        display: none;
+    }
+}
 
 button {
     transition: all 0.3s ease-in !important;

@@ -1,4 +1,5 @@
 import { IChatType } from '@/Types/Chat';
+import ChatFooter from '@/components/chat/ChatFooter';
 import { IActiveRoom, IRoomType } from '@/Types/Room';
 import ChatArea from '@/components/chat/ChatArea';
 import RoomInfo from '@/components/chat/RoomInfo';
@@ -10,18 +11,30 @@ import { RoomActionTypes } from '@/context/chat/roomActions';
 import { getSocket, initSocket } from '@/utils/socketService';
 import axios, { AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
+import CreateGroupChat from '@/components/chat/CreateGroupChat';
 
 import React, { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import ChatSidebar from '@/components/chat/ChatSidebar';
 
 function ChatRoom() {
     const [isInfoOpen, setIsInfoOpen] = useState<boolean>(false);
+    const [createGroupOpen, setCreateGroupOpen] = useState(false);
+    const [socketConnected, setSocketConnected] = useState(false);
+
     const router = useRouter();
     const { state, dispatch } = useRoom();
-
     const auth = useAuth();
 
-    const [socketConnected, setSocketConnected] = useState(false);
+
+    const handleCreateGroupOpen = () => {
+        setCreateGroupOpen(true);
+    };
+
+    const handleCreateGroupClose = () => {
+        setCreateGroupOpen(false);
+    };
+
 
     const handleOpenInfo = () => {
         setIsInfoOpen(true);
@@ -47,6 +60,29 @@ function ChatRoom() {
         } catch (err) {
             toast.error('Error loding room');
             router.push('/chat');
+        }
+    };
+
+    const handleFormSubmit = async (userIds: string[], groupName: string) => {
+        if (!groupName) {
+            toast.error('Please enter valid room name');
+            return;
+        } else if (userIds.length < 1) {
+            toast.error('Please enter any other member');
+            return;
+        }
+        try {
+            const res: AxiosResponse<{ message: string; group: IRoomType }> = await axios.post(`/room`, {
+                isGroupChat: true,
+                groupName: groupName,
+                users: userIds,
+            });
+            dispatch({ type: RoomActionTypes.AppendRoom, payload: res.data.group });
+            toast.success(res.data.message);
+
+            handleCreateGroupClose();
+        } catch (err: any) {
+            toast.error(err.response?.data.message || 'Error creating group');
         }
     };
 
@@ -76,30 +112,42 @@ function ChatRoom() {
             }
         };
     }, []);
+
     return (
         <div
-            className={`pt-4 w-full md:w-auto flex flex-col self-end h-[93vh]  overflow-hidden   ${
-                !isInfoOpen && 'relative'
-            }`}
+            className={`w-full md:w-auto flex flex-col h-full overflow-hidden lg:self-stretch`}
         >
-            {state.isActiveRoomLoading ? (
-                <Loading />
-            ) : !state.activeRoom ? (
-                <p></p>
-            ) : (
-                <>
-                    <div className="popup md:hidden">
-                        {isInfoOpen ? (
-                            <Popup onClose={handleCloseInfo}>
-                                <RoomInfo light={true} room={state.activeRoom} />
-                            </Popup>
-                        ) : (
-                            ''
-                        )}
-                    </div>
-                    <ChatArea room={state.activeRoom} handleInfoOpen={handleOpenInfo} />
-                </>
+            {createGroupOpen && (
+                <Popup onClose={handleCreateGroupClose}>
+                    <CreateGroupChat onSubmit={handleFormSubmit} />
+                </Popup>
             )}
+            <div className="flex flex-row h-full w-full">
+                <div className="hidden lg:block w-[30%] h-full">
+                    <ChatSidebar handleGroupChatOpen={handleCreateGroupOpen} />
+                </div>
+                {state.isActiveRoomLoading ? (
+                    <Loading />
+                ) : !state.activeRoom ? (
+                    <p></p>
+                ) : (
+                    <>
+                        <div className="popup">
+                            {isInfoOpen ? (
+                                <Popup onClose={handleCloseInfo}>
+                                    <RoomInfo light={true} room={state.activeRoom} />
+                                </Popup>
+                            ) : (
+                                ''
+                            )}
+                        </div>
+                        
+                        <div className="flex-1">
+                            <ChatArea room={state.activeRoom} handleInfoOpen={handleOpenInfo} />
+                        </div>
+                    </>
+                )}
+            </div>
         </div>
     );
 }
