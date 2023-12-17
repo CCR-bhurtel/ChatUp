@@ -1,8 +1,4 @@
-import {
-    faPhone,
-    faTrashCan,
-    faVideoCamera,
-} from '@fortawesome/free-solid-svg-icons';
+import { faPhone, faTrashCan, faVideoCamera } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { SyntheticEvent, createRef, useEffect, useMemo, useState, useRef } from 'react';
 import Avatar from '../reusables/Avatar';
@@ -17,10 +13,16 @@ import { RoomActionTypes } from '@/context/chat/roomActions';
 import toast from 'react-hot-toast';
 import { getSocket } from '@/utils/socketService';
 import MessageInput from './MessageInput';
+import TypingContainer from './TypingContainer';
 
 interface IChatArea {
     handleInfoOpen?: () => void;
     room: IActiveRoom;
+}
+
+export interface TypingUser {
+    userId: string;
+    profilePic: string;
 }
 
 function ChatArea(props: IChatArea) {
@@ -29,7 +31,7 @@ function ChatArea(props: IChatArea) {
     const { state, dispatch } = useRoom();
     const divref = createRef<HTMLDivElement>();
 
-    const [typingUser, setTypingUser] = useState<string | null>(null);
+    const [typingUsers, setTypingUsers] = useState<TypingUser[]>([]);
 
     const socket = useMemo(() => getSocket(), []);
     useEffect(() => {
@@ -68,14 +70,19 @@ function ChatArea(props: IChatArea) {
     };
 
     useEffect(() => {
-        socket.on('typing', (userImage: string) => setTypingUser(userImage));
-        socket.on('stopTyping', () => setTypingUser(null));
+        socket.on('typing', (typingUser: TypingUser) => {
+            const newTypingUsers = typingUsers.filter((user) => user.userId !== typingUser.userId);
+            newTypingUsers.push(typingUser);
+            setTypingUsers(newTypingUsers);
+        });
+        socket.on('stopTyping', (userId: string) => {
+            const newTypingUsers = typingUsers.filter((user) => user.userId !== userId);
+            setTypingUsers(newTypingUsers);
+        });
         socket.on('messageReceived', (message: IChatType) => {
             dispatch({ type: RoomActionTypes.AppendChatToRoom, payload: message });
         });
     }, []);
-
-    
 
     return (
         <div className="flex chatsection relative  flex-col h-full w-full">
@@ -98,13 +105,11 @@ function ChatArea(props: IChatArea) {
                     <FontAwesomeIcon icon={faTrashCan} style={{ color: 'white' }} />
                 </div>
             </div>
-            <div  ref={divref} className="max-h-[75%] overflow-y-scroll no-scrollbar flex flex-col flex-1 w-full">
+            <div ref={divref} className="max-h-[78%] mb-20 overflow-y-scroll no-scrollbar flex flex-col flex-1 w-full">
                 <div className="flex p-4  flex-1 min-w-full">
-                    <div
-                       
-                        className="message-container w-full py-2 overflow-y-scroll no-scrollbar overflow-x-hidden flex flex-col"
-                    >
+                    <div className="message-container w-full py-2 overflow-y-scroll no-scrollbar overflow-x-hidden flex flex-col">
                         <MessageContainer messages={room.messages} />
+                        <TypingContainer users={typingUsers} />
                     </div>
                 </div>
                 <MessageInput handleSendMessage={handleSendMessage} />

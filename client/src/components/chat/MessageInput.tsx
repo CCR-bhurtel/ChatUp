@@ -1,22 +1,27 @@
-import {
-    faFaceSmile,
-    faPaperPlane,
-    faPaperclip,
-} from '@fortawesome/free-solid-svg-icons';
+import { faFaceSmile, faPaperPlane, faPaperclip } from '@fortawesome/free-solid-svg-icons';
 import Picker from '@emoji-mart/react';
 import data, { Skin } from '@emoji-mart/data';
 import { useState, useRef, useEffect, ChangeEvent, SyntheticEvent } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { getSocket, initSocket } from '@/utils/socketService';
+import { useAuth } from '@/context/auth/AuthContextProvider';
+import { useRoom } from '@/context/chat/RoomContextProvider';
 
 interface Props {
-    handleSendMessage: (e: SyntheticEvent, message: string) => Promise<void>
+    handleSendMessage: (e: SyntheticEvent, message: string) => Promise<void>;
 }
 
 function MessageInput({ handleSendMessage }: Props) {
     const [message, setMessage] = useState<string>('');
     const [showPicker, setShowPicker] = useState(false);
+
+    const [typing, setTyping] = useState(false);
     const emojiPickerRef = useRef<HTMLDivElement>(null);
+
+    const auth = useAuth();
+
+    const room = useRoom();
 
     const onEmojiClick = (obj: Skin) => {
         setMessage(message + obj.native);
@@ -25,26 +30,52 @@ function MessageInput({ handleSendMessage }: Props) {
 
     useEffect(() => {
         const handleClickOutside = (event: globalThis.MouseEvent) => {
-          if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target as Node)) {
-            setShowPicker(false);
-          }
+            if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target as Node)) {
+                setShowPicker(false);
+            }
         };
-    
+
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
-          document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('mousedown', handleClickOutside);
         };
-      }, []);
+    }, []);
+
+    let timeOut: string | number | NodeJS.Timeout | undefined;
 
     const handleMessageChange = (e: ChangeEvent<HTMLInputElement>) => {
         setMessage(e.target.value);
+
+        let socket = getSocket();
+        if (!socket) {
+            initSocket();
+            socket = getSocket();
+        }
+        if (!typing) {
+            setTyping(true);
+            socket.emit('typing', {
+                room: room.state.activeRoom,
+                profilePic: auth.state.user?.profilePic,
+                userId: auth.state.user?._id,
+            });
+        }
+
+        if (timeOut) clearTimeout(timeOut);
+
+        timeOut = setTimeout(() => {
+            setTyping(false);
+            socket.emit('stopTyping', {
+                room: room.state.activeRoom?._id,
+                userId: auth.state.user?._id,
+            });
+        }, 3000);
     };
 
     const handleSend = (e: SyntheticEvent) => {
         e.preventDefault();
         handleSendMessage(e, message);
         setMessage('');
-    }
+    };
 
     return (
         <div className="messageBox absolute w-full justify-center self-end bottom-2 flex p-4">
@@ -80,7 +111,7 @@ function MessageInput({ handleSendMessage }: Props) {
                 <FontAwesomeIcon icon={faPaperPlane} style={{ color: 'white' }} />
             </div>
         </div>
-    )
+    );
 }
 
 export default MessageInput;

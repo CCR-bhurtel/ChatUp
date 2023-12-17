@@ -37,16 +37,20 @@ io.on('connection', (socket) => {
         socket.join(roomId);
         console.log(`User joined room ${roomId}`);
     });
-    socket.on('typing', (room, userImage) => socket.in(room).emit('typing', userImage));
+    socket.on('typing', ({ room, profilePic, userId }) => {
+        room.users.forEach((user: IUser) => {
+            if (user._id === userId) return;
+            socket.in(room._id).emit('typing', { userId: user._id, profilePic: profilePic });
+        });
+    });
 
-    socket.on('stopTyping', (room) => socket.in(room).emit('stopTyping'));
+    socket.on('stopTyping', ({ room, userId }) => socket.in(room).emit('stopTyping', userId));
 
     socket.on('newMessage', (message: IPopulatedChat, socktId: any) => {
         const room = message.room;
-
+        if (socktId == socket.id) return;
         room.users.forEach((user) => {
-            if (socktId == socket.id) return;
-            else socket.in(user._id.toString()).emit('messageReceived', { ...message, room: message.room._id });
+            socket.in(user._id.toString()).emit('messageReceived', { ...message, room: message.room._id });
         });
     });
 
