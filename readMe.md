@@ -27,17 +27,20 @@ Follow these instructions to set up and run ChatUp on your local machine for dev
    npm install
 
   Check .env.sample in api and frontend folder  and create .env file inside BOTH folder with necessary keys.
+  
+  RUN mongodb server if necessary or add atlas connection string
 
   Running the Development Servers
 ```bash
   cd api
   npm run dev
 ```
+Your backend development server should start at:- http://localhost:3000
 
   Start the frontend development server in another terminal tab:
 
 ```bash
-  cd ../client
+  cd client
   npm run dev
 ```
 

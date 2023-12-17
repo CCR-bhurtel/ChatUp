@@ -28,7 +28,7 @@ server = app.listen(PORT, () => {
 const io = new socketio.Server(server, { cors: { origin: 'http://localhost:3000' }, pingTimeout: 60000 });
 
 io.on('connection', (socket) => {
-    socket.on('initial', (userData: IUser) => {
+    socket.on('initialSetup', (userData: IUser) => {
         socket.join(userData._id);
         socket.emit('connected');
     });
@@ -37,7 +37,7 @@ io.on('connection', (socket) => {
         socket.join(roomId);
         console.log(`User joined room ${roomId}`);
     });
-    socket.on('typing', (room, userImage) => socket.in(room).emit('typing', { userImage: userImage }));
+    socket.on('typing', (room, userImage) => socket.in(room).emit('typing', userImage));
 
     socket.on('stopTyping', (room) => socket.in(room).emit('stopTyping'));
 
@@ -46,8 +46,7 @@ io.on('connection', (socket) => {
 
         room.users.forEach((user) => {
             if (user._id.toString() === message.sender._id) return;
-
-            socket.in(user._id.toString()).emit('message received', message);
+            else socket.in(user._id.toString()).emit('messageReceived', { ...message, room: message.room._id });
         });
     });
 
