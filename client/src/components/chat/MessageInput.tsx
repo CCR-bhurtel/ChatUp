@@ -48,37 +48,37 @@ function MessageInput({ handleSendMessage }: Props) {
 
     return (
         <div className="messageBox absolute w-full justify-center self-end bottom-2 flex p-4">
-            <div className="bg-cgray p-4 rounded-tl-xl text-sm rounded-bl-xl flex flex-1 items-center">
-                <form onSubmit={handleSend} className="flex-1">
-                    <input
-                        value={message}
-                        onChange={handleMessageChange}
-                        type="text"
-                        className="w-full outline-none placeholder:font-thin text-white font-light text-sm placeholder:text-white bg-transparent focus:bg-transparent border-none outline-0 focus:outline-0"
-                        placeholder="Your message here "
-                    />
-                </form>
-
-                <div className="flex md:relative  gap-2 self-end justify-end">
-                    <FontAwesomeIcon icon={faPaperclip} style={{ color: 'white' }} />
-
-                    <div className="emojicontainer ">
-                        <FontAwesomeIcon
-                            icon={faFaceSmile}
-                            style={{ color: 'white', cursor: 'pointer' }}
-                            onClick={() => setShowPicker(true)}
+            <form onSubmit={handleSend} className="flex flex-row flex-1">
+                <div className="bg-cgray p-4 rounded-tl-xl text-sm rounded-bl-xl flex flex-1 items-center">
+                        <input
+                            value={message}
+                            onChange={handleMessageChange}
+                            type="text"
+                            className="w-full outline-none placeholder:font-thin text-white font-light text-sm placeholder:text-white bg-transparent focus:bg-transparent border-none outline-0 focus:outline-0"
+                            placeholder="Your message here "
                         />
-                        {showPicker && (
-                            <div className="absolute left-0 bottom-10 md:left-auto md:right-0" ref={emojiPickerRef}>
-                                <Picker data={data} onEmojiSelect={onEmojiClick} />
-                            </div>
-                        )}
+
+                    <div className="flex md:relative  gap-2 self-end justify-end">
+                        <FontAwesomeIcon icon={faPaperclip} style={{ color: 'white' }} />
+
+                        <div className="emojicontainer ">
+                            <FontAwesomeIcon
+                                icon={faFaceSmile}
+                                style={{ color: 'white', cursor: 'pointer' }}
+                                onClick={() => setShowPicker(true)}
+                                />
+                            {showPicker && (
+                                <div className="absolute left-0 bottom-10 md:left-auto md:right-0" ref={emojiPickerRef}>
+                                    <Picker data={data} onEmojiSelect={onEmojiClick} />
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className="sendButton bg-navy hover:bg-secondary px-4 items-center justify-center flex rounded-tr-md rounded-br-md">
-                <FontAwesomeIcon icon={faPaperPlane} style={{ color: 'white' }} />
-            </div>
+                <button type="submit" className="sendButton bg-navy hover:bg-secondary px-4 items-center justify-center flex rounded-tr-md rounded-br-md">
+                    <FontAwesomeIcon icon={faPaperPlane} style={{ color: 'white' }} />
+                </button>
+            </form>
         </div>
     )
 }

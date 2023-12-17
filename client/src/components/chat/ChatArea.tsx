@@ -73,7 +73,11 @@ function ChatArea(props: IChatArea) {
         socket.on('messageReceived', (message: IChatType) => {
             dispatch({ type: RoomActionTypes.AppendChatToRoom, payload: message });
         });
-    }, []);
+    }, [socket, dispatch]);
+
+    useEffect(() => {
+        console.log(typingUser);
+    }, [typingUser]);
 
     
 
