@@ -9,7 +9,7 @@ function ChatList() {
     const { state } = useRoom();
 
     return (
-        <div className="mt-8 w-full h-full overflow-y-scroll overflow-x-hidden">
+        <div className="mt-8 w-full h-full overflow-y-scroll no-scrollbar overflow-x-hidden">
             <div className="rooms max-h-full flex gap-2 flex-col w-full md:pb-0">
                 {state.isRoomsLoading ? (
                     <Loading />

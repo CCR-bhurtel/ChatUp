@@ -4,8 +4,6 @@ import { IChatType } from '@/Types/Chat';
 import { useAuth } from '@/context/auth/AuthContextProvider';
 import getAvatarImage from '@/utils/getAvatarImage';
 
-
-
 export interface IMessageContainer {
     messages: IChatType[];
 }

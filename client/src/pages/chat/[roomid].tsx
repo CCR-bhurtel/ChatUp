@@ -122,8 +122,8 @@ function ChatRoom() {
                     <CreateGroupChat onSubmit={handleFormSubmit} />
                 </Popup>
             )}
-            <div className="flex flex-row h-full w-full">
-                <div className="hidden lg:block w-[30%] h-full">
+            <div className="flex flex-row h-full  w-full">
+                <div className="hidden lg:block w-[30%] h-full ">
                     <ChatSidebar handleGroupChatOpen={handleCreateGroupOpen} />
                 </div>
                 {state.isActiveRoomLoading ? (

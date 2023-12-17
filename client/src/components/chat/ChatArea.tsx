@@ -113,12 +113,9 @@ function ChatArea(props: IChatArea) {
                     <FontAwesomeIcon icon={faTrashCan} style={{ color: 'white' }} />
                 </div>
             </div>
-            <div className="max-h-[75%] overflow-scroll flex flex-col flex-1 w-full">
-                <div className="flex p-4  flex-1 min-w-full">
-                    <div
-                        ref={divref}
-                        className="message-container w-full py-2 overflow-y-scroll overflow-x-hidden flex flex-col"
-                    >
+            <div className="max-h-[75%] overflow-y-scroll no-scrollbar flex flex-col flex-1 w-full">
+                <div ref={divref} className="flex p-4  flex-1 min-w-full">
+                    <div className="message-container w-full py-2 overflow-y-scroll no-scrollbar overflow-x-hidden flex flex-col">
                         <MessageContainer messages={room.messages} />
                     </div>
                 </div>
