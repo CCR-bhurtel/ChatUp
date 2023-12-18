@@ -31,7 +31,10 @@ export const getUserRooms = catchAsync(async (req: ExpressRequest, res: Response
 export const getRoom = catchAsync(async (req: ExpressRequest, res: Response, next: NextFunction) => {
     const roomId = req.params.roomid;
 
-    const room = await Room.findById(roomId).populate({ path: 'users', select: 'profilePic name' });
+    const room = await Room.findOne({ _id: roomId, users: req.user._id }).populate({
+        path: 'users',
+        select: 'profilePic name',
+    });
     if (!room) return next(new AppError("Room can't be found, please check roomId", 400));
     const formatttedRoom = await formatRoomDetail(room, req.user._id);
     if (room) {

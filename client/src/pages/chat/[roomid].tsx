@@ -84,19 +84,6 @@ function ChatRoom() {
     };
 
     useEffect(() => {
-        try {
-            if (!socket) initSocket();
-
-            if (auth.state.user && socket) {
-                socket.emit('initialSetup', auth.state.user);
-            }
-            if (socket) socket.on('connected', () => setSocketConnected(true));
-        } catch (err) {
-            console.log(err);
-        }
-    }, [auth.state.user]);
-
-    useEffect(() => {
         handleRoomLoad();
         const background = document.querySelector('.backgroundlayer');
         if (background) {

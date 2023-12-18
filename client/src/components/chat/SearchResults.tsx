@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Avatar from '../reusables/Avatar';
-import Link from 'next/link';
 import { useRoom } from '@/context/chat/RoomContextProvider';
 import Loading from '../reusables/Loading';
 import getAvatarImage from '@/utils/getAvatarImage';
@@ -11,6 +10,7 @@ import { useRouter } from 'next/router';
 import axios, { AxiosResponse } from 'axios';
 import { useAuth } from '@/context/auth/AuthContextProvider';
 import toast from 'react-hot-toast';
+import { getSocket } from '@/utils/socketService';
 
 interface ISearchResult {
     results: IRoomType[];
@@ -20,16 +20,21 @@ function SearchResult({ results, loading }: ISearchResult) {
     const router = useRouter();
     const auth = useAuth();
 
+    let socket = useMemo(() => getSocket(), []);
+
     const handleItemClick = async (id: string, isGroupChat: boolean) => {
         if (isGroupChat) {
             router.push(`/chat/${id}`);
         } else {
             try {
-                const res: AxiosResponse<IRoomType> = await axios.post('/room', {
+                const res: AxiosResponse<{ isNew: boolean; room: IRoomType }> = await axios.post('/room', {
                     users: [id, auth.state.user?._id],
                     isGroupChat: false,
                 });
-                const room = res.data;
+                const room = res.data.room;
+                if (res.data.isNew) {
+                    socket.emit('newRoom', room, auth.state.user?._id);
+                }
                 router.push(`/chat/${room._id}`);
             } catch (err: any) {
                 toast.error(err.response?.data.message || 'Error getting chats');

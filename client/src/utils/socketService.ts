@@ -17,5 +17,6 @@ export const initSocket = () => {
 };
 
 export const getSocket = (): Socket => {
+    if (!socket) initSocket();
     return socket;
 };

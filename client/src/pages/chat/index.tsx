@@ -5,6 +5,7 @@ import CreateGroupChat from '@/components/chat/CreateGroupChat';
 import Popup from '@/components/layouts/Popup';
 import { loadRooms, useRoom } from '@/context/chat/RoomContextProvider';
 import { RoomActionTypes } from '@/context/chat/roomActions';
+import { getSocket } from '@/utils/socketService';
 import axios, { AxiosResponse } from 'axios';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -55,6 +56,14 @@ function Chat() {
                 background.classList.toggle('hidden');
             }
         };
+    }, []);
+
+    useEffect(() => {
+        let socket = getSocket();
+
+        socket.on('newRoomCreated', (room: IRoomType) => {
+            dispatch({ type: RoomActionTypes.AppendRoom, payload: room });
+        });
     }, []);
 
     useEffect(() => {

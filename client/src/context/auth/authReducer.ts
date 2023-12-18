@@ -21,6 +21,8 @@ const authReducer = (state: AuthStateInterface, action: AuthActions): AuthStateI
         case AuthActionTypes.RemoveUser:
         case AuthActionTypes.LogOut:
             return { ...state, isLoggedIn: false, user: undefined };
+        case AuthActionTypes.SocketConnected:
+            return { ...state, socketConnected: action.payload };
         default:
             return state;
     }

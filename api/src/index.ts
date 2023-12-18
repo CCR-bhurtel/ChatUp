@@ -11,6 +11,8 @@ import { PORT } from './config/keys';
 import socketio, { Socket } from 'socket.io';
 import { IUser } from './Types/User';
 import { IPopulatedChat } from './Types/Chat';
+import { IRoom } from './Types/Room';
+import { formatRoomDetail } from './utils/formatRoomDetails';
 
 connectDb()
     .then(() => {})
@@ -35,7 +37,6 @@ const leaveAllRooms = (socket: Socket, userId: string) => {
 io.on('connection', (socket) => {
     socket.on('initialSetup', (userData: IUser) => {
         socket.join(userData._id.toString());
-        socket.emit('connected');
     });
 
     socket.on('joinRoom', (roomId: string, userId: string) => {
@@ -54,6 +55,24 @@ io.on('connection', (socket) => {
         const room = message.room;
         if (socktId === socket.id) return;
         socket.to(room._id.toString()).emit('messageReceived', { ...message, room: message.room._id });
+    });
+
+    socket.on('newRoom', async (room: IRoom, userId: string) => {
+        if (room.isGroupChat) {
+            room.users.forEach((user) => {
+                const id = user._id.toString();
+
+                socket.to(id).emit('newRoomCreated', room);
+            });
+        } else {
+            const otherUser = room.users.find((user) => user._id.toString() !== userId);
+            console.log(otherUser);
+            if (otherUser) {
+                const idInString = otherUser._id.toString();
+                const formattedRoom = await formatRoomDetail(room, idInString);
+                socket.to(idInString).emit('newRoomCreated', formattedRoom);
+            }
+        }
     });
 
     socket.off('setup', (userData: IUser) => {

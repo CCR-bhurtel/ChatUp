@@ -44,17 +44,21 @@ const createRoom = catchAsync(async (req: ExpressRequest, res: Response, next: N
             //     .limit(20);
 
             return res.status(200).json({
-                ...formattedRoom.toJSON(),
+                isNew: false,
+                room: formattedRoom.toJSON(),
             });
         } else {
-            const duoRoom = await Room.create({
+            let duoRoom = await Room.create({
                 isGroupChat: false,
                 users,
             });
-            const formattedRoom = await formatRoomDetail(duoRoom, req.user._id);
+            let privateRoom = await Room.findById(duoRoom._id).populate({ path: 'users', select: 'name profilePic' });
+            if (!privateRoom) return new AppError('Error creating room', 50);
+            const formattedRoom = await formatRoomDetail(privateRoom, req.user._id);
 
             return res.status(200).json({
-                ...formattedRoom.toJSON(),
+                isNew: true,
+                room: formattedRoom.toJSON(),
             });
         }
     }

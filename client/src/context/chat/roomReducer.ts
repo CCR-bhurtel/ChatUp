@@ -55,7 +55,7 @@ const roomReducer = (state: RoomStateInterface, action: RoomActions): RoomStateI
             const newRooms = state.rooms;
 
             newRooms.unshift(action.payload);
-            return state;
+            return { ...state, rooms: newRooms };
 
         case RoomActionTypes.AppendChatToRoom:
             if (!state.activeRoom) return state;

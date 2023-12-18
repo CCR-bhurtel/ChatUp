@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 import { IRoomType } from '@/Types/Room';
 import SearchResult from './SearchResults';
 import axios, { AxiosResponse } from 'axios';
-import toast from 'react-hot-toast';
 
 interface IChatSidebar {
     handleGroupChatOpen: () => void;
@@ -27,13 +26,16 @@ function ChatSidebar({ handleGroupChatOpen }: IChatSidebar) {
         setSearchKey(e.target.value);
         if (e.target.value && e.target.value.length) {
             try {
+                setSearchResultLoading(true);
                 const res: AxiosResponse<{ searchResult: IRoomType[] }> = await axios.get(
                     `/room/search?key=${e.target.value}`
                 );
                 const result = res.data.searchResult;
                 setSearchResult(result);
+                setSearchResultLoading(false);
             } catch (err) {
                 console.log(err);
+                setSearchResultLoading(false);
             }
         }
     };

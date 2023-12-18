@@ -1,21 +1,24 @@
 import { IUserType } from '@/Types/User';
-import React, { Dispatch, ReactElement, createContext, useContext, useEffect, useReducer } from 'react';
+import React, { Dispatch, ReactElement, createContext, useContext, useEffect, useMemo, useReducer } from 'react';
 import { AuthActionTypes, AuthActions } from './authActions';
 import authReducer from './authReducer';
 import axios, { AxiosResponse } from 'axios';
 import { BASE_API_PATH } from '@/config/keys';
 import { NextRouter, useRouter } from 'next/router';
+import { getSocket } from '@/utils/socketService';
 
 export interface AuthStateInterface {
     user?: IUserType;
     loading: boolean;
     isLoggedIn: boolean;
+    socketConnected: boolean;
 }
 
 const INITIAL_STATE: AuthStateInterface = {
     user: undefined,
     loading: false,
     isLoggedIn: false,
+    socketConnected: false,
 };
 
 export const AuthContext = createContext<{
@@ -31,6 +34,7 @@ export const loadUser = async (dispatch: React.Dispatch<AuthActions>, router: Ne
         const response: AxiosResponse<IUserType> = await axios.get(`/user/`, { withCredentials: true });
 
         const data = response.data;
+
         dispatch({ type: AuthActionTypes.LoadUser, payload: data });
         router.push('/chat');
     } catch (err) {
@@ -52,6 +56,17 @@ function AuthContextProvider(props: { children: ReactElement }) {
             }
         }
     }, [state, router]);
+    let socket = useMemo(() => getSocket(), []);
+
+    useEffect(() => {
+        if (state.user && !state.socketConnected) {
+            socket.emit('initialSetup', state.user);
+        }
+
+        socket.on('connected', () => {
+            dispatch({ type: AuthActionTypes.SocketConnected, payload: true });
+        });
+    }, [state.isLoggedIn, router]);
 
     useEffect(() => {
         loadUser(dispatch, router);
