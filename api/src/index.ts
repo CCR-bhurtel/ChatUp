@@ -11,17 +11,15 @@ import { Server } from 'http';
 import socketio from 'socket.io';
 import { IUser } from './Types/User';
 import { IPopulatedChat } from './Types/Chat';
-let server: Server;
+
 
 connectDb()
-    .then(() => {
-        console.log('Database connected');
-    })
+    .then(() => {})
     .catch((err: any) => {
         console.log(err);
     });
 
-server = app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`app listening to port ${PORT}`);
 });
 

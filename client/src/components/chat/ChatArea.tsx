@@ -16,7 +16,7 @@ import MessageInput from './MessageInput';
 import TypingContainer from './TypingContainer';
 
 interface IChatArea {
-    handleInfoOpen?: () => void;
+    handleInfoOpen: () => void;
     room: IActiveRoom;
 }
 
@@ -89,7 +89,7 @@ function ChatArea(props: IChatArea) {
             <div className="flex justify-between p-4 items-center">
                 <div
                     onClick={() => {
-                        props.handleInfoOpen && props.handleInfoOpen();
+                      props.handleInfoOpen();
                     }}
                     className="personinfo flex flex-row gap-2 items-center cursor-pointer"
                 >
