@@ -1,7 +1,20 @@
+import { IChatType } from '@/Types/Chat';
 import { RoomActionTypes, RoomActions } from './roomActions';
 import { RoomStateInterface } from './RoomContextProvider';
 
 // | LoadActiveRoomPreviousMessages;
+
+function getUniqueObjects(arr: IChatType[]) {
+    const uniqueMap: any = {};
+    return arr.filter((obj) => {
+        const id = obj._id;
+        if (!uniqueMap[id]) {
+            uniqueMap[id] = true;
+            return true;
+        }
+        return false;
+    });
+}
 
 const roomReducer = (state: RoomStateInterface, action: RoomActions): RoomStateInterface => {
     switch (action.type) {
@@ -40,16 +53,17 @@ const roomReducer = (state: RoomStateInterface, action: RoomActions): RoomStateI
 
         case RoomActionTypes.AppendRoom:
             const newRooms = state.rooms;
-            console.log('Reducer called');
-            console.log(action.payload);
 
             newRooms.unshift(action.payload);
             return state;
 
         case RoomActionTypes.AppendChatToRoom:
             if (!state.activeRoom) return state;
-            const newMessageList = state.activeRoom.messages;
+
+            let newMessageList = state.activeRoom.messages;
             newMessageList?.push(action.payload);
+            newMessageList = getUniqueObjects(newMessageList);
+
             return { ...state, activeRoom: { ...state.activeRoom, messages: newMessageList } };
 
         case RoomActionTypes.LoadActiveRoomPreviousMessages:

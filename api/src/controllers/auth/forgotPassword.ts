@@ -9,7 +9,6 @@ import path from 'path';
 
 const forgotPasswordHandler = catchAsync(async (req: Request, res, next) => {
     const { email } = req.body;
-    console.log(email);
 
     if (!email) return next(new AppError('Please provide email', 400));
 

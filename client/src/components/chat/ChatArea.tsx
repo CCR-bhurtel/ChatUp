@@ -71,25 +71,27 @@ function ChatArea(props: IChatArea) {
 
     useEffect(() => {
         socket.on('typing', (typingUser: TypingUser) => {
-            const newTypingUsers = typingUsers.filter((user) => user.userId !== typingUser.userId);
-            newTypingUsers.push(typingUser);
-            setTypingUsers(newTypingUsers);
+            console.log(typingUser)
+            const existingUser = typingUsers.find((user) => user.userId === typingUser.userId);
+            if (!existingUser) {
+                setTypingUsers((typingUsers) => typingUsers.concat(typingUser));
+            }
         });
         socket.on('stopTyping', (userId: string) => {
             const newTypingUsers = typingUsers.filter((user) => user.userId !== userId);
-            setTypingUsers(newTypingUsers);
+            setTypingUsers((typingUsers) => newTypingUsers);
         });
         socket.on('messageReceived', (message: IChatType) => {
             dispatch({ type: RoomActionTypes.AppendChatToRoom, payload: message });
         });
-    }, [socket, dispatch]);
+    }, []);
 
     return (
         <div className="flex chatsection relative  flex-col h-full w-full">
             <div className="flex justify-between p-4 items-center">
                 <div
                     onClick={() => {
-                      props.handleInfoOpen();
+                        props.handleInfoOpen();
                     }}
                     className="personinfo flex flex-row gap-2 items-center cursor-pointer"
                 >

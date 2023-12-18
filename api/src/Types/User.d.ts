@@ -42,7 +42,7 @@ export type PopulatedUser = Pick<
     IUser,
     'name' | 'email' | 'location' | 'registerType' | 'profilePic' | 'blockedUsers' | 'preferences'
 > & {
-    _id: Types.ObjectId;
+    _id: string;
     _doc?: Mixed;
 };
 

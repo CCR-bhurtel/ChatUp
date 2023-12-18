@@ -5,6 +5,7 @@ import User from '../../database/Model/User';
 import Room from '../../database/Model/Room';
 import Chat from '../../database/Model/Chat';
 import AppError from '../../utils/AppError';
+import { formatRoomDetail } from '../../utils/formatRoomDetails';
 
 const createRoom = catchAsync(async (req: ExpressRequest, res: Response, next: NextFunction) => {
     const { users, isGroupChat } = req.body;
@@ -27,42 +28,33 @@ const createRoom = catchAsync(async (req: ExpressRequest, res: Response, next: N
         if (req.user.blockedUsers.includes(req.body.users[0])) return next(new AppError('This user is blocked', 400));
 
         const existingRoom = await Room.findOne({
-            users: [req.user._id, ...req.body.users],
+            users: req.body.users,
         }).populate({ path: 'users', select: 'name profilePic' });
 
         if (existingRoom) {
-            const nextUser = existingRoom.users.find((user) => !user._id.equals(req.user._id));
-            if (nextUser) {
-                const populatedNextUser = await User.findById(nextUser._id);
-                const chats = await Chat.find({ roomId: existingRoom._id })
-                    .populate({
-                        path: 'sender',
-                        select: 'name profilePic _id',
-                    })
-                    .sort({ createdAt: -1 })
+            const formattedRoom = await formatRoomDetail(existingRoom, req.user._id);
 
-                    .limit(20);
+            // const chats = await Chat.find({ roomId: existingRoom._id })
+            //     .populate({
+            //         path: 'sender',
+            //         select: 'name profilePic',
+            //     })
+            //     .sort({ createdAt: -1 })
 
-                return res.status(200).json({
-                    ...existingRoom.toJSON(),
-                    chats,
-                    roomName: populatedNextUser?.name,
-                    roomImage: populatedNextUser?.profilePic,
-                });
-            }
+            //     .limit(20);
+
+            return res.status(200).json({
+                ...formattedRoom.toJSON(),
+            });
         } else {
             const duoRoom = await Room.create({
                 isGroupChat: false,
                 users,
             });
-            const nextUser = duoRoom?.users.find((user) => !user._id.equals(req.user._id));
+            const formattedRoom = await formatRoomDetail(duoRoom, req.user._id);
 
-            const populatedNextUser = await User.findById(nextUser);
             return res.status(200).json({
-                ...duoRoom.toJSON(),
-                chats: [],
-                roomName: populatedNextUser?.name,
-                roomImage: populatedNextUser?.profilePic,
+                ...formattedRoom.toJSON(),
             });
         }
     }

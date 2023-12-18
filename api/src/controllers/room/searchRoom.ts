@@ -16,10 +16,22 @@ const searchRoom = catchAsync(async (req: ExpressRequest, res: Response, next: N
             $not: { $eq: req.user._id },
         },
     });
-    const involvedGroupChats = await Room.find({ name: regexPattern, isGroupChat: true, users: req.user._id });
+
+    const formattedUsersToRoom = users.map((user) => ({
+        _id: user._id,
+        isGroupChat: false,
+        roomImage: user.profilePic,
+        roomName: user.name,
+    }));
+
+    const involvedGroupChats = await Room.find({
+        roomName: regexPattern,
+        isGroupChat: true,
+        users: req.user._id,
+    }).populate({ path: 'lastMessage', populate: { path: 'sender', select: 'name profilepic' } });
 
     let searchResults = [];
-    searchResults.push(...users);
+    searchResults.push(...formattedUsersToRoom);
     searchResults.push(...involvedGroupChats);
     return res.status(200).json({ searchResult: searchResults });
 });

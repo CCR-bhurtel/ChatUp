@@ -26,7 +26,6 @@ function ChatRoom() {
     const { state, dispatch } = useRoom();
     const auth = useAuth();
 
-
     const handleCreateGroupOpen = () => {
         setCreateGroupOpen(true);
     };
@@ -34,7 +33,6 @@ function ChatRoom() {
     const handleCreateGroupClose = () => {
         setCreateGroupOpen(false);
     };
-
 
     const handleOpenInfo = () => {
         setIsInfoOpen(true);
@@ -54,9 +52,8 @@ function ChatRoom() {
                 `/room/${roomid}`
             );
             const room: IActiveRoom = { ...res.data.roomDetails, messages: res.data.messages };
-            console.log(room);
             dispatch({ type: RoomActionTypes.SetActiveRoom, payload: room });
-            socket.emit('joinRoom', room._id);
+            socket.emit('joinRoom', room._id, auth.state.user?._id.toString());
         } catch (err) {
             toast.error('Error loding room');
             router.push('/chat');
@@ -114,9 +111,7 @@ function ChatRoom() {
     }, [router]);
 
     return (
-        <div
-            className={`w-full md:w-auto flex flex-col h-full overflow-hidden lg:self-stretch`}
-        >
+        <div className={`w-full md:w-auto flex flex-col h-full overflow-hidden lg:self-stretch`}>
             {createGroupOpen && (
                 <Popup onClose={handleCreateGroupClose}>
                     <CreateGroupChat onSubmit={handleFormSubmit} />
@@ -141,7 +136,7 @@ function ChatRoom() {
                                 ''
                             )}
                         </div>
-                        
+
                         <div className="flex-1">
                             <ChatArea room={state.activeRoom} handleInfoOpen={handleOpenInfo} />
                         </div>

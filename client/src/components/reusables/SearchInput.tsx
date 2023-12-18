@@ -6,6 +6,7 @@ interface InputProps {
     onChange: ChangeEventHandler<HTMLInputElement>;
     name: string;
     type: string;
+    value: string;
 }
 function SearchInput(props: InputProps) {
     return (

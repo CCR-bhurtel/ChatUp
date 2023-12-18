@@ -17,7 +17,8 @@ export const getUserRooms = catchAsync(async (req: ExpressRequest, res: Response
     })
         .sort({ lastMessageDate: -1 })
         .skip(totalSkipItems)
-        .limit(limit as number);
+        .limit(limit as number)
+        .populate({ path: 'lastMessage', populate: { path: 'sender', select: 'name profilePic' } });
 
     let formattedRooms = rooms.map(async (room) => {
         const formattedRoom = await formatRoomDetail(room, req.user._id);
