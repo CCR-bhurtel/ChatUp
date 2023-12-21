@@ -71,7 +71,6 @@ function ChatArea(props: IChatArea) {
 
     useEffect(() => {
         socket.on('typing', (typingUser: TypingUser) => {
-            console.log(typingUser)
             const existingUser = typingUsers.find((user) => user.userId === typingUser.userId);
             if (!existingUser) {
                 setTypingUsers((typingUsers) => typingUsers.concat(typingUser));

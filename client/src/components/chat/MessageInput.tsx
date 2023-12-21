@@ -42,17 +42,14 @@ function MessageInput({ handleSendMessage }: Props) {
         };
     }, []);
 
+    const socket = useMemo(() => getSocket(), []);
+
+    const [currentTimeoutId, setCurrentTimeoutId] = useState<string | number | NodeJS.Timeout | undefined>(0);
+
     const handleMessageChange = (e: ChangeEvent<HTMLInputElement>) => {
         setMessage(e.target.value);
-
-        let socket = getSocket();
-        if (!socket) {
-            initSocket();
-            socket = getSocket();
-        }
         if (!isTyping) {
-            setIsTyping(true);
-            console.log(socket);
+            setIsTyping((prev) => true);
             socket.emit('typing', {
                 room: room.state.activeRoom,
                 profilePic: auth.state.user?.profilePic,
@@ -60,14 +57,17 @@ function MessageInput({ handleSendMessage }: Props) {
             });
         }
 
-        let lastTYpingTime = new Date().getTime();
+        let lastTypingTime = new Date().getTime();
         let timerLength = 3000;
 
-        setTimeout(() => {
+        if (currentTimeoutId) {
+            clearTimeout(currentTimeoutId);
+        }
+        let timeoutId = setTimeout(() => {
             let timeNow = new Date().getTime();
-            let timeDiff = timeNow - lastTYpingTime;
+            let timeDiff = timeNow - lastTypingTime;
 
-            if (timeDiff >= timerLength && isTyping) {
+            if (timeDiff >= timerLength) {
                 socket.emit('stopTyping', {
                     roomId: room.state.activeRoom?._id,
                     userId: auth.state.user?._id,
@@ -75,6 +75,7 @@ function MessageInput({ handleSendMessage }: Props) {
                 setIsTyping(false);
             }
         }, timerLength);
+        setCurrentTimeoutId(timeoutId);
     };
 
     const handleSend = (e: SyntheticEvent) => {
