@@ -41,6 +41,11 @@ function ChatRoom() {
 
     const socket = useMemo(() => getSocket(), []);
 
+    useEffect(() => {
+        return () => {
+            socket.emit('leaveRoom', state.activeRoom?._id);
+        };
+    }, []);
     const handleRoomLoad = async () => {
         const { roomid } = router.query;
         if (!roomid) return;

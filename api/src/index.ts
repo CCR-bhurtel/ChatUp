@@ -62,6 +62,10 @@ io.on('connection', (socket) => {
         // leaveAllRooms(socket, userId);
         socket.join(roomId.toString());
     });
+
+    socket.on('leaveRoom', (roomId: string) => {
+        socket.leave(roomId);
+    });
     socket.on('typing', ({ room, profilePic, userId }) => {
         // if (socket.id === socketId) return;
 
@@ -85,7 +89,7 @@ io.on('connection', (socket) => {
             });
         } else {
             const otherUser = room.users.find((user) => user._id.toString() !== userId);
-            console.log(otherUser);
+
             if (otherUser) {
                 const idInString = otherUser._id.toString();
                 const formattedRoom = await formatRoomDetail(room, idInString);
