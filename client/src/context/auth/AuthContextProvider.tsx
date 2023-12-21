@@ -3,7 +3,6 @@ import React, { Dispatch, ReactElement, createContext, useContext, useEffect, us
 import { AuthActionTypes, AuthActions } from './authActions';
 import authReducer from './authReducer';
 import axios, { AxiosResponse } from 'axios';
-import { BASE_API_PATH } from '@/config/keys';
 import { NextRouter, useRouter } from 'next/router';
 import { getSocket } from '@/utils/socketService';
 
@@ -59,7 +58,7 @@ function AuthContextProvider(props: { children: ReactElement }) {
     let socket = useMemo(() => getSocket(), []);
 
     useEffect(() => {
-        if (state.user && !state.socketConnected) {
+        if (state.user && !socket.connected) {
             socket.emit('initialSetup', state.user);
         }
 

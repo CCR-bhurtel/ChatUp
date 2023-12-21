@@ -1,5 +1,4 @@
 import { IChatType } from '@/Types/Chat';
-import ChatFooter from '@/components/chat/ChatFooter';
 import { IActiveRoom, IRoomType } from '@/Types/Room';
 import ChatArea from '@/components/chat/ChatArea';
 import RoomInfo from '@/components/chat/RoomInfo';
@@ -8,7 +7,7 @@ import Loading from '@/components/reusables/Loading';
 import { useAuth } from '@/context/auth/AuthContextProvider';
 import { useRoom } from '@/context/chat/RoomContextProvider';
 import { RoomActionTypes } from '@/context/chat/roomActions';
-import { getSocket, initSocket } from '@/utils/socketService';
+import { getSocket } from '@/utils/socketService';
 import axios, { AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import CreateGroupChat from '@/components/chat/CreateGroupChat';
@@ -20,7 +19,6 @@ import ChatSidebar from '@/components/chat/ChatSidebar';
 function ChatRoom() {
     const [isInfoOpen, setIsInfoOpen] = useState<boolean>(false);
     const [createGroupOpen, setCreateGroupOpen] = useState(false);
-    const [socketConnected, setSocketConnected] = useState(false);
 
     const router = useRouter();
     const { state, dispatch } = useRoom();

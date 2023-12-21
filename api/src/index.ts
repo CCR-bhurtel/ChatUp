@@ -13,6 +13,7 @@ import { IUser } from './Types/User';
 import { IPopulatedChat } from './Types/Chat';
 import { IRoom } from './Types/Room';
 import { formatRoomDetail } from './utils/formatRoomDetails';
+import { SocketAddress } from 'net';
 
 connectDb()
     .then(() => {})
@@ -34,13 +35,31 @@ const leaveAllRooms = (socket: Socket, userId: string) => {
         }
     });
 };
+
+let onlineUsers: any[] = []; // stores {socketId:userId} collection
+
+const isOnline = (socketId: string) => {
+    return onlineUsers.some((user) => Object.keys(user).includes(socketId));
+};
+
+const getUserIdWithSocketID = (socketId: string): string => {
+    const user = onlineUsers.find((user) => Object.keys(user).includes(socketId));
+    return user[socketId];
+};
+
 io.on('connection', (socket) => {
     socket.on('initialSetup', (userData: IUser) => {
+        if (!isOnline(socket.id) && userData._id)
+            onlineUsers.push({
+                [socket.id]: userData._id,
+            });
+        console.log(onlineUsers);
+
         socket.join(userData._id.toString());
     });
 
     socket.on('joinRoom', (roomId: string, userId: string) => {
-        leaveAllRooms(socket, userId);
+        // leaveAllRooms(socket, userId);
         socket.join(roomId.toString());
     });
     socket.on('typing', ({ room, profilePic, userId }) => {
@@ -73,6 +92,14 @@ io.on('connection', (socket) => {
                 socket.to(idInString).emit('newRoomCreated', formattedRoom);
             }
         }
+    });
+
+    socket.on('disconnect', () => {
+        socket.rooms.forEach((room) => {
+            socket.in(room).emit('useroffline', getUserIdWithSocketID(socket.id));
+        });
+
+        onlineUsers = onlineUsers.filter((onlineUser) => !onlineUser[socket.id]);
     });
 
     socket.off('setup', (userData: IUser) => {
