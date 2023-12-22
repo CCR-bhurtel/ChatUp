@@ -11,6 +11,7 @@ export interface AuthStateInterface {
     loading: boolean;
     isLoggedIn: boolean;
     socketConnected: boolean;
+    activeUsers: string[];
 }
 
 const INITIAL_STATE: AuthStateInterface = {
@@ -18,6 +19,7 @@ const INITIAL_STATE: AuthStateInterface = {
     loading: false,
     isLoggedIn: false,
     socketConnected: false,
+    activeUsers: [],
 };
 
 export const AuthContext = createContext<{
@@ -46,26 +48,34 @@ function AuthContextProvider(props: { children: ReactElement }) {
     const [state, dispatch] = useReducer(authReducer, INITIAL_STATE);
 
     const router = useRouter();
+
+    let socket = useMemo(() => getSocket(), []);
+
+    useEffect(() => {
+        if (state.user && !state.socketConnected) {
+            console.log(state.user._id);
+            socket.emit('initialSetup', state.user._id);
+            socket.on('joinself', () => {
+                dispatch({ type: AuthActionTypes.SocketConnected, payload: true });
+            });
+
+            socket.on('onlneUsersReceived', (activeUsers: string[]) => {
+                dispatch({ type: AuthActionTypes.LoadActiveUsers, payload: activeUsers });
+            });
+        }
+    }, [state, router]);
+
     useEffect(() => {
         if (!state.loading) {
-            if (!state.isLoggedIn && !router.pathname.includes('auth')) {
+            if (!state.isLoggedIn) {
+                socket.emit('end');
+
                 // router.push('/auth/login');
-            } else if (state.isLoggedIn && router.pathname.includes('auth')) {
+            } else if (state.isLoggedIn) {
                 // router.push('/chat');
             }
         }
     }, [state, router]);
-    let socket = useMemo(() => getSocket(), []);
-
-    useEffect(() => {
-        if (state.user && !socket.connected) {
-            socket.emit('initialSetup', state.user);
-        }
-
-        socket.on('connected', () => {
-            dispatch({ type: AuthActionTypes.SocketConnected, payload: true });
-        });
-    }, [state.isLoggedIn, router]);
 
     useEffect(() => {
         loadUser(dispatch, router);

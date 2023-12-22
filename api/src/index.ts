@@ -13,7 +13,6 @@ import { IUser } from './Types/User';
 import { IPopulatedChat } from './Types/Chat';
 import { IRoom } from './Types/Room';
 import { formatRoomDetail } from './utils/formatRoomDetails';
-import { SocketAddress } from 'net';
 
 connectDb()
     .then(() => {})
@@ -42,24 +41,28 @@ const isOnline = (socketId: string) => {
     return onlineUsers.some((user) => Object.keys(user).includes(socketId));
 };
 
-const getUserIdWithSocketID = (socketId: string): string => {
+const getUserIdWithSocketID = (socketId: string): string | void => {
     const user = onlineUsers.find((user) => Object.keys(user).includes(socketId));
-    return user[socketId];
+
+    if (user) return user;
+    return;
 };
 
 io.on('connection', (socket) => {
-    socket.on('initialSetup', (userData: IUser) => {
-        if (!isOnline(socket.id) && userData._id)
+    socket.on('initialSetup', (userId: string) => {
+        if (!isOnline(socket.id) && userId)
             onlineUsers.push({
-                [socket.id]: userData._id,
+                [socket.id]: userId,
             });
-        console.log(onlineUsers);
 
-        socket.join(userData._id.toString());
+        socket.join(userId);
+        socket.to(userId).emit('joinself');
+        socket.emit('onlineUsersReceived', onlineUsers);
     });
 
     socket.on('joinRoom', (roomId: string, userId: string) => {
         // leaveAllRooms(socket, userId);
+
         socket.join(roomId.toString());
     });
 
@@ -98,14 +101,20 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('disconnect', () => {
-        socket.rooms.forEach((room) => {
-            socket.in(room).emit('useroffline', getUserIdWithSocketID(socket.id));
-        });
+    const handleSocketEnd = () => {
+        const userId = getUserIdWithSocketID(socket.id);
+        if (userId)
+            socket.rooms.forEach((room) => {
+                socket.in(room).emit('useroffline', getUserIdWithSocketID(socket.id));
+            });
 
-        onlineUsers = onlineUsers.filter((onlineUser) => !onlineUser[socket.id]);
-    });
+        onlineUsers = onlineUsers.filter((onlineUser) => !Object.keys(onlineUser).includes(socket.id));
+        console.log(onlineUsers);
+    };
 
+    socket.on('disconnect', handleSocketEnd);
+
+    socket.on('end', handleSocketEnd);
     socket.off('setup', (userData: IUser) => {
         console.log('User disconnected');
         socket.leave(userData._id);

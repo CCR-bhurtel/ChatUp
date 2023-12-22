@@ -17,6 +17,7 @@ const AccountClickables = () => {
     const handleLogOut = () => {
         document.cookie = `Authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
         dispatch && dispatch({ type: AuthActionTypes.LogOut, payload: undefined });
+
         router.push('/auth/login');
     };
 
@@ -35,6 +36,6 @@ const AccountClickables = () => {
             )}
         </div>
     );
-}
+};
 
 export default AccountClickables;

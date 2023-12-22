@@ -12,6 +12,7 @@ export enum AuthActionTypes {
     EditPreferences,
     LoggingUser,
     SocketConnected,
+    LoadActiveUsers,
 }
 
 export interface LoggingUser {
@@ -67,6 +68,11 @@ export interface SocketConnected {
     payload: boolean;
 }
 
+export interface LoadActiveUsers {
+    type: AuthActionTypes.LoadActiveUsers;
+    payload: string[];
+}
+
 export type AuthActions =
     | LoggingUser
     | Loaduser
@@ -78,4 +84,5 @@ export type AuthActions =
     | Logout
     | BlockUser
     | UnblockUser
-    | SocketConnected;
+    | SocketConnected
+    | LoadActiveUsers;

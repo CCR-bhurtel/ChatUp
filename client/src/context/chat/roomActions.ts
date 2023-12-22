@@ -1,6 +1,5 @@
 import { IActiveRoom, IRoomType } from '@/Types/Room';
 import { IChatType } from '@/Types/Chat';
-import { IUserType } from '@/Types/User';
 
 export enum RoomActionTypes {
     RoomsLoading,
