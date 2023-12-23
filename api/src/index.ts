@@ -35,25 +35,36 @@ const leaveAllRooms = (socket: Socket, userId: string) => {
     });
 };
 
-let onlineUsers: any[] = []; // stores {socketId:userId} collection
+let onlineUsers: { [key: string]: string } = {}; // stores {userId:socketId}
 
-const isOnline = (socketId: string) => {
-    return onlineUsers.some((user) => Object.keys(user).includes(socketId));
-};
+const isOnline = (userId: string): boolean => onlineUsers.hasOwnProperty(userId);
 
 const getUserIdWithSocketID = (socketId: string): string | void => {
-    const user = onlineUsers.find((user) => Object.keys(user).includes(socketId));
+    const entry = Object.entries(onlineUsers).find((entry) => entry[1] === socketId);
 
-    if (user) return user;
+    if (entry) return entry[0];
     return;
+};
+
+interface IOnlineStatus {
+    userId: string;
+    online: boolean;
+}
+
+const handleSocketEnd = (socket: Socket) => {
+    const userId = getUserIdWithSocketID(socket.id);
+    if (userId) {
+        delete onlineUsers[userId];
+
+        socket.rooms.forEach((room) => {
+            socket.in(room).emit('useroffline', userId);
+        });
+    }
 };
 
 io.on('connection', (socket) => {
     socket.on('initialSetup', (userId: string) => {
-        if (!isOnline(socket.id) && userId)
-            onlineUsers.push({
-                [socket.id]: userId,
-            });
+        if (userId && !isOnline(userId)) onlineUsers[userId] = socket.id;
 
         socket.join(userId);
         socket.to(userId).emit('joinself');
@@ -101,20 +112,15 @@ io.on('connection', (socket) => {
         }
     });
 
-    const handleSocketEnd = () => {
-        const userId = getUserIdWithSocketID(socket.id);
-        if (userId)
-            socket.rooms.forEach((room) => {
-                socket.in(room).emit('useroffline', getUserIdWithSocketID(socket.id));
-            });
+    socket.on('getOnlineStatus', (userIds: string[]) => {
+        const activeUsers: string[] = userIds.filter((userId) => isOnline(userId));
 
-        onlineUsers = onlineUsers.filter((onlineUser) => !Object.keys(onlineUser).includes(socket.id));
-        console.log(onlineUsers);
-    };
+        socket.emit('onlineStatusReceived', Object.keys(onlineUsers));
+    });
 
-    socket.on('disconnect', handleSocketEnd);
+    socket.on('disconnect', () => handleSocketEnd(socket));
 
-    socket.on('end', handleSocketEnd);
+    socket.on('end', () => handleSocketEnd(socket));
     socket.off('setup', (userData: IUser) => {
         console.log('User disconnected');
         socket.leave(userData._id);
