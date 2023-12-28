@@ -78,10 +78,16 @@ function MessageInput({ handleSendMessage }: Props) {
         setCurrentTimeoutId(timeoutId);
     };
 
-    const handleSend = (e: SyntheticEvent) => {
+    const handleSend = (e: SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
         handleSendMessage(e, message);
         setMessage('');
+       if(currentTimeoutId) clearTimeout(currentTimeoutId);
+        setIsTyping(false);
+        socket.emit('stopTyping', {
+            roomId: room.state.activeRoom?._id,
+            userId: auth.state.user?._id,
+        });
     };
 
     return (
