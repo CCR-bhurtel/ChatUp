@@ -6,13 +6,15 @@ dotenv.config();
 
 import app from './app';
 import connectDb from './database/connect';
-import { PORT } from './config/keys';
+import { JWT_SECRET, PORT } from './config/keys';
 
 import socketio, { Socket } from 'socket.io';
-import { IUser } from './Types/User';
+import { IUser, PopulatedUser } from './Types/User';
 import { IPopulatedChat } from './Types/Chat';
 import { IRoom } from './Types/Room';
 import { formatRoomDetail } from './utils/formatRoomDetails';
+
+import jwt from 'jsonwebtoken';
 
 connectDb()
     .then(() => {})
@@ -62,7 +64,23 @@ const handleSocketEnd = (socket: Socket) => {
     }
 };
 
-io.on('connection', (socket) => {
+io.use((socket: Socket, next) => {
+    try {
+        const token = socket.handshake.auth.token;
+        if (!token) {
+            return next(new Error('Unauthorized: Token not provided'));
+        }
+
+        const decodedUser: any = jwt.verify(token, JWT_SECRET);
+        if (!decodedUser) return next(new Error('Unauthorized:Invalid token'));
+
+        next();
+    } catch (err) {
+        return next(new Error('Unauthorized:Invalid token'));
+    }
+});
+
+io.on('connection', (socket: Socket) => {
     socket.on('initialSetup', (userId: string) => {
         if (userId && !isOnline(userId)) onlineUsers[userId] = socket.id;
 
@@ -112,8 +130,11 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('getOnlineStatus', (userIds: string[]) => {
-        const activeUsers: string[] = userIds.filter((userId) => isOnline(userId));
+    socket.on('getOnlineStatus', (userIds?: string[]) => {
+        let activeUsers: string[] = [];
+        if (userIds) {
+            activeUsers = userIds.filter((userId) => isOnline(userId));
+        }
 
         socket.emit('onlineStatusReceived', Object.keys(onlineUsers));
     });
