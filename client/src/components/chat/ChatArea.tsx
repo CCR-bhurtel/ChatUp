@@ -41,7 +41,7 @@ function ChatArea(props: IChatArea) {
                 behavior: 'smooth',
             });
         }
-    }, [state.activeRoom?.messages]);
+    }, [state.activeRoom?.messages, typingUsers]);
     const roomImage = useMemo(() => getAvatarImage(room.roomImage, room.isGroupChat), [room]);
 
     const handleSendMessage = async (e: SyntheticEvent, message: string) => {
@@ -63,6 +63,7 @@ function ChatArea(props: IChatArea) {
             };
 
             dispatch({ type: RoomActionTypes.AppendChatToRoom, payload: chat });
+            
             socket.emit('newMessage', { ...chat, room: state.activeRoom });
         } catch (err: any) {
             toast.error(err.response?.data.message);
@@ -80,9 +81,13 @@ function ChatArea(props: IChatArea) {
             const newTypingUsers = typingUsers.filter((user) => user.userId !== userId);
             setTypingUsers((typingUsers) => newTypingUsers);
         });
-        socket.on('messageReceived', (message: IChatType) => {
+        socket.on('roomMessageReceived', (message: IChatType) => {
+            
             dispatch({ type: RoomActionTypes.AppendChatToRoom, payload: message });
         });
+
+        
+
     }, []);
 
     return (

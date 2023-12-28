@@ -83,13 +83,13 @@ io.use((socket: Socket, next) => {
 io.on('connection', (socket: Socket) => {
     socket.on('initialSetup', (userId: string) => {
         if (userId && !isOnline(userId)) onlineUsers[userId] = socket.id;
-
-        socket.join(userId);
-        socket.to(userId).emit('joinself');
+        const id = userId.toString();
+        socket.join(id);
+        socket.to(id).emit('joinself');
         socket.emit('onlineUsersReceived', onlineUsers);
     });
 
-    socket.on('joinRoom', (roomId: string, userId: string) => {
+    socket.on('joinRoom', (roomId: string) => {
         // leaveAllRooms(socket, userId);
 
         socket.join(roomId.toString());
@@ -101,15 +101,24 @@ io.on('connection', (socket: Socket) => {
     socket.on('typing', ({ room, profilePic, userId }) => {
         // if (socket.id === socketId) return;
 
-        socket.to(room._id.toString()).except(userId).emit('typing', { userId: userId, profilePic: profilePic });
+        socket.to(room._id.toString()).emit('typing', { userId: userId, profilePic: profilePic });
+        
     });
 
-    socket.on('stopTyping', ({ roomId, userId }) => socket.in(roomId).except(userId).emit('stopTyping', userId));
+    socket.on('stopTyping', ({ roomId, userId }) => socket.in(roomId).emit('stopTyping', userId));
 
     socket.on('newMessage', (message: IPopulatedChat, socktId: any) => {
         const room = message.room;
-        if (socktId === socket.id) return;
-        socket.to(room._id.toString()).emit('messageReceived', { ...message, room: message.room._id });
+        console.log(Array.from(socket.rooms));
+
+        const senderId = message.sender._id.toString();
+
+        socket.to(room._id.toString()).emit('roomMessageReceived', message);
+        room.users.forEach((user) => {
+            if (user._id.toString() == senderId) return;
+
+            socket.to(user._id).emit('messageReceived', message);
+        });
     });
 
     socket.on('newRoom', async (room: IRoom, userId: string) => {

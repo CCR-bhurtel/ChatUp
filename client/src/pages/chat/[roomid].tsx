@@ -56,7 +56,7 @@ function ChatRoom() {
             );
             const room: IActiveRoom = { ...res.data.roomDetails, messages: res.data.messages };
             dispatch({ type: RoomActionTypes.SetActiveRoom, payload: room });
-            socket.emit('joinRoom', room._id, auth.state.user?._id.toString());
+            socket.emit('joinRoom', room._id);
         } catch (err) {
             toast.error('Error loding room');
             router.push('/chat');

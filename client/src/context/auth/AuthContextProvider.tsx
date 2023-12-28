@@ -64,7 +64,7 @@ function AuthContextProvider(props: { children: ReactElement }) {
                 dispatch({ type: AuthActionTypes.LoadActiveUsers, payload: activeUsers });
             });
         }
-    }, [state.isLoggedIn, router]);
+    }, [state.isLoggedIn]);
 
     useEffect(() => {
         if (!state.loading) {

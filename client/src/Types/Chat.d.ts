@@ -1,3 +1,4 @@
+import { IRoomType } from './Room';
 import { ISimpleUser } from './User';
 
 export interface IChatType {
@@ -7,6 +8,6 @@ export interface IChatType {
     textContent?: string;
     mediaId?: string;
     isDeleted: boolean;
-    roomId?: string;
+    room: IRoomType;
     createdAt: Date;
 }

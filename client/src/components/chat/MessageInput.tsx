@@ -4,7 +4,7 @@ import data, { Skin } from '@emoji-mart/data';
 import { useState, useRef, useEffect, ChangeEvent, SyntheticEvent, useMemo } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getSocket, initSocket } from '@/utils/socketService';
+import { getSocket } from '@/utils/socketService';
 import { useAuth } from '@/context/auth/AuthContextProvider';
 import { useRoom } from '@/context/chat/RoomContextProvider';
 
@@ -82,7 +82,7 @@ function MessageInput({ handleSendMessage }: Props) {
         e.preventDefault();
         handleSendMessage(e, message);
         setMessage('');
-       if(currentTimeoutId) clearTimeout(currentTimeoutId);
+        if (currentTimeoutId) clearTimeout(currentTimeoutId);
         setIsTyping(false);
         socket.emit('stopTyping', {
             roomId: room.state.activeRoom?._id,

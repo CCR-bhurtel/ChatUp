@@ -14,10 +14,6 @@ export default function App({ Component, pageProps }: AppProps) {
     axios.defaults.baseURL = BASE_API_PATH;
     axios.defaults.withCredentials = true;
 
-    useEffect(() => {
-        initSocket();    
-    }, []);
-
     return (
         <div className="h-screen relative overflow-hidden flex flex-col">
             <Toaster />

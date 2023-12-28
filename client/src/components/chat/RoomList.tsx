@@ -1,15 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Avatar from '../reusables/Avatar';
 import Link from 'next/link';
 import { useRoom } from '@/context/chat/RoomContextProvider';
 import Loading from '../reusables/Loading';
 import getAvatarImage from '@/utils/getAvatarImage';
+import { getSocket } from '@/utils/socketService';
+import { IChatType } from '@/Types/Chat';
+import { RoomActionTypes } from '@/context/chat/roomActions';
 
 function ChatList() {
-    const { state } = useRoom();
+    const { state, dispatch } = useRoom();
+
+    useEffect(() => {
+        const socket = getSocket();
+        socket.on('messageReceived', (message: IChatType) => {
+            dispatch({ type: RoomActionTypes.UpdateLastMessage, payload: message });
+        });
+    }, []);
 
     return (
-        <div className="mt-8 mb-8 w-full h-full overflow-y-scroll no-scrollbar overflow-x-hidden">
+        <div className="mt-8 mb-20 w-full h-full overflow-y-scroll no-scrollbar overflow-x-hidden">
             <div className="rooms max-h-full flex gap-2 flex-col w-full md:pb-0">
                 {state.isRoomsLoading ? (
                     <Loading />

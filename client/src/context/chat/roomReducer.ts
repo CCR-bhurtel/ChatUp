@@ -83,6 +83,13 @@ const roomReducer = (state: RoomStateInterface, action: RoomActions): RoomStateI
 
             return { ...state, activeRoom: { ...state.activeRoom, messages: newMessageListAfterDeletion } };
 
+        case RoomActionTypes.UpdateLastMessage:
+            const messaage = action.payload;
+            const newRoomListAfterLastMessageUpdate = state.rooms.map((room) => {
+                if (messaage.room._id != room._id) return room;
+                return { ...room, lastMessage: messaage };
+            });
+            return { ...state, rooms: newRoomListAfterLastMessageUpdate };
         default:
             return state;
     }
