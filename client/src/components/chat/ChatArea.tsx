@@ -41,7 +41,7 @@ function ChatArea(props: IChatArea) {
                 behavior: 'smooth',
             });
         }
-    }, [state.activeRoom?.messages, divref]);
+    }, [state.activeRoom?.messages]);
     const roomImage = useMemo(() => getAvatarImage(room.roomImage, room.isGroupChat), [room]);
 
     const handleSendMessage = async (e: SyntheticEvent, message: string) => {

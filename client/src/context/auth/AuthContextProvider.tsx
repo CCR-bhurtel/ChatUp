@@ -53,6 +53,7 @@ function AuthContextProvider(props: { children: ReactElement }) {
 
     useEffect(() => {
         if (state.user && !state.socketConnected) {
+            console.log(state.user._id);
             socket.emit('initialSetup', state.user._id);
             socket.on('joinself', () => {
                 dispatch({ type: AuthActionTypes.SocketConnected, payload: true });
@@ -63,7 +64,7 @@ function AuthContextProvider(props: { children: ReactElement }) {
                 dispatch({ type: AuthActionTypes.LoadActiveUsers, payload: activeUsers });
             });
         }
-    }, [state, router]);
+    }, [state.isLoggedIn, router]);
 
     useEffect(() => {
         if (!state.loading) {
