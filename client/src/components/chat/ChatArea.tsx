@@ -23,6 +23,7 @@ interface IChatArea {
 export interface TypingUser {
     userId: string;
     profilePic: string;
+    roomId: string;
 }
 
 function ChatArea(props: IChatArea) {
@@ -63,7 +64,8 @@ function ChatArea(props: IChatArea) {
             };
 
             dispatch({ type: RoomActionTypes.AppendChatToRoom, payload: chat });
-            
+            dispatch({ type: RoomActionTypes.UpdateLastMessage, payload: chat });
+
             socket.emit('newMessage', { ...chat, room: state.activeRoom });
         } catch (err: any) {
             toast.error(err.response?.data.message);
@@ -73,7 +75,7 @@ function ChatArea(props: IChatArea) {
     useEffect(() => {
         socket.on('typing', (typingUser: TypingUser) => {
             const existingUser = typingUsers.find((user) => user.userId === typingUser.userId);
-            if (!existingUser) {
+            if (!existingUser && typingUser.roomId === state.activeRoom?._id) {
                 setTypingUsers((typingUsers) => typingUsers.concat(typingUser));
             }
         });
@@ -82,12 +84,12 @@ function ChatArea(props: IChatArea) {
             setTypingUsers((typingUsers) => newTypingUsers);
         });
         socket.on('roomMessageReceived', (message: IChatType) => {
-            
             dispatch({ type: RoomActionTypes.AppendChatToRoom, payload: message });
         });
-
-        
-
+        return () => {
+            setTypingUsers([]);
+            socket.emit('stopTyping', { roomId: state.activeRoom?._id, userId: auth.state.user?._id });
+        };
     }, []);
 
     return (

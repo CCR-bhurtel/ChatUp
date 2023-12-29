@@ -75,7 +75,7 @@ io.use((socket: Socket, next) => {
 
         const decodedUser: any = jwt.verify(token, JWT_SECRET);
         if (!decodedUser) return next(new Error('Unauthorized:Invalid token'));
-
+        (socket as any).user = decodedUser;
         next();
     } catch (err) {
         return next(new Error('Unauthorized:Invalid token'));
@@ -92,35 +92,34 @@ io.on('connection', (socket: Socket) => {
     });
 
     socket.on('joinRoom', (roomId: string) => {
-        // leaveAllRooms(socket, userId);
+        // leaveAllRooms(socket, (socket as any).user.userId);
 
         socket.join(roomId);
     });
 
-    
-
     socket.on('leaveRoom', (roomId: string) => {
         socket.leave(roomId);
+        // console.log(socket.rooms);
     });
-    socket.on('typing', ({ room, profilePic, userId }) => {
+    socket.on('typing', ({ roomId, profilePic, userId }) => {
         // if (socket.id === socketId) return;
 
-        socket.to(room._id.toString()).emit('typing', { userId: userId, profilePic: profilePic });
+        socket.to(roomId).emit('typing', { roomId, userId: userId, profilePic: profilePic });
     });
 
-    socket.on('stopTyping', ({ roomId, userId }) => socket.in(roomId).emit('stopTyping', userId));
+    socket.on('stopTyping', ({ roomId, userId }) => socket.to(roomId).emit('stopTyping', userId));
 
     socket.on('newMessage', (message: IPopulatedChat, socktId: any) => {
         const room = message.room;
-        console.log(Array.from(socket.rooms));
 
         const senderId = message.sender._id.toString();
+        const updatedMessage = { ...message, room: message.room._id };
 
-        socket.to(room._id.toString()).emit('roomMessageReceived', message);
+        socket.to(room._id.toString()).emit('roomMessageReceived', updatedMessage);
         room.users.forEach((user) => {
             if (user._id.toString() == senderId) return;
 
-            socket.to(user._id).emit('messageReceived', message);
+            socket.to(user._id).emit('messageReceived', updatedMessage);
         });
     });
 

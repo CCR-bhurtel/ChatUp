@@ -8,6 +8,6 @@ export interface IChatType {
     textContent?: string;
     mediaId?: string;
     isDeleted: boolean;
-    room: IRoomType;
+    room: string;
     createdAt: Date;
 }

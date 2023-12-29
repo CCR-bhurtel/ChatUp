@@ -45,7 +45,7 @@ function ChatRoom() {
         return () => {
             socket.emit('leaveRoom', state.activeRoom?._id);
         };
-    }, []);
+    }, [router.query.roomid]);
 
     useEffect(() => {
         const activeRoomId = state.activeRoom?._id;

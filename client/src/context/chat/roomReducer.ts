@@ -59,6 +59,7 @@ const roomReducer = (state: RoomStateInterface, action: RoomActions): RoomStateI
 
         case RoomActionTypes.AppendChatToRoom:
             if (!state.activeRoom) return state;
+            if (action.payload.room !== state.activeRoom._id) return state;
 
             let newMessageList = state.activeRoom.messages;
             newMessageList?.push(action.payload);
@@ -84,14 +85,16 @@ const roomReducer = (state: RoomStateInterface, action: RoomActions): RoomStateI
             return { ...state, activeRoom: { ...state.activeRoom, messages: newMessageListAfterDeletion } };
 
         case RoomActionTypes.UpdateLastMessage:
-            const messaage = action.payload;
+            const message = action.payload;
             let newRoomListAfterLastMessageUpdate = state.rooms.map((room) => {
-                if (messaage.room._id != room._id) return room;
+                if (message.room != room._id) return room;
+                let users = [message.sender._id];
+                if (message.room === state.activeRoom?._id) users = state.activeRoom.users.map((user) => user._id);
                 return {
                     ...room,
-                    lastMessage: messaage,
+                    lastMessage: message,
 
-                    lastMessageReadBy: [messaage.sender._id],
+                    lastMessageReadBy: users,
                     lastMessageDate: new Date(),
                 };
             });

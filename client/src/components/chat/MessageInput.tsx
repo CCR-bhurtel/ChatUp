@@ -51,7 +51,7 @@ function MessageInput({ handleSendMessage }: Props) {
         if (!isTyping) {
             setIsTyping((prev) => true);
             socket.emit('typing', {
-                room: room.state.activeRoom,
+                roomId: room.state.activeRoom?._id,
                 profilePic: auth.state.user?.profilePic,
                 userId: auth.state.user?._id,
             });
