@@ -29,50 +29,52 @@ function ChatList() {
                 ) : !state.rooms ? (
                     <h2>Rooms not available</h2>
                 ) : (
-                    state.rooms?.map((room, i) => (
-                        <div className="w-full h-full" key={room._id}>
-                            <Link href={`/chat/${room._id}`} className="w-full h-full block">
-                                <div className="cursor-pointer roomItem flex items-center justify-between flex-row p-2 m-2 bg-Gravel rounded-md">
-                                    <div className="messageDetails flex flex-row gap-2 items-center">
-                                        <Avatar
-                                            source={
-                                                room.isGroupChat
-                                                    ? getAvatarImage(room.roomImage, true)
-                                                    : getAvatarImage(room.roomImage, false)
-                                            }
-                                            className="h-[60px] w-[60px] "
-                                        />
-                                        <div
-                                            className={`messageContent ${
-                                                userId && room.lastMessageReadBy.includes(userId)
-                                                    ? 'text-gray-400'
-                                                    : 'text-white'
-                                            }`}
-                                        >
-                                            <h2 className="text-md font-medium">{room.roomName}</h2>
-                                            {room.isGroupChat ? (
-                                                <p>
-                                                    {room.lastMessage &&
-                                                        `${
-                                                            room.lastMessage?.sender?.name
-                                                        } : ${room.lastMessage.textContent?.substring(0, 20)}`}
-                                                </p>
-                                            ) : (
-                                                <p className="text-sm font-light">
-                                                    {room.lastMessage ? room.lastMessage?.textContent : ''}
-                                                </p>
-                                            )}
+                    state.rooms?.map((room, i) => {
+                        const textColor =
+                            userId && room.lastMessageReadBy.includes(userId) ? 'text-gray-400' : 'text-white';
+                        return (
+                            <div className="w-full h-full" key={room._id}>
+                                <Link href={`/chat/${room._id}`} className="w-full h-full block">
+                                    <div
+                                        className={`cursor-pointer roomItem flex items-center justify-between flex-row p-2 m-2
+                                        ${room._id === state.activeRoom?._id ? 'bg-sapphire' : 'bg-Gravel'}
+                                         rounded-md`}
+                                    >
+                                        <div className="messageDetails flex flex-row gap-2 items-center">
+                                            <Avatar
+                                                source={
+                                                    room.isGroupChat
+                                                        ? getAvatarImage(room.roomImage, true)
+                                                        : getAvatarImage(room.roomImage, false)
+                                                }
+                                                className="h-[60px] w-[60px] "
+                                            />
+                                            <div className={`messageContent`}>
+                                                <h2 className="text-md font-medium text-white">{room.roomName}</h2>
+                                                {room.isGroupChat ? (
+                                                    <p className={`${textColor}`}>
+                                                        {room.lastMessage &&
+                                                            `${
+                                                                room.lastMessage?.sender?.name
+                                                            } : ${room.lastMessage.textContent?.substring(0, 20)}`}
+                                                    </p>
+                                                ) : (
+                                                    <p className={`text-sm font-light ${textColor}`}>
+                                                        {room.lastMessage ? room.lastMessage?.textContent : ''}
+                                                    </p>
+                                                )}
+                                            </div>
                                         </div>
+                                        {/* {room.sender.online ? (
+                                        <div className="onlinestatus rounded-full w-2 h-2 bg-primary"></div>
+                                    ) : (
+                                        ''
+                                    )} */}
                                     </div>
-                                    {/* {room.sender.online ? (
-                                    <div className="onlinestatus rounded-full w-2 h-2 bg-primary"></div>
-                                ) : (
-                                    ''
-                                )} */}
-                                </div>
-                            </Link>
-                        </div>
-                    ))
+                                </Link>
+                            </div>
+                        );
+                    })
                 )}
             </div>
         </div>

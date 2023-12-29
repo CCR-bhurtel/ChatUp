@@ -46,6 +46,7 @@ function Chat() {
     };
 
     useEffect(() => {
+        dispatch({ type: RoomActionTypes.ErrorLoadingActiveRoom });
         const background = document.querySelector('.backgroundlayer');
         if (background) {
             background.classList.toggle('hidden');

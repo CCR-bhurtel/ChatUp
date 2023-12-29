@@ -27,6 +27,7 @@ const config: Config = {
                 cgray: '#747474',
                 purple: '#4556EF',
                 storm: '#606165',
+                sapphire: '#4550b6',
             },
         },
     },
