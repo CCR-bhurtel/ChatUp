@@ -46,6 +46,24 @@ function ChatRoom() {
             socket.emit('leaveRoom', state.activeRoom?._id);
         };
     }, []);
+
+    useEffect(() => {
+        const activeRoomId = state.activeRoom?._id;
+        const userId = auth.state.user?._id;
+        dispatch({
+            type: RoomActionTypes.UpdateLastMessageReadUsers,
+            payload: { roomId: activeRoomId, userId: userId },
+        });
+        if (activeRoomId && userId && !state.activeRoom?.lastMessageReadBy.includes(userId)) {
+            axios
+                .put(`/room/${activeRoomId}/lastmessage`, { userId }, { withCredentials: true })
+                .then((res) => {})
+                .catch((err: any) => {
+                    console.log(err);
+                });
+        }
+    }, [state.activeRoom?.messages]);
+
     const handleRoomLoad = async () => {
         const { roomid } = router.query;
         if (!roomid) return;
@@ -56,6 +74,7 @@ function ChatRoom() {
             );
             const room: IActiveRoom = { ...res.data.roomDetails, messages: res.data.messages };
             dispatch({ type: RoomActionTypes.SetActiveRoom, payload: room });
+
             socket.emit('joinRoom', room._id);
         } catch (err) {
             toast.error('Error loding room');

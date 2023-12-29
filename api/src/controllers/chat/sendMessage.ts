@@ -23,7 +23,11 @@ const sendMessage = catchAsync(async (req: ExpressRequest, res: Response, next: 
         room: room._id,
     });
 
-    await Room.findByIdAndUpdate(room._id, { lastMessage: chat._id, lastMessageDate: new Date() });
+    await Room.findByIdAndUpdate(room._id, {
+        lastMessage: chat._id,
+        lastMessageDate: new Date(),
+        lastMessageReadBy: [userId],
+    });
 
     return res.status(201).json(chat);
 });

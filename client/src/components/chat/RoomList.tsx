@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Avatar from '../reusables/Avatar';
 import Link from 'next/link';
 import { useRoom } from '@/context/chat/RoomContextProvider';
@@ -7,9 +7,12 @@ import getAvatarImage from '@/utils/getAvatarImage';
 import { getSocket } from '@/utils/socketService';
 import { IChatType } from '@/Types/Chat';
 import { RoomActionTypes } from '@/context/chat/roomActions';
+import { useAuth } from '@/context/auth/AuthContextProvider';
 
 function ChatList() {
     const { state, dispatch } = useRoom();
+    const auth = useAuth();
+    const userId = useMemo(() => auth.state.user?._id, [auth]);
 
     useEffect(() => {
         const socket = getSocket();
@@ -39,7 +42,13 @@ function ChatList() {
                                             }
                                             className="h-[60px] w-[60px] "
                                         />
-                                        <div className={`messageContent ${true ? 'text-gray-400' : 'text-white'}`}>
+                                        <div
+                                            className={`messageContent ${
+                                                userId && room.lastMessageReadBy.includes(userId)
+                                                    ? 'text-gray-400'
+                                                    : 'text-white'
+                                            }`}
+                                        >
                                             <h2 className="text-md font-medium">{room.roomName}</h2>
                                             {room.isGroupChat ? (
                                                 <p>

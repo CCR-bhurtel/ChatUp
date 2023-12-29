@@ -19,6 +19,7 @@ export enum RoomActionTypes {
     RemoveChatFromRoom,
     LoadActiveRoomPreviousMessages,
     UpdateLastMessage,
+    UpdateLastMessageReadUsers,
 }
 
 export interface RoomsLoading {
@@ -99,6 +100,14 @@ export interface UpdateLastMessage {
     payload: IChatType;
 }
 
+export interface UpdateLastMessageReadUsers {
+    type: RoomActionTypes.UpdateLastMessageReadUsers;
+    payload: {
+        roomId?: string;
+        userId?: string;
+    };
+}
+
 export type RoomActions =
     | RoomsLoading
     | LoadRooms
@@ -116,4 +125,5 @@ export type RoomActions =
     | AppendChatToRoom
     | LoadActiveRoomPreviousMessages
     | RemoveChatFromRoom
-    | UpdateLastMessage;
+    | UpdateLastMessage
+    | UpdateLastMessageReadUsers;

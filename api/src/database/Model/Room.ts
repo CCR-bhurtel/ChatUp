@@ -27,7 +27,12 @@ const roomSchema = new mongoose.Schema<IRoom, RoomModel, IRoomMethods>({
         type: mongoose.Types.ObjectId,
         ref: 'Chat',
     },
-
+    lastMessageReadBy: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'User',
+        },
+    ],
     blockedUsers: [
         {
             type: mongoose.Types.ObjectId,

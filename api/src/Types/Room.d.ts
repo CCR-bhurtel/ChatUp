@@ -12,6 +12,7 @@ export interface IRoom extends Document {
     lastMessageDate: {
         type: Date;
     };
+    lastMessageReadBy: Types.ObjectId[];
     lastMessage?: Types.ObjectId;
 }
 

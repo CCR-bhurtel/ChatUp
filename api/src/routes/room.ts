@@ -12,6 +12,7 @@ import { blockUser } from '../controllers/user/userProfile';
 import searchMessageOfRoom from '../controllers/room/searchMessageOfRoom';
 import upload from '../middlewares/imageUpload';
 import changeRoomImage from '../controllers/room/changeRoomImage';
+import { readLastMessage } from '../controllers/room/readLastMessage';
 
 const router = express.Router();
 
@@ -47,6 +48,8 @@ router.get('/:roomid/message', searchMessageOfRoom);
 
 // block user
 router.put('/:roomid/block', blockUser);
+
+router.put('/:roomId/lastmessage', readLastMessage);
 
 // -----------groupChat room ----------------
 // room update

@@ -15,6 +15,8 @@ import { IRoom } from './Types/Room';
 import { formatRoomDetail } from './utils/formatRoomDetails';
 
 import jwt from 'jsonwebtoken';
+import Chat from './database/Model/Chat';
+import Room from './database/Model/Room';
 
 connectDb()
     .then(() => {})
@@ -92,8 +94,10 @@ io.on('connection', (socket: Socket) => {
     socket.on('joinRoom', (roomId: string) => {
         // leaveAllRooms(socket, userId);
 
-        socket.join(roomId.toString());
+        socket.join(roomId);
     });
+
+    
 
     socket.on('leaveRoom', (roomId: string) => {
         socket.leave(roomId);
@@ -102,7 +106,6 @@ io.on('connection', (socket: Socket) => {
         // if (socket.id === socketId) return;
 
         socket.to(room._id.toString()).emit('typing', { userId: userId, profilePic: profilePic });
-        
     });
 
     socket.on('stopTyping', ({ roomId, userId }) => socket.in(roomId).emit('stopTyping', userId));
@@ -120,6 +123,8 @@ io.on('connection', (socket: Socket) => {
             socket.to(user._id).emit('messageReceived', message);
         });
     });
+
+    socket.on('acknowledgeMessageRead', async (roomId: string, userId: string) => {});
 
     socket.on('newRoom', async (room: IRoom, userId: string) => {
         if (room.isGroupChat) {

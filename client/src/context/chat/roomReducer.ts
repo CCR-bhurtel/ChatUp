@@ -85,11 +85,33 @@ const roomReducer = (state: RoomStateInterface, action: RoomActions): RoomStateI
 
         case RoomActionTypes.UpdateLastMessage:
             const messaage = action.payload;
-            const newRoomListAfterLastMessageUpdate = state.rooms.map((room) => {
+            let newRoomListAfterLastMessageUpdate = state.rooms.map((room) => {
                 if (messaage.room._id != room._id) return room;
-                return { ...room, lastMessage: messaage };
+                return {
+                    ...room,
+                    lastMessage: messaage,
+
+                    lastMessageReadBy: [messaage.sender._id],
+                    lastMessageDate: new Date(),
+                };
             });
+
+            newRoomListAfterLastMessageUpdate.sort((a, b) => {
+                return new Date(b.lastMessageDate).getTime() - new Date(a.lastMessageDate).getTime();
+            });
+
             return { ...state, rooms: newRoomListAfterLastMessageUpdate };
+
+        case RoomActionTypes.UpdateLastMessageReadUsers:
+            const { roomId, userId } = action.payload;
+            if (!userId || !roomId) return state;
+            const newRoomListAfterReadUpdate = state.rooms.map((room) => {
+                if (roomId !== room._id) return room;
+                if (room.lastMessageReadBy.includes(userId)) return room;
+                return { ...room, lastMessageReadBy: [...room.lastMessageReadBy, userId] };
+            });
+            return { ...state, rooms: newRoomListAfterReadUpdate };
+
         default:
             return state;
     }
