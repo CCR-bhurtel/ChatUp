@@ -12,6 +12,7 @@ import { useAuth } from '@/context/auth/AuthContextProvider';
 function ChatList() {
     const { state, dispatch } = useRoom();
     const auth = useAuth();
+    const { activeUsers } = auth.state;
     const userId = useMemo(() => auth.state.user?._id, [auth]);
 
     useEffect(() => {
@@ -32,6 +33,11 @@ function ChatList() {
                     state.rooms?.map((room, i) => {
                         const textColor =
                             userId && room.lastMessageReadBy.includes(userId) ? 'text-gray-400' : 'text-white';
+                        const otherUsers = room.users.filter((userId) => userId !== auth.state.user?._id);
+
+                        const isActive = otherUsers.some((userId) => activeUsers.includes(userId));
+                        console.log(otherUsers, activeUsers, isActive);
+
                         return (
                             <div className="w-full h-full" key={room._id}>
                                 <Link href={`/chat/${room._id}`} className="w-full h-full block">
@@ -65,11 +71,11 @@ function ChatList() {
                                                 )}
                                             </div>
                                         </div>
-                                        {/* {room.sender.online ? (
-                                        <div className="onlinestatus rounded-full w-2 h-2 bg-primary"></div>
-                                    ) : (
-                                        ''
-                                    )} */}
+                                        {isActive ? (
+                                            <div className="onlinestatus rounded-full w-2 h-2 bg-primary"></div>
+                                        ) : (
+                                            ''
+                                        )}
                                     </div>
                                 </Link>
                             </div>

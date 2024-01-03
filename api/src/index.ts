@@ -8,15 +8,13 @@ import app from './app';
 import connectDb from './database/connect';
 import { JWT_SECRET, PORT } from './config/keys';
 
-import socketio, { Socket } from 'socket.io';
+import socketio, { Server, Socket } from 'socket.io';
 import { IUser, PopulatedUser } from './Types/User';
 import { IPopulatedChat } from './Types/Chat';
 import { IRoom } from './Types/Room';
 import { formatRoomDetail } from './utils/formatRoomDetails';
 
 import jwt from 'jsonwebtoken';
-import Chat from './database/Model/Chat';
-import Room from './database/Model/Room';
 
 connectDb()
     .then(() => {})
@@ -44,10 +42,12 @@ let onlineUsers: { [key: string]: string } = {}; // stores {userId:socketId}
 const isOnline = (userId: string): boolean => onlineUsers.hasOwnProperty(userId);
 
 const getUserIdWithSocketID = (socketId: string): string | void => {
-    const entry = Object.entries(onlineUsers).find((entry) => entry[1] === socketId);
-
-    if (entry) return entry[0];
-    return;
+    const entry = Object.entries(onlineUsers);
+    const userEntry = entry.find((entry) => entry[1] === socketId);
+    if (userEntry) {
+        console.log(userEntry[0]);
+        return userEntry[0];
+    }
 };
 
 interface IOnlineStatus {
@@ -55,14 +55,21 @@ interface IOnlineStatus {
     online: boolean;
 }
 
-const handleSocketEnd = (socket: Socket) => {
+const handleSocketEnd = (socket: Socket, io: Server | undefined = undefined) => {
     const userId = getUserIdWithSocketID(socket.id);
+    console.log('1', userId);
+
     if (userId) {
         delete onlineUsers[userId];
+        console.log(onlineUsers);
 
         socket.rooms.forEach((room) => {
             socket.in(room).emit('useroffline', userId);
         });
+        if (io) {
+            console.log(Object.keys(onlineUsers));
+            io.emit('onlineUsersReceived', Object.keys(onlineUsers));
+        }
     }
 };
 
@@ -88,7 +95,8 @@ io.on('connection', (socket: Socket) => {
         const id = userId.toString();
         socket.join(id);
         socket.to(id).emit('joinself');
-        socket.emit('onlineUsersReceived', onlineUsers);
+        io.emit('onlineUsersReceived', onlineUsers);
+        console.log(onlineUsers);
     });
 
     socket.on('joinRoom', (roomId: string) => {
@@ -152,11 +160,12 @@ io.on('connection', (socket: Socket) => {
         socket.emit('onlineStatusReceived', Object.keys(onlineUsers));
     });
 
-    socket.on('disconnect', () => handleSocketEnd(socket));
+    socket.on('disconnect', () => handleSocketEnd(socket, io));
 
-    socket.on('end', () => handleSocketEnd(socket));
+    socket.on('end', () => handleSocketEnd(socket, io));
     socket.off('setup', (userData: IUser) => {
         console.log('User disconnected');
         socket.leave(userData._id);
+        handleSocketEnd(socket);
     });
 });

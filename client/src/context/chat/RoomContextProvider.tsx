@@ -1,5 +1,5 @@
 import { IChatType } from '@/Types/Chat';
-import { IActiveRoom, IRoomType } from '@/Types/Room';
+import { IActiveRoom, IRoomType, ISimpleRoom } from '@/Types/Room';
 import React, { Dispatch, ReactElement, createContext, useContext, useReducer } from 'react';
 import { RoomActionTypes, RoomActions } from './roomActions';
 import axios, { AxiosResponse } from 'axios';
@@ -12,7 +12,7 @@ export interface RoomStateInterface {
     isRoomsLoading: boolean;
     isActiveRoomLoading: boolean;
     isPreviousMessagesLoading: boolean;
-    rooms: IRoomType[];
+    rooms: ISimpleRoom[];
 }
 
 const INITIAL_STATE: RoomStateInterface = {

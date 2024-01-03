@@ -1,6 +1,8 @@
+import { IUserType } from '@/Types/User';
 import Navbar from '@/components/layouts/Navbar';
 import { BASE_API_PATH } from '@/config/keys';
-import AuthContextProvider from '@/context/auth/AuthContextProvider';
+import AuthContextProvider, { useAuth } from '@/context/auth/AuthContextProvider';
+import { AuthActionTypes } from '@/context/auth/authActions';
 import RoomContextProvider from '@/context/chat/RoomContextProvider';
 import '@/styles/globals.css';
 import { getSocket, initSocket } from '@/utils/socketService';
@@ -13,6 +15,15 @@ import { Toaster } from 'react-hot-toast';
 export default function App({ Component, pageProps }: AppProps) {
     axios.defaults.baseURL = BASE_API_PATH;
     axios.defaults.withCredentials = true;
+    const { state, dispatch } = useAuth();
+
+    useEffect(() => {
+        let socket = getSocket();
+        socket.on('onlineUsersReceived', (users: string[]) => {
+            console.log(users);
+            dispatch({ type: AuthActionTypes.LoadActiveUsers, payload: users });
+        });
+    }, []);
 
     return (
         <div className="h-screen relative overflow-hidden flex flex-col">
