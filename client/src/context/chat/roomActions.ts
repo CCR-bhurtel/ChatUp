@@ -1,4 +1,4 @@
-import { IActiveRoom, IRoomType } from '@/Types/Room';
+import { IActiveRoom, IRoomType, ISimpleRoom } from '@/Types/Room';
 import { IChatType } from '@/Types/Chat';
 
 export enum RoomActionTypes {
@@ -27,7 +27,7 @@ export interface RoomsLoading {
 }
 export interface LoadRooms {
     type: RoomActionTypes.LoadRooms;
-    payload: IRoomType[];
+    payload: ISimpleRoom[];
 }
 
 export interface EditRoomImage {
@@ -54,12 +54,12 @@ export interface RemoveRoom {
 
 export interface AppendRoom {
     type: RoomActionTypes.AppendRoom;
-    payload: IRoomType;
+    payload: ISimpleRoom;
 }
 
 export interface AppendRooms {
     type: RoomActionTypes.AppendRooms;
-    payload: IRoomType[];
+    payload: ISimpleRoom[];
 }
 
 export interface LeaveActiveRoom {

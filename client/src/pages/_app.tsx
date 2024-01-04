@@ -19,10 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
     useEffect(() => {
         let socket = getSocket();
-        socket.on('onlineUsersReceived', (users: string[]) => {
-            console.log(users);
-            dispatch({ type: AuthActionTypes.LoadActiveUsers, payload: users });
-        });
+        
     }, []);
 
     return (

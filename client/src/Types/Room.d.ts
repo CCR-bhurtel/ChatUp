@@ -19,14 +19,6 @@ export interface IActiveRoom extends IRoomType {
     messages: IChatType[];
 }
 
-export interface ISimpleRoom {
-    roomName: string;
-    isGroupChat: boolean;
-    _id: string;
+export interface ISimpleRoom extends IRoomType {
     users: string[];
-    roomImage: string;
-    roomAdmin?: ISimpleUser;
-    lastMessage?: IChatType;
-    lastMessageReadBy: string[];
-    lastMessageDate: Date;
 }

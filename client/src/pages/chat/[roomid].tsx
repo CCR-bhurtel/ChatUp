@@ -1,5 +1,5 @@
 import { IChatType } from '@/Types/Chat';
-import { IActiveRoom, IRoomType } from '@/Types/Room';
+import { IActiveRoom, IRoomType, ISimpleRoom } from '@/Types/Room';
 import ChatArea from '@/components/chat/ChatArea';
 import RoomInfo from '@/components/chat/RoomInfo';
 import Popup from '@/components/layouts/Popup';
@@ -91,7 +91,7 @@ function ChatRoom() {
             return;
         }
         try {
-            const res: AxiosResponse<{ message: string; group: IRoomType }> = await axios.post(`/room`, {
+            const res: AxiosResponse<{ message: string; group: ISimpleRoom }> = await axios.post(`/room`, {
                 isGroupChat: true,
                 groupName: groupName,
                 users: userIds,

@@ -63,6 +63,10 @@ function AuthContextProvider(props: { children: ReactElement }) {
             socket.on('onlineStatusReceived', (activeUsers: string[]) => {
                 dispatch({ type: AuthActionTypes.LoadActiveUsers, payload: activeUsers });
             });
+
+            socket.on('onlineUsersReceived', (users: string[]) => {
+                dispatch({ type: AuthActionTypes.LoadActiveUsers, payload: users });
+            });
         }
     }, [state.isLoggedIn]);
 

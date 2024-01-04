@@ -36,7 +36,7 @@ export const useRoom = () => useContext(RoomContext);
 
 export const loadRooms = async (dispatch: Dispatch<RoomActions>) => {
     try {
-        const response: AxiosResponse<{ rooms: IRoomType[] }> = await axios.get(`/room`, { withCredentials: true });
+        const response: AxiosResponse<{ rooms: ISimpleRoom[] }> = await axios.get(`/room`, { withCredentials: true });
         dispatch({ type: RoomActionTypes.LoadRooms, payload: response.data.rooms });
     } catch (err: any) {
         dispatch({ type: RoomActionTypes.ErrorLoadingRooms });

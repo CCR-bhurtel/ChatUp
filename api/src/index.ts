@@ -45,7 +45,6 @@ const getUserIdWithSocketID = (socketId: string): string | void => {
     const entry = Object.entries(onlineUsers);
     const userEntry = entry.find((entry) => entry[1] === socketId);
     if (userEntry) {
-        console.log(userEntry[0]);
         return userEntry[0];
     }
 };
@@ -57,17 +56,14 @@ interface IOnlineStatus {
 
 const handleSocketEnd = (socket: Socket, io: Server | undefined = undefined) => {
     const userId = getUserIdWithSocketID(socket.id);
-    console.log('1', userId);
 
     if (userId) {
         delete onlineUsers[userId];
-        console.log(onlineUsers);
 
         socket.rooms.forEach((room) => {
             socket.in(room).emit('useroffline', userId);
         });
         if (io) {
-            console.log(Object.keys(onlineUsers));
             io.emit('onlineUsersReceived', Object.keys(onlineUsers));
         }
     }
@@ -91,12 +87,12 @@ io.use((socket: Socket, next) => {
 
 io.on('connection', (socket: Socket) => {
     socket.on('initialSetup', (userId: string) => {
+        console.log(userId);
         if (userId && !isOnline(userId)) onlineUsers[userId] = socket.id;
         const id = userId.toString();
         socket.join(id);
         socket.to(id).emit('joinself');
-        io.emit('onlineUsersReceived', onlineUsers);
-        console.log(onlineUsers);
+        socket.broadcast.emit('onlineUsersReceived', Object.keys(onlineUsers));
     });
 
     socket.on('joinRoom', (roomId: string) => {

@@ -25,6 +25,7 @@ const authReducer = (state: AuthStateInterface, action: AuthActions): AuthStateI
             return { ...state, socketConnected: action.payload };
 
         case AuthActionTypes.LoadActiveUsers:
+            console.log(action.payload);
             return { ...state, activeUsers: action.payload };
         default:
             return state;

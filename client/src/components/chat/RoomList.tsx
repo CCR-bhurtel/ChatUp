@@ -13,6 +13,7 @@ function ChatList() {
     const { state, dispatch } = useRoom();
     const auth = useAuth();
     const { activeUsers } = auth.state;
+
     const userId = useMemo(() => auth.state.user?._id, [auth]);
 
     useEffect(() => {
@@ -36,7 +37,6 @@ function ChatList() {
                         const otherUsers = room.users.filter((userId) => userId !== auth.state.user?._id);
 
                         const isActive = otherUsers.some((userId) => activeUsers.includes(userId));
-                        console.log(otherUsers, activeUsers, isActive);
 
                         return (
                             <div className="w-full h-full" key={room._id}>
