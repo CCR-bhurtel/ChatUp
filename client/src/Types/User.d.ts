@@ -15,8 +15,8 @@ export interface IUser {
     passwordChangedAt: Date;
     contactNumber: string;
     preferences: {
-        email: boolean;
-        message: boolean;
+        emails: boolean;
+        messages: boolean;
         notification: boolean;
     };
 }
