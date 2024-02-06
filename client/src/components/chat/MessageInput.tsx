@@ -14,6 +14,7 @@ import {
   ChangeEvent,
   SyntheticEvent,
   useMemo,
+  RefObject,
 } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,7 +23,13 @@ import { useAuth } from "@/context/auth/AuthContextProvider";
 import { useRoom } from "@/context/chat/RoomContextProvider";
 
 interface Props {
-  handleSendMessage: (e: SyntheticEvent, message: string) => Promise<void>;
+  handleSendMessage: (
+    e: SyntheticEvent,
+    message?: string,
+    images?: File[],
+    inputRef?: RefObject<HTMLInputElement>,
+    resetPrevImages?: () => void
+  ) => Promise<void>;
 }
 
 function MessageInput({ handleSendMessage }: Props) {
@@ -127,7 +134,9 @@ function MessageInput({ handleSendMessage }: Props) {
 
   const handleSend = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    handleSendMessage(e, message);
+    handleSendMessage(e, message, selectedImages, imageInputRef, () => {
+      setPrevImages([]);
+    });
     setMessage("");
     if (currentTimeoutId) clearTimeout(currentTimeoutId);
     setIsTyping(false);

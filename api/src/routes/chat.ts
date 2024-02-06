@@ -1,5 +1,7 @@
-import express from 'express';
-import sendMessage from '../controllers/chat/sendMessage';
+import express from "express";
+import sendMessage from "../controllers/chat/sendMessage";
+import upload from "../middlewares/imageUpload";
+import sendImageMessage from "../controllers/chat/sendImageMessages";
 
 const router = express.Router();
 
@@ -7,7 +9,13 @@ const router = express.Router();
 //     return res.send('Hello world from chat router');
 // });
 
-router.post('/', sendMessage);
+router.post("/", sendMessage);
+
+router.post(
+  "/imagemessage",
+  upload("chatImages").array("files"),
+  sendImageMessage
+);
 
 const chatRouter = router;
 
