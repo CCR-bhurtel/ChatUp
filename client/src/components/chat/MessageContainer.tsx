@@ -8,6 +8,7 @@ import { BASE_PATH } from "@/config/keys";
 
 export interface IMessageContainer {
   messages: IChatType[];
+  handleSliderOpen: (id: string) => void;
 }
 
 function DateIndicator(props: { date: string }) {
@@ -60,7 +61,14 @@ function MessageContainer(props: IMessageContainer) {
                     {message.messageType === "Text" ? (
                       message.textContent
                     ) : (
-                      <div className="">
+                      <div
+                        onClick={() => {
+                          if (message.media?._id) {
+                            props.handleSliderOpen(message.media?._id);
+                          }
+                        }}
+                        className="cursor-pointer"
+                      >
                         <img
                           className="max-h-[200px] max-w-[200px]  object-cover"
                           src={`${BASE_PATH}/images/chatImages/${message.media?.downloadUrl}`}
@@ -105,7 +113,14 @@ function MessageContainer(props: IMessageContainer) {
                   {message.messageType === "Text" ? (
                     message.textContent
                   ) : (
-                    <div className="">
+                    <div
+                      onClick={() => {
+                        if (message.media?._id) {
+                          props.handleSliderOpen(message.media?._id);
+                        }
+                      }}
+                      className="cursor-pointer"
+                    >
                       <img
                         className="max-h-[200px] max-w-[200px]  object-cover"
                         src={`${BASE_PATH}/images/chatImages/${message.media?.downloadUrl}`}

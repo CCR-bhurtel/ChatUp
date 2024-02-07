@@ -1,11 +1,12 @@
-import { Model, Types } from 'mongoose';
+import { Model, Types } from "mongoose";
 
 export interface IMedia {
-    name: string;
+  _id: string;
+  name: string;
 
-    type: string;
-    downloadUrl: string;
-    roomId: Types.ObjectId;
+  type: string;
+  downloadUrl: string;
+  roomId: Types.ObjectId;
 }
 
 export interface IMediaMethods {}

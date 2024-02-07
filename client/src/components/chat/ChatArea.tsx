@@ -28,10 +28,12 @@ import { getSocket } from "@/utils/socketService";
 import MessageInput from "./MessageInput";
 import TypingContainer from "./TypingContainer";
 import { IUserType } from "@/Types/User";
+import ChatImageSlider from "./ChatImageSlider";
 
 interface IChatArea {
   handleInfoOpen: () => void;
   room: IActiveRoom;
+  handleSliderOpen: (id: string) => void;
 }
 
 export interface TypingUser {
@@ -192,7 +194,10 @@ function ChatArea(props: IChatArea) {
       >
         <div className="flex p-4  flex-1 min-w-full">
           <div className="message-container w-full py-2 overflow-y-scroll no-scrollbar overflow-x-hidden flex flex-col">
-            <MessageContainer messages={room.messages} />
+            <MessageContainer
+              handleSliderOpen={props.handleSliderOpen}
+              messages={room.messages}
+            />
             <TypingContainer users={typingUsers} />
           </div>
         </div>
