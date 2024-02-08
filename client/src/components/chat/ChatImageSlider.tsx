@@ -6,6 +6,7 @@ import { useRoom } from "@/context/chat/RoomContextProvider";
 import toast from "react-hot-toast";
 import Slider, { Settings } from "react-slick";
 import { BASE_PATH } from "@/config/keys";
+import Loading from "../reusables/Loading";
 
 interface IChatImageSlider {
   isSliderOpen: boolean;
@@ -56,7 +57,7 @@ function ChatImageSlider(props: IChatImageSlider) {
   return isSliderOpen ? (
     <Popup onClose={handleSliderClose}>
       {loadingMedia ? (
-        <h2>loading...</h2>
+        <Loading />
       ) : (
         <div className="relative  w-[90vw]  px-4 md:w-[600px] lg:w-[800px]">
           <Slider {...settings}>
