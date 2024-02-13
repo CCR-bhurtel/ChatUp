@@ -70,7 +70,7 @@
  * /user/profile:
  *  put:
  *      summary: Update profile information
- *      tags: [Profile]
+ *      tags: [User]
  *      requestBody:
  *        required: true
  *        content:
@@ -106,6 +106,34 @@
  *                 application/json:
  *                     schema:
  *                         $ref: '#/components/schemas/User'
+ */
+
+/**
+ * @swagger
+ *  /user/profileimage:
+ *    post:
+ *      tags: [User]
+ *      summary: Upload a profile pic
+ *      requestBody:
+ *        content:
+ *          multipart/form-data:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                image:
+ *                  type: string
+ *                  format: binary
+ *            encoding:
+ *              image:
+ *                contentType: 'image/png'
+ *      responses:
+ *        200:
+ *          description: user with updated profile pic
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/User'
+ *
  */
 
 import express from "express";
