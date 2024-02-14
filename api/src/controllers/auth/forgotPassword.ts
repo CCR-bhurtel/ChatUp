@@ -10,7 +10,7 @@ import path from 'path';
 const forgotPasswordHandler = catchAsync(async (req: Request, res, next) => {
     const { email } = req.body;
 
-    if (!email) return next(new AppError('Please provide email', 400));
+    if (!email) return next(new AppError('Please provide email', 404));
 
     const user = await User.findOne({ email });
 
@@ -28,7 +28,7 @@ const forgotPasswordHandler = catchAsync(async (req: Request, res, next) => {
     const resetUrl = `${req.headers.origin}/auth/resetpassword/?token=${resetToken}`;
 
     if (!user.email && !req.body.email) {
-        return next(new AppError('Email id not found', 400));
+        return next(new AppError('Email id not found', 404));
     }
 
     const forgotPasswordHTML = pug.renderFile(`${path.join(__dirname, '../../../templates/forgotpassword.pug')}`, {

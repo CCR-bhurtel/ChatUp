@@ -4,9 +4,6 @@
  *  schemas:
  *      User:
  *          type: object
- *          required:
- *              - email
- *              - password
  *          properties:
  *              _id:
  *                  type: string
@@ -46,7 +43,6 @@
 
 /**
  * @swagger
- *  description: user managing api
  * /user:
  *  get:
  *      summary: Get logged in user's profile
