@@ -45,11 +45,8 @@ function ChatList() {
             );
 
             return (
-              <div className="w-full h-full" key={room._id}>
-                <Link
-                  href={`/chat/${room._id}`}
-                  className="w-full h-full block"
-                >
+              <div className="w-full" key={room._id}>
+                <Link href={`/chat/${room._id}`} className="w-full block">
                   <div
                     className={`cursor-pointer roomItem flex items-center justify-between flex-row p-2 m-2
                                         ${
@@ -66,13 +63,17 @@ function ChatList() {
                             ? getAvatarImage(room.roomImage, true)
                             : getAvatarImage(room.roomImage, false)
                         }
-                        className="h-[60px] w-[60px] "
+                        className="h-[40px] w-[40px] "
                       />
                       <div className={`messageContent`}>
                         <h2 className="text-md font-medium text-white">
                           {room.roomName}
                         </h2>
-                        {room.isGroupChat ? (
+                        {room.lastMessage?.messageType == "Info" ? (
+                          <div className={`text-sm font-light ${textColor}`}>
+                            {room.lastMessage.textContent}
+                          </div>
+                        ) : room.isGroupChat ? (
                           <p className={`${textColor}`}>
                             {room.lastMessage &&
                               `${room.lastMessage?.sender?.name} : ${

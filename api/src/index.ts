@@ -1,7 +1,7 @@
 /* eslint-disable import/first */
 
 import dotenv from "dotenv";
-
+import { ExpressPeerServer } from "peer";
 dotenv.config();
 
 import app from "./app";
@@ -10,7 +10,7 @@ import { JWT_SECRET, PORT } from "./config/keys";
 
 import socketio, { Server, Socket } from "socket.io";
 import { IUser, PopulatedUser } from "./Types/User";
-import { IPopulatedChat } from "./Types/Chat";
+import { IChat, IPopulatedChat } from "./Types/Chat";
 import { IRoom } from "./Types/Room";
 import { formatRoomDetail } from "./utils/formatRoomDetails";
 
@@ -172,6 +172,12 @@ io.on("connection", (socket: Socket) => {
     }
 
     socket.emit("onlineStatusReceived", Object.keys(onlineUsers));
+  });
+
+  socket.on("updateRoom", (data: { room: IRoom; messages: [IChat] }) => {
+    socket
+      .to(data.room._id)
+      .emit("newGroupUpdate", { ...data.room, messages: data.messages });
   });
 
   socket.on("disconnect", () => handleSocketEnd(socket, io));

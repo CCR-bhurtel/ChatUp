@@ -17,6 +17,7 @@ import upload from "../middlewares/imageUpload";
 import changeRoomImage from "../controllers/room/changeRoomImage";
 import { readLastMessage } from "../controllers/room/readLastMessage";
 import getMediasForRoom from "../controllers/room/getMedias";
+import { leaveRoom } from "../controllers/room/leaveRoom";
 
 const router = express.Router();
 
@@ -64,6 +65,8 @@ router.put(
   upload("groupImages").single("image"),
   changeRoomImage
 );
+
+router.post("/group/:roomId/leave", leaveRoom);
 
 // add user by admin
 router.post("/:roomid/user", addUserToGroupChat);

@@ -161,7 +161,7 @@ function ChatRoom() {
         </Popup>
       )}
       <div className="flex flex-row h-full  w-full">
-        <div className="hidden lg:block w-[30%] h-full ">
+        <div className="hidden lg:block lg:w-[25%] h-full ">
           <ChatSidebar handleGroupChatOpen={handleCreateGroupOpen} />
         </div>
         {state.isActiveRoomLoading ? (
@@ -170,7 +170,7 @@ function ChatRoom() {
           <p></p>
         ) : (
           <>
-            <div className="popup">
+            <div className="popup lg:hidden">
               {isInfoOpen ? (
                 <Popup onClose={handleCloseInfo}>
                   <RoomInfo light={true} room={state.activeRoom} />
@@ -186,6 +186,9 @@ function ChatRoom() {
                 handleInfoOpen={handleOpenInfo}
                 handleSliderOpen={handleImageSliderOpen}
               />
+            </div>
+            <div className="hidden lg:block">
+              <RoomInfo light={false} room={state.activeRoom} />
             </div>
           </>
         )}

@@ -1,0 +1,92 @@
+components:
+  schemas:
+    Chat:
+      properties:
+        sender:
+          type: string
+          description: user id that sent the message
+        messageType:
+          type: string
+          description: type of message, can be either 'Text' or 'File'
+        room:
+          type: string
+          description: room id in which message was sent
+        textContent:
+          type: string
+          description: text content of message if it is of type 'Text'
+        read:
+          type: [string]
+          description: array of ids of people who read the last message
+        media:
+          type: string
+          description: media id if the message sent was of type File
+        isDeleted:
+          type: string
+          description: self explanatory
+paths:
+  /chat:
+    post:
+      summary: send text message in a room
+      tags: [Chat]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: text message content
+                roomId:
+                  type: string
+                  description: room id in which message is to be sent
+      responses:
+        201:
+          description: chat created in room
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Chat"
+        400:
+          description: invalid message (less than length 1)
+  /chat/imagemessage/:
+    post:
+      tags: [Chat]
+      summary: send image message
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                message:
+                  type: string
+                  description: message content along with image (not required)
+                roomId:
+                  type: string
+                  description: room id to which the image is to send
+          enconding:
+            files:
+              contentType: "image/*"
+      responses:
+        200:
+          description: image message sent successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: array
+                  $ref: "#/components/schemas/Chat"
+        400:
+          description: image or roomId not provided
+        404:
+          description: no room found with given id

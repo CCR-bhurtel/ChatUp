@@ -42,6 +42,14 @@ function MessageContainer(props: IMessageContainer) {
           dateIndicator = formatBasedOnDifference(nextMessageDate, date);
         }
 
+        console.log(message);
+        if (message.messageType == "Info") {
+          return (
+            <div className="text-gray-500 w-full text-center">
+              {message.textContent}
+            </div>
+          );
+        }
         if (message.sender._id === state.user?._id) {
           return (
             <>
@@ -92,7 +100,7 @@ function MessageContainer(props: IMessageContainer) {
                   className={`avatardiv
                              ${
                                message.sender._id ===
-                                 props.messages[i + 1]?.sender._id &&
+                                 props.messages[i + 1]?.sender?._id &&
                                "opacity-0 pointer-events-none"
                              }`}
                 >
@@ -103,9 +111,9 @@ function MessageContainer(props: IMessageContainer) {
                   />
                 </div>
                 <div
-                  className={`message self-justify-self-start ${
+                  className={`message self-start ${
                     message.messageType == "Text" && "bg-storm"
-                  }p-4 pt-6  color-white rounded-md relative text-sm`}
+                  } p-4 pt-6  color-white rounded-md relative text-sm`}
                 >
                   <div className="time text-[10px] absolute left-1 top-1 p-1 font-thin tracking-wide">
                     {formattedTime}

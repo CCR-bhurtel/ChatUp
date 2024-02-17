@@ -14,8 +14,11 @@ const resetPasswordHandler = catchAsync(
     }
 
     const { password, confirmPassword } = req.body;
+    if (!password || !confirmPassword) {
+      return next(new AppError("Please provide password", 400));
+    }
     if (password !== confirmPassword)
-      return new AppError("passwords donot match", 400);
+      return next(new AppError("passwords donot match", 400));
     const user = await User.findOne({
       resetToken,
       resetTokenExpires: {

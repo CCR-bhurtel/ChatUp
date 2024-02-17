@@ -11,7 +11,14 @@ const sendImageMessage = catchAsync(
   async (req: ExpressRequest, res: Response, next: NextFunction) => {
     const userId = req.user._id;
     const { message, roomId } = req.body;
+    if (!roomId) {
+      return next(new AppError("Please provide room id", 400));
+    }
     const room = await Room.findById(roomId, { users: userId });
+
+    if (!room) {
+      return next(new AppError("No room with provided room id", 404));
+    }
 
     const chats: (IChat | IPopulatedChat)[] = [];
 
@@ -61,7 +68,7 @@ const sendImageMessage = catchAsync(
       });
     }
 
-    res.status(200).json(chats);
+    return res.status(200).json(chats);
   }
 );
 

@@ -8,11 +8,22 @@ const chatSchema = new mongoose.Schema<IChat, ChatModel>(
     sender: {
       type: mongoose.Types.ObjectId,
       ref: "User",
-      required: [true, "User is required field"],
+      validate: {
+        validator: function (this: IChat, val: string) {
+          if (this.messageType !== "Info") {
+            if (!val) {
+              return false;
+            } else {
+              return true;
+            }
+          }
+        },
+        message: "Sender is required",
+      },
     },
     messageType: {
       type: String,
-      enum: ["Text", "File"],
+      enum: ["Text", "File", "Info"],
       default: "Text",
     },
     room: {

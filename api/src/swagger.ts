@@ -23,7 +23,7 @@ const options: Options = {
     },
     servers: [{ url: "http://localhost:8000/api/v1" }],
   },
-  apis: [path.join(__dirname, "./routes/*.js")],
+  apis: [path.join(__dirname, "../docs/*.yml")],
 };
 
 const specs = swaggerJsdoc(options);

@@ -6,7 +6,7 @@ import { IMedia } from "./Media";
 export interface IChat {
   _id: string;
   sender: ReferenceType;
-  messageType: "Text" | "File" | "Media";
+  messageType: "Text" | "File" | "Media" | "Info";
   textContent?: String;
   media?: Types.ObjectId;
   isDeleted: false;

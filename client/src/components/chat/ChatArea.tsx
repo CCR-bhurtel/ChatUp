@@ -158,6 +158,10 @@ function ChatArea(props: IChatArea) {
     socket.on("roomMessageReceived", (message: IChatType) => {
       dispatch({ type: RoomActionTypes.AppendChatToRoom, payload: message });
     });
+
+    socket.on("newGroupUpdate", (room: IActiveRoom) => {
+      dispatch({ type: RoomActionTypes.SetActiveRoom, payload: room });
+    });
     return () => {
       setTypingUsers([]);
       socket.emit("stopTyping", {
@@ -176,7 +180,7 @@ function ChatArea(props: IChatArea) {
           }}
           className="personinfo flex flex-row gap-2 items-center cursor-pointer"
         >
-          <Avatar className="min-h-[50px] w-[50px]" source={roomImage} />
+          <Avatar className="h-[50px] w-[50px]" source={roomImage} />
           <div className={`messageContent  text-white`}>
             <h2 className="text-md font-medium">{room.roomName}</h2>
             {/* <p className="text-xs font-thin -mt-1">online</p> */}
