@@ -1,0 +1,35 @@
+components:
+  schemas:
+    Room:
+      properties:
+        users:
+          description: object Ids of users in the room
+          type: array
+          items:
+            type: string
+        roomImage:
+          description: room Image, group image for groupchat, alternate user's image for private chat
+          type: string
+          example: 'defaultGroupImage.png'
+        roomAdmin:
+          description: admin user's id
+          type: string
+        lastMessageDate:
+          description: last message creation date
+          type: string
+          format: date
+        lastMessage: 
+          description: object id of last message in the room
+          type: string
+        lastMessageReadBy:
+          description: array of object ids of user who have read last message
+          type: array
+          items:
+            type: string
+        blockedUsers:
+          description: array of object ids of user who have been blocked in the room
+          type: array 
+          items: 
+            type: string
+    IPopulatedUsersRoom:
+      allof
