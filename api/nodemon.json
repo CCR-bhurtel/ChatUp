@@ -1,6 +1,8 @@
 {
   "verbose": true,
+
   "ignore": ["public/images/**"],
+  "ext": ".js, .mjs, .coffee, .litcoffee, .json, .yaml, .ts, .env",
 
   "execMap": {
     "rb": "ruby",

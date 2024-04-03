@@ -1,12 +1,12 @@
 /* eslint-disable import/first */
 
 import dotenv from "dotenv";
-import { ExpressPeerServer } from "peer";
+import { PeerServer } from "peer";
 dotenv.config();
 
 import app from "./app";
 import connectDb from "./database/connect";
-import { JWT_SECRET, PORT } from "./config/keys";
+import { JWT_SECRET, PEER_SERVER_PORT, PORT } from "./config/keys";
 
 import socketio, { Server, Socket } from "socket.io";
 import { IUser, PopulatedUser } from "./Types/User";
@@ -24,10 +24,13 @@ connectDb()
   });
 
 swagger(app);
-const server = app.listen(PORT, () => {
+let server = app.listen(PORT, () => {
   console.log(`app listening to port ${PORT}`);
 });
-
+let peerServer = PeerServer({ port: PEER_SERVER_PORT }, () => {
+  console.log(`Peer server running in port ${PEER_SERVER_PORT}`);
+});
+peerServer.on("connection", (peer) => {});
 const io = new socketio.Server(server, {
   cors: { origin: "http://localhost:3000" },
   pingTimeout: 60000,

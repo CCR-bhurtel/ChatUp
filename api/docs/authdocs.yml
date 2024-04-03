@@ -17,6 +17,7 @@ paths:
                   example: john@gmail.com
                 password:
                   type: string
+                  format: password
                   exmple: john@123
       responses:
         404:
@@ -61,6 +62,7 @@ paths:
                 password:
                   type: string
                   example: helloworld
+                  format: password
                 confirmPassword:
                   type: string
                   example: helloworld
