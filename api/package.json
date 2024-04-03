@@ -8,7 +8,7 @@
     "buildts": "tsc",
     "devserver": "npx nodemon ./dist/index.js",
     "dev": "npx concurrently \"npm run watch\" \"npm run devserver\"",
-    "build": "npm run buildts && npm install",
+    "build": "npm install && npm run buildts",
     "start": "node ./dist/index.js"
   },
   "keywords": [],
