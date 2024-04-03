@@ -8,7 +8,7 @@
     "buildts": "tsc",
     "devserver": "npx nodemon ./dist/index.js",
     "dev": "npx concurrently \"npm run watch\" \"npm run devserver\"",
-    "build": "npm install && npm run buildts",
+    "build": "npm install -D && npm run buildts",
     "start": "node ./dist/index.js"
   },
   "keywords": [],
@@ -42,9 +42,7 @@
     "socket.io": "^4.7.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
-    "validator": "^13.9.0"
-  },
-  "devDependencies": {
+    "validator": "^13.9.0",
     "@types/bcryptjs": "^2.4.3",
     "@types/cookie-session": "^2.0.45",
     "@types/dotenv": "^8.2.0",
@@ -57,7 +55,9 @@
     "@types/passport": "^1.0.12",
     "@types/passport-facebook": "^3.0.0",
     "@types/passport-google-oauth20": "^2.0.11",
-    "@types/validator": "^13.11.1",
+    "@types/validator": "^13.11.1"
+  },
+  "devDependencies": {
     "typescript": "^5.2.2"
   }
 }
