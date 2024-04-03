@@ -10,6 +10,8 @@ export const initSocket = () => {
     auth: {
       token: getCookie("Authorization"),
     },
+    transports: ["websocket"],
+    secure: true,
   });
 
   socket.on("connect", () => {
