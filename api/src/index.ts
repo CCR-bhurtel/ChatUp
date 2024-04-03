@@ -16,6 +16,8 @@ import { formatRoomDetail } from "./utils/formatRoomDetails";
 
 import jwt from "jsonwebtoken";
 import swagger from "./swagger";
+import cookieParser from "cookie-parser";
+import parseCookieFromHeader from "./utils/parseCookieFromHeader";
 
 connectDb()
   .then(() => {})
@@ -83,7 +85,8 @@ const handleSocketEnd = (
 
 io.use((socket: Socket, next) => {
   try {
-    const token = socket.handshake.auth.token;
+    const token = parseCookieFromHeader(socket.handshake.headers.cookie);
+    // const token = socket.handshake.auth.token;
     if (!token) {
       return next(new Error("Unauthorized: Token not provided"));
     }
