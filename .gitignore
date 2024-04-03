@@ -17,6 +17,7 @@ api/public/images/userImages/*
 
 !api/public/images/userImages/defaultProfilePic404.png
 !api/public/images/groupImages/defaultGroupImage.png
+!api/public/images/chatImages/defaultChatImage.png
 
 # next.js
 .next/
