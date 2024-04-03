@@ -10,7 +10,13 @@ node_modules
 # testing
 /coverage
 
-api/public/images/**/*
+
+api/public/images/chatImages/*
+api/public/images/groupImages/*
+api/public/images/userImages/*
+
+!api/public/images/userImages/defaultProfilePic404.png
+!api/public/images/groupImages/defaultGroupImage.png
 
 # next.js
 .next/
