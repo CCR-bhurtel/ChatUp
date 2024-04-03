@@ -1,12 +1,12 @@
 import { io, Socket } from "socket.io-client";
 import getCookie from "./cookie";
-import { NEXT_SOCKET_IO_PATH } from "@/config/keys";
+import { NEXT_PUBLIC_SOCKET_IO_PATH } from "@/config/keys";
 
 let socket: Socket;
 
 export const initSocket = () => {
   console.log("Authorization", getCookie("Authorization"));
-  socket = io(NEXT_SOCKET_IO_PATH, {
+  socket = io(NEXT_PUBLIC_SOCKET_IO_PATH, {
     auth: {
       token: getCookie("Authorization"),
     },
