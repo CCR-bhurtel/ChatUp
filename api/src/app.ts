@@ -39,6 +39,7 @@ app.use(
     keys: [COOKIE_KEY],
     sameSite: "none",
     secure: true,
+    httpOnly: process.env.NODE_ENV === "production",
   })
 );
 

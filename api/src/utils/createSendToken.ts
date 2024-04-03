@@ -15,7 +15,7 @@ const createSendToken = (user: PopulatedUser, res: Response) => {
       sameSite: "none",
       secure: true,
 
-      //   httpOnly: process.env.NODE_ENV === "production",
+      httpOnly: process.env.NODE_ENV === "production",
     });
     return res.status(200).json({ ...user._doc, password: "", token });
   } catch (err) {
