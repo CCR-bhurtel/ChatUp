@@ -6,7 +6,7 @@ dotenv.config();
 
 import app from "./app";
 import connectDb from "./database/connect";
-import { JWT_SECRET, PEER_SERVER_PORT, PORT } from "./config/keys";
+import { CLIENT_URI, JWT_SECRET, PEER_SERVER_PORT, PORT } from "./config/keys";
 
 import socketio, { Server, Socket } from "socket.io";
 import { IUser, PopulatedUser } from "./Types/User";
@@ -32,7 +32,7 @@ let peerServer = PeerServer({ port: PEER_SERVER_PORT }, () => {
 });
 peerServer.on("connection", (peer) => {});
 const io = new socketio.Server(server, {
-  cors: { origin: "http://localhost:3000" },
+  cors: { origin: CLIENT_URI },
   pingTimeout: 60000,
 });
 

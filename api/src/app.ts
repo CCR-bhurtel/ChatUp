@@ -11,7 +11,7 @@ import cookieParser from "cookie-parser";
 import ErrorControllerDev from "./controllers/error/DevErrorController";
 import ErrorControllerProd from "./controllers/error/ProdErrorController";
 import "./config/passportConfig";
-import { COOKIE_EXPIRES_IN, COOKIE_KEY } from "./config/keys";
+import { CLIENT_URI, COOKIE_EXPIRES_IN, COOKIE_KEY } from "./config/keys";
 import authCheck from "./middlewares/authCheck";
 import roomRouter from "./routes/room";
 import chatRouter from "./routes/chat";
@@ -29,7 +29,7 @@ app.use(express.static(publicPath));
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:3000",
+    origin: CLIENT_URI,
   })
 );
 

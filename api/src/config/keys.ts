@@ -22,4 +22,5 @@ export const EMAIL_AUTH_USER = process.env.EMAIL_AUTH_USER as string;
 export const EMAIL_AUTH_PASSWORD = process.env.EMAIL_AUTH_PASSWORD as string;
 export const EMAIL_HOST_TLS =
   process.env.EMAIL_HOST_TLS === "true" ? true : false;
+export const CLIENT_URI = process.env.CLIENT_URI;
 // more to come
