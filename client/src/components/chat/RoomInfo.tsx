@@ -75,7 +75,7 @@ function RoomInfoPrivate({ room }: IRoomInfo) {
         </div>
       </div>
 
-      <span className="blockUser text-navy dark:text-white flex w-full justify-between">
+      {/* <span className="blockUser text-navy dark:text-white flex w-full justify-between">
         <div className="label">
           <FontAwesomeIcon icon={faBan} />
           <span> Block User</span>
@@ -90,7 +90,7 @@ function RoomInfoPrivate({ room }: IRoomInfo) {
           }}
           crossOrigin={""}
         />
-      </span>
+      </span> */}
     </div>
   );
 }

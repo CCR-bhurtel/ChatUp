@@ -86,6 +86,7 @@ const handleSocketEnd = (
 io.use((socket: Socket, next) => {
   try {
     const token = parseCookieFromHeader(socket.handshake.headers.cookie);
+    console.log(token);
     // const token = socket.handshake.auth.token;
     if (!token) {
       return next(new Error("Unauthorized: Token not provided"));
