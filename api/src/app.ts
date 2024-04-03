@@ -37,6 +37,8 @@ app.use(
   cookieSession({
     maxAge: parseInt(COOKIE_EXPIRES_IN) * 24 * 60 * 60,
     keys: [COOKIE_KEY],
+    sameSite: "none",
+    secure: true,
   })
 );
 
