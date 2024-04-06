@@ -9,7 +9,7 @@ import connectDb from "./database/connect";
 import { CLIENT_URI, JWT_SECRET, PEER_SERVER_PORT, PORT } from "./config/keys";
 
 import swagger from "./swagger";
-import WS from "./websockets";
+import WS from "./services/Websocket";
 
 connectDb()
   .then(() => {})
@@ -21,7 +21,8 @@ swagger(app);
 let server = app.listen(PORT, () => {
   console.log(`app listening to port ${PORT}`);
   let websocket = new WS();
-  websocket.createConnection(server);
+  websocket.createConnection(server)
+  
 });
 let peerServer = PeerServer({ port: PEER_SERVER_PORT }, () => {
   console.log(`Peer server running in port ${PEER_SERVER_PORT}`);
