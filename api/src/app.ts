@@ -23,6 +23,7 @@ const publicPath: string = path.resolve(__dirname, "../public");
 app.use(cookieParser());
 app.use(express.json());
 app.use("/static", express.static(publicPath));
+app.use("/", express.static(publicPath));
 
 // app.set('view engine', 'pug');
 // app.set('views', path.join(__dirname, 'templates'));
@@ -37,8 +38,8 @@ app.use(
   cookieSession({
     maxAge: parseInt(COOKIE_EXPIRES_IN) * 24 * 60 * 60,
     keys: [COOKIE_KEY],
-    sameSite: "none",
-    secure: true,
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
     httpOnly: process.env.NODE_ENV === "production",
   })
 );
