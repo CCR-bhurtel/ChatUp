@@ -79,7 +79,7 @@ function MessageContainer(props: IMessageContainer) {
                       >
                         <img
                           className="max-h-[200px] max-w-[200px]  object-cover"
-                          src={`${BASE_PATH}/images/chatImages/${message.media?.downloadUrl}`}
+                          src={`${BASE_PATH}/static/images/chatImages/${message.media?.downloadUrl}`}
                         />
                       </div>
                     )}
@@ -131,7 +131,7 @@ function MessageContainer(props: IMessageContainer) {
                     >
                       <img
                         className="max-h-[200px] max-w-[200px]  object-cover"
-                        src={`${BASE_PATH}/images/chatImages/${message.media?.downloadUrl}`}
+                        src={`${BASE_PATH}/static/images/chatImages/${message.media?.downloadUrl}`}
                       />
                     </div>
                   )}

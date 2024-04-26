@@ -50,7 +50,8 @@ const AccountClickables = () => {
               <Avatar
                 className="h-[30px] w-[30px] "
                 source={
-                  user && `${BASE_PATH}/images/userImages/${user.profilePic}`
+                  user &&
+                  `${BASE_PATH}/static/images/userImages/${user.profilePic}`
                 }
               />
             </div>

@@ -127,7 +127,7 @@ function CreateGroupChat({ onSubmit }: ICreateGroupChat) {
                   className="member flex  items-center justify-center bg-Gravel p-2 rounded-md w-full cursor-pointer"
                 >
                   <Avatar
-                    source={`${BASE_PATH}/images/userImages/${member.profilePic}`}
+                    source={`${BASE_PATH}/static/images/userImages/${member.profilePic}`}
                     className="w-[30px] h-[30px]"
                   />
                   <p className="ml-2 text-md text-white">{member.name}</p>

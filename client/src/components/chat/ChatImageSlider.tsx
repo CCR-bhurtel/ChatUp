@@ -91,7 +91,7 @@ function ChatImageSlider(props: IChatImageSlider) {
                 className="flex items-center justify-center h-[80vh] "
               >
                 <img
-                  src={`${BASE_PATH}/images/chatImages/${media.downloadUrl}`}
+                  src={`${BASE_PATH}/static/images/chatImages/${media.downloadUrl}`}
                   alt="chat room media"
                   className="w-full h-full object-contain"
                 />
