@@ -67,7 +67,7 @@ const roomReducer = (
       const newRooms = state.rooms;
 
       newRooms.unshift(action.payload);
-      return { ...state, rooms: newRooms };
+      return { ...state, rooms: Array.from(new Set(newRooms)) };
 
     case RoomActionTypes.AppendChatToRoom:
       if (!state.activeRoom) return state;
@@ -93,7 +93,7 @@ const roomReducer = (
       };
     case RoomActionTypes.AppendRooms:
       const newRoomListAfterAppend = state.rooms.concat(action.payload);
-      return { ...state, rooms: newRoomListAfterAppend };
+      return { ...state, rooms: Array.from(new Set(newRoomListAfterAppend)) };
 
     case RoomActionTypes.LeaveActiveRoom:
       const newRoomListAfterLeave = state.rooms.filter(

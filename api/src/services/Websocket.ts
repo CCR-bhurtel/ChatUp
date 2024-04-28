@@ -6,6 +6,7 @@ import { IRoom } from "../Types/Room";
 import { IChat, IPopulatedChat } from "../Types/Chat";
 import { formatRoomDetail } from "../utils/formatRoomDetails";
 import { IUser } from "../Types/User";
+import { SocketType } from "dgram";
 
 export default class WS {
   static io: Server;
@@ -23,6 +24,10 @@ export default class WS {
   static isUserOnline = (userId: string): boolean => {
     return WS.onlineUsers.hasOwnProperty(userId);
   };
+
+  public sendOnlineUsersStatus(socket: Socket) {
+    socket.broadcast.emit("onlineUsersReceived", Object.keys(WS.onlineUsers));
+  }
 
   public createConnection(server: any, origin?: string) {
     WS.io = new socketio.Server(server, {
@@ -48,29 +53,24 @@ export default class WS {
     });
 
     WS.io.on("connection", (socket: Socket) => {
-      console.log(socket.id);
       socket.on("initialSetup", (userId: string) => {
-        console.log(userId);
         if (userId && !WS.isUserOnline(userId))
           WS.onlineUsers[userId] = socket.id;
         const id = userId.toString();
         socket.join(id);
         socket.to(id).emit("joinself");
-        socket.broadcast.emit(
-          "onlineUsersReceived",
-          Object.keys(WS.onlineUsers)
-        );
+        this.sendOnlineUsersStatus(socket);
       });
 
       socket.on("joinRoom", (roomId: string) => {
         // leaveAllRooms(socket, (socket as any).user.userId);
 
         socket.join(roomId);
+        this.sendOnlineUsersStatus(socket);
       });
 
       socket.on("leaveRoom", (roomId: string) => {
         socket.leave(roomId);
-        // console.log(socket.rooms);
       });
       socket.on("typing", ({ roomId, profilePic, userId }) => {
         // if (socket.id === socketId) return;

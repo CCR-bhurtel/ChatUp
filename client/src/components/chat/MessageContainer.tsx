@@ -42,7 +42,6 @@ function MessageContainer(props: IMessageContainer) {
           dateIndicator = formatBasedOnDifference(nextMessageDate, date);
         }
 
-        console.log(message);
         if (message.messageType == "Info") {
           return (
             <div className="text-gray-500 w-full text-center">

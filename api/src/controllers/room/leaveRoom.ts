@@ -13,7 +13,6 @@ export const leaveRoom = catchAsync(
       return next(new AppError("No room exists with given room id", 404));
     }
     if (room.roomAdmin.toString() === user?._id.toString()) {
-      console.log("User is admin");
       const { newAdminUserId } = req.body;
       if (!newAdminUserId)
         return next(new AppError("Please provide new admin", 400));

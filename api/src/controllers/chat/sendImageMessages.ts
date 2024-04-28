@@ -34,6 +34,7 @@ const sendImageMessage = catchAsync(
 
     if (req.files) {
       const files = req.files as Array<any>;
+      console.log(files);
       const filePromises = files.map(async (file) => {
         const media = await Media.create({
           roomId: room?._id,

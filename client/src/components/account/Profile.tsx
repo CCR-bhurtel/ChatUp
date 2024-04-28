@@ -93,12 +93,10 @@ function Profile() {
   };
 
   const handlePreferenceChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.checked);
     const preferences = {
       ...state.user?.preferences,
       [e.target.name]: e.target.checked,
     };
-    console.log(preferences);
     try {
       const response: AxiosResponse<IUserType> = await axios.put(
         "/user/preferences",

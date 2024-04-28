@@ -53,7 +53,6 @@ function AuthContextProvider(props: { children: ReactElement }) {
 
     useEffect(() => {
         if (state.user && !state.socketConnected) {
-            console.log(state.user._id);
             socket.emit('initialSetup', state.user._id);
             socket.on('joinself', () => {
                 dispatch({ type: AuthActionTypes.SocketConnected, payload: true });
