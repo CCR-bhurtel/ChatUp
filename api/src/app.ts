@@ -38,7 +38,7 @@ app.use(
   cookieSession({
     maxAge: parseInt(COOKIE_EXPIRES_IN) * 24 * 60 * 60,
     keys: [COOKIE_KEY],
-    sameSite: "strict",
+    sameSite:"none",
     secure: process.env.NODE_ENV === "production",
     httpOnly: process.env.NODE_ENV === "production",
   })

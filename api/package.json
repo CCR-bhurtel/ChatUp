@@ -3,13 +3,19 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  },
   "scripts": {
     "watch": "tsc --w",
     "buildts": "tsc",
     "devserver": "npx nodemon ./dist/index.js",
     "dev": "npx concurrently \"npm run watch\" \"npm run devserver\"",
     "build": "npm install -D && npm run buildts",
-    "start": "node ./dist/index.js"
+    "start": "node ./dist/index.js",
+    "test": "jest",
+    "test-watch": "jest --watchAll --no-cache"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +27,7 @@
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/mongodb": "^4.0.7",
     "@types/mongoose": "^5.11.97",
@@ -60,6 +67,8 @@
     "validator": "^13.9.0"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
     "typescript": "^5.2.2"
   }
 }

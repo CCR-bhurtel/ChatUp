@@ -12,7 +12,7 @@ const createSendToken = (user: PopulatedUser, res: Response) => {
 
     res.cookie("Authorization", token, {
       expires: new Date(Date.now() + time * 24 * 60 * 60 * 1000),
-      sameSite: "strict",
+      sameSite: "none",
       secure: process.env.NODE_ENV === "production",
 
       httpOnly: process.env.NODE_ENV === "production",
