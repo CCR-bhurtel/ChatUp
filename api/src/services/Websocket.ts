@@ -6,7 +6,6 @@ import { IRoom } from "../Types/Room";
 import { IChat, IPopulatedChat } from "../Types/Chat";
 import { formatRoomDetail } from "../utils/formatRoomDetails";
 import { IUser } from "../Types/User";
-import { SocketType } from "dgram";
 
 export default class WS {
   static io: Server;

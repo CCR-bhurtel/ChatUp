@@ -21,7 +21,7 @@ swagger(app);
 let server = app.listen(PORT, () => {
   console.log(`app listening to port ${PORT}`);
   let websocket = new WS();
-  websocket.createConnection(server)
+  websocket.createConnection(server, CLIENT_URI)
   
 });
 let peerServer = PeerServer({ port: PEER_SERVER_PORT }, () => {
