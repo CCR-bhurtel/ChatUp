@@ -34,7 +34,7 @@ function ChatSidebar({ handleGroupChatOpen }: IChatSidebar) {
         setSearchResult(result);
         setSearchResultLoading(false);
       } catch (err) {
-        console.log(err);
+        logger;
         setSearchResultLoading(false);
       }
     }
@@ -73,7 +73,11 @@ function ChatSidebar({ handleGroupChatOpen }: IChatSidebar) {
           placeholder="Search users, groups"
         />
         {searchKey.length ? (
-          <SearchResult handleEmptySearchKey={handleEmptySearchKey} results={searchResult} loading={searchResultLoading} />
+          <SearchResult
+            handleEmptySearchKey={handleEmptySearchKey}
+            results={searchResult}
+            loading={searchResultLoading}
+          />
         ) : (
           <RoomList />
         )}

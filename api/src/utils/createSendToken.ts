@@ -2,6 +2,7 @@ import { Response } from "express";
 import jwt from "jsonwebtoken";
 import { PopulatedUser } from "../Types/User";
 import { JWT_COOKIE_EXPIRES_IN, JWT_SECRET } from "../config/keys";
+import logger from "../logger/winston.logger";
 
 const createSendToken = (user: PopulatedUser, res: Response) => {
   try {
@@ -19,7 +20,7 @@ const createSendToken = (user: PopulatedUser, res: Response) => {
     });
     return res.status(200).json({ ...user._doc, password: "", token });
   } catch (err) {
-    console.log(err);
+    logger.error("Error creating token", err);
     return res.status(400).json(err);
   }
 };

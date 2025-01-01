@@ -5,6 +5,7 @@ import AppError from "../../utils/AppError";
 import catchAsync from "../../utils/catchAsync";
 import fs from "fs";
 import path from "path";
+import logger from "../../logger/winston.logger";
 
 export const profileImageUpload = catchAsync(
   async (req: ExpressRequest, res, next) => {
@@ -24,7 +25,7 @@ export const profileImageUpload = catchAsync(
             )
           );
       } catch (err) {
-        console.log("Error deleting previous profile");
+        logger.error("Error deleting previous profile", err);
       }
 
       const user = await User.findByIdAndUpdate(

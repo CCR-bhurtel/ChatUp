@@ -38,8 +38,6 @@ const createRoom = catchAsync(
           $all: req.body.users,
         },
       }).populate({ path: "users", select: "name profilePic" });
-      console.log(req.body.users);
-      console.log(existingRoom);
 
       if (existingRoom) {
         const formattedRoom = await formatRoomDetail(

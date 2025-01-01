@@ -97,7 +97,6 @@ function ChatArea(props: IChatArea) {
             },
           }
         );
-        console.log(res.data);
         let chats = res.data.map((chat) => ({
           ...chat,
           sender: auth.state.user as IUserType,

@@ -8,6 +8,7 @@ import {
     GOOGLE_OAUTH_CLIENT_SECRET,
 } from './keys';
 import { Strategy } from 'passport-facebook';
+import logger from '../logger/winston.logger';
 
 passport.serializeUser((user, done) => {
     done(null, user._id);
@@ -79,7 +80,7 @@ passport.use(
                     done(null, currentUser);
                 }
             } catch (err) {
-                console.log(err);
+                logger.error(err);
             }
         }
     )

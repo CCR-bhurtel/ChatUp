@@ -10,21 +10,21 @@ import { CLIENT_URI, JWT_SECRET, PEER_SERVER_PORT, PORT } from "./config/keys";
 
 import swagger from "./swagger";
 import WS from "./services/Websocket";
+import logger from "./logger/winston.logger";
 
 connectDb()
   .then(() => {})
   .catch((err: any) => {
-    console.log(err);
+    logger.error("Error connecting to database", err);
   });
 
 swagger(app);
 let server = app.listen(PORT, () => {
-  console.log(`app listening to port ${PORT}`);
+  logger.info(`app listening to port ${PORT}`);
   let websocket = new WS();
-  websocket.createConnection(server, CLIENT_URI)
-  
+  websocket.createConnection(server, CLIENT_URI);
 });
 let peerServer = PeerServer({ port: PEER_SERVER_PORT }, () => {
-  console.log(`Peer server running in port ${PEER_SERVER_PORT}`);
+  logger.info(`Peer server running in port ${PEER_SERVER_PORT}`);
 });
 peerServer.on("connection", (peer) => {});

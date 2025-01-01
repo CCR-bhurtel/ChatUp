@@ -15,6 +15,7 @@ import { CLIENT_URI, COOKIE_EXPIRES_IN, COOKIE_KEY } from "./config/keys";
 import authCheck from "./middlewares/authCheck";
 import roomRouter from "./routes/room";
 import chatRouter from "./routes/chat";
+import morganMiddleware from "./logger/morgan.logger";
 import cors from "cors";
 const app = express();
 
@@ -22,6 +23,7 @@ const publicPath: string = path.resolve(__dirname, "../public");
 
 app.use(cookieParser());
 app.use(express.json());
+app.use(morganMiddleware);
 app.use("/static", express.static(publicPath));
 app.use("/", express.static(publicPath));
 
@@ -38,7 +40,7 @@ app.use(
   cookieSession({
     maxAge: parseInt(COOKIE_EXPIRES_IN) * 24 * 60 * 60,
     keys: [COOKIE_KEY],
-    sameSite:"none",
+    sameSite: "none",
     secure: process.env.NODE_ENV === "production",
     httpOnly: process.env.NODE_ENV === "production",
   })

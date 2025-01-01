@@ -7,6 +7,7 @@ import {
   ExtendedErrorJWT,
   ExtendedErrorToken,
 } from "./ErrorTypes";
+import logger from "../../logger/winston.logger";
 
 class ErrorController {
   private handleCastErroDB = (err: ExtendedErrorCast) => {
@@ -36,7 +37,7 @@ class ErrorController {
         });
       }
 
-      console.log(err);
+      logger.error(err);
       return res.status(500).json({
         status: "error",
         message: "Something went wrong",
