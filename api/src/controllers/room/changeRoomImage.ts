@@ -1,7 +1,7 @@
 import { NextFunction, Response } from "express";
-import catchAsync from "../../utils/catchAsync";
+import catchAsync from "../../lib/catchAsync";
 import { ExpressRequest } from "../../Types/User";
-import AppError from "../../utils/AppError";
+import AppError from "../../lib/AppError";
 import Room from "../../database/Model/Room";
 import fs from "fs";
 import path from "path";

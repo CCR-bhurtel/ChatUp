@@ -1,8 +1,8 @@
 import { Response } from "express";
 import { ExpressRequest } from "../../Types/User";
 import User from "../../database/Model/User";
-import AppError from "../../utils/AppError";
-import catchAsync from "../../utils/catchAsync";
+import AppError from "../../lib/AppError";
+import catchAsync from "../../lib/catchAsync";
 import fs from "fs";
 import path from "path";
 import logger from "../../logger/winston.logger";

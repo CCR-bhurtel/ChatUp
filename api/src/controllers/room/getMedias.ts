@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import catchAsync from "../../utils/catchAsync";
+import catchAsync from "../../lib/catchAsync";
 import Media from "../../database/Model/Media";
 
 const getMediasForRoom = catchAsync(async (req: Request, res: Response) => {

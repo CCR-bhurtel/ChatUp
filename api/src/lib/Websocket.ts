@@ -1,10 +1,10 @@
 import socketio, { Socket, Server } from "socket.io";
-import parseCookieFromHeader from "../utils/parseCookieFromHeader";
+import parseCookieFromHeader from "./parseCookieFromHeader";
 import { JWT_SECRET } from "../config/keys";
 import jwt from "jsonwebtoken";
 import { IRoom } from "../Types/Room";
 import { IChat, IPopulatedChat } from "../Types/Chat";
-import { formatRoomDetail } from "../utils/formatRoomDetails";
+import { formatRoomDetail } from "./formatRoomDetails";
 import { IUser } from "../Types/User";
 
 export default class WS {

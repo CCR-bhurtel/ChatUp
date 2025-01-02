@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import catchAsync from "../../utils/catchAsync";
+import catchAsync from "../../lib/catchAsync";
 import Room from "../../database/Model/Room";
-import AppError from "../../utils/AppError";
+import AppError from "../../lib/AppError";
 import Chat from "../../database/Model/Chat";
 
 export const leaveRoom = catchAsync(

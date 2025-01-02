@@ -1,5 +1,5 @@
 import { NextFunction, Response } from "express";
-import parseToken from "../utils/parseToken";
+import parseToken from "../lib/parseToken";
 import jwt from "jsonwebtoken";
 import User from "../database/Model/User";
 import { JWT_SECRET } from "../config/keys";

@@ -11,12 +11,13 @@ import cookieParser from "cookie-parser";
 import ErrorControllerDev from "./controllers/error/DevErrorController";
 import ErrorControllerProd from "./controllers/error/ProdErrorController";
 import "./config/passportConfig";
-import { CLIENT_URI, COOKIE_EXPIRES_IN, COOKIE_KEY } from "./config/keys";
+import { CLIENT_URI } from "./config/keys";
 import authCheck from "./middlewares/authCheck";
 import roomRouter from "./routes/room";
 import chatRouter from "./routes/chat";
 import morganMiddleware from "./logger/morgan.logger";
 import cors from "cors";
+import { cookieSessionConfiguration } from "./constants";
 const app = express();
 
 const publicPath: string = path.resolve(__dirname, "../public");
@@ -36,15 +37,7 @@ app.use(
   })
 );
 
-app.use(
-  cookieSession({
-    maxAge: parseInt(COOKIE_EXPIRES_IN) * 24 * 60 * 60,
-    keys: [COOKIE_KEY],
-    sameSite: "none",
-    secure: process.env.NODE_ENV === "production",
-    httpOnly: process.env.NODE_ENV === "production",
-  })
-);
+app.use(cookieSession(cookieSessionConfiguration));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 

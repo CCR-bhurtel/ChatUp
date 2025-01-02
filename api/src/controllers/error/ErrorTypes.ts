@@ -1,6 +1,6 @@
-import { ErrorType } from '../../utils/AppError';
-import { Error } from 'mongoose';
-import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
+import { ErrorType } from "../../lib/AppError";
+import { Error } from "mongoose";
+import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 
 export type ExtendedErrorCast = ErrorType & Error.CastError;
 

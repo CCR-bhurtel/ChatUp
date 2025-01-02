@@ -1,6 +1,6 @@
 import User from "../../database/Model/User";
-import AppError from "../../utils/AppError";
-import catchAsync from "../../utils/catchAsync";
+import AppError from "../../lib/AppError";
+import catchAsync from "../../lib/catchAsync";
 
 const changePasswordHandler = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user._id);

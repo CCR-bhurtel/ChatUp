@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import AppError, { ErrorType } from "../../utils/AppError";
+import AppError, { ErrorType } from "../../lib/AppError";
 import {
   ExtendedErrorCast,
   ExtendedErrorValidation,

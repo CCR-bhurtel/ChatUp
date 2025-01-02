@@ -1,8 +1,8 @@
 import { NextFunction, Response } from "express";
-import catchAsync from "../../utils/catchAsync";
+import catchAsync from "../../lib/catchAsync";
 import { ExpressRequest } from "../../Types/User";
 import Room from "../../database/Model/Room";
-import AppError from "../../utils/AppError";
+import AppError from "../../lib/AppError";
 import Chat from "../../database/Model/Chat";
 import Media from "../../database/Model/Media";
 import { IChat, IPopulatedChat } from "../../Types/Chat";

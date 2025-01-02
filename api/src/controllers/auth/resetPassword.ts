@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../../database/Model/User";
-import catchAsync from "../../utils/catchAsync";
-import AppError from "../../utils/AppError";
-import createSendToken from "../../utils/createSendToken";
+import catchAsync from "../../lib/catchAsync";
+import AppError from "../../lib/AppError";
+import createSendToken from "../../lib/createSendToken";
 import { use } from "passport";
 
 const resetPasswordHandler = catchAsync(

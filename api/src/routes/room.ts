@@ -1,6 +1,6 @@
 import express, { NextFunction, Response } from "express";
 import { ExpressRequest } from "../Types/User";
-import catchAsync from "../utils/catchAsync";
+import catchAsync from "../lib/catchAsync";
 import createRoom from "../controllers/room/createRoom";
 import searchRoom from "../controllers/room/searchRoom";
 import { searchUsersForGroupChat } from "../controllers/user/searchUsers";

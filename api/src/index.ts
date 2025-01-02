@@ -9,7 +9,7 @@ import connectDb from "./database/connect";
 import { CLIENT_URI, JWT_SECRET, PEER_SERVER_PORT, PORT } from "./config/keys";
 
 import swagger from "./swagger";
-import WS from "./services/Websocket";
+import WS from "./lib/Websocket";
 import logger from "./logger/winston.logger";
 
 connectDb()

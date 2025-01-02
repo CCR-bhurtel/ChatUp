@@ -1,11 +1,11 @@
 import { NextFunction, Response } from "express";
 import { ExpressRequest, IUser } from "../../Types/User";
-import catchAsync from "../../utils/catchAsync";
+import catchAsync from "../../lib/catchAsync";
 import User from "../../database/Model/User";
 import Room from "../../database/Model/Room";
 import Chat from "../../database/Model/Chat";
-import AppError from "../../utils/AppError";
-import { formatRoomDetail } from "../../utils/formatRoomDetails";
+import AppError from "../../lib/AppError";
+import { formatRoomDetail } from "../../lib/formatRoomDetails";
 import mongoose from "mongoose";
 
 const createRoom = catchAsync(
